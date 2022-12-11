@@ -1,7 +1,7 @@
 ---
 import MainHead from '../components/MainHead.astro'
 import Nav from '../components/Nav.astro'
-// import Footer from '../components/Footer.astro'
+import Footer from '../components/Footer.astro'
 
 const {content} = Astro.props
 ---
@@ -13,7 +13,7 @@ const {content} = Astro.props
   <body class='container'>
     <Nav />
     <slot />
-    <!-- <Footer /> -->
+    <Footer />
     <style>
       .container {
         max-width: 1500px;

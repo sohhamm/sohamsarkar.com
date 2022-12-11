@@ -1,16 +1,10 @@
 ---
-import MainHead from '../components/MainHead.astro'
-import Footer from '../components/Footer.astro'
-import Nav from '../components/Nav.astro'
+import Layout from '../layouts/layout.astro'
+
+const content = {
+  title: 'About | Soham Sarkar',
+  description: `About Soham Sarkar`,
+}
 ---
 
-<html lang='en'>
-  <head>
-    <MainHead title='About | Soham Sarkar' description='About Soham Sarkar Lorem Ipsum' />
-  </head>
-  <body>
-    <Nav />
-
-    <Footer />
-  </body>
-</html>
+<Layout content={content}>about me</Layout>

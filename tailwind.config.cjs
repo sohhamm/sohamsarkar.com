@@ -9,6 +9,9 @@ module.exports = {
       fontFamily: {
         urbanist: ["'Urbanist'", 'sans-serif'],
       },
+      colors: {
+        'secondary': '#CCDDE6',
+      },
     },
   },
   plugins: [

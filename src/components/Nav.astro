@@ -1,20 +1,26 @@
 ---
 export const LINKS = [
   {name: 'Blog', to: '/blog'},
-  {name: 'Projects', to: '/projects'},
+  {name: 'Work', to: '/work'},
   {name: 'About', to: '/about'},
 ]
+
+const pathname = Astro.url.pathname
 ---
 
 <div class='flex justify-between mt-9 py-4 px-10'>
-  <h1 class='logo'>Soham Sarkar</h1>
+  <a href='/'>
+    <h1 class='logo'>Soham Sarkar</h1>
+  </a>
 
-  <div class='flex items-center gap-8'>
+  <div class='flex items-center gap-10'>
     {
       LINKS.map(link => (
         <a
           href={link.to}
-          class='block font-semibold whitespace-nowrap text-lg focus:outline-none underlined'
+          class={`block font-semibold whitespace-nowrap text-lg focus:outline-none underlined ${
+            pathname === link.to ? 'is-active' : ''
+          }`}
         >
           {link.name}
         </a>
@@ -35,6 +41,7 @@ export const LINKS = [
     text-decoration: none !important;
   }
 
+  .is-active:after,
   .underlined:after {
     bottom: -4px;
     content: '';
@@ -55,7 +62,7 @@ export const LINKS = [
 
   .underlined:hover:after,
   .underlined:focus:after,
-  .active.underlined:after {
+  .is-active.underlined:after {
     background-color: currentColor;
     transform: scaleX(1);
   }
