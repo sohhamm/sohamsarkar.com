@@ -1,0 +1,26 @@
+---
+import MainHead from '../components/MainHead.astro'
+import Nav from '../components/Nav.astro'
+import Footer from '../components/Footer.astro'
+
+const {content} = Astro.props
+---
+
+<html lang={'en'}>
+  <head>
+    <MainHead title={content.title} description={content.description} />
+  </head>
+  <body class='container'>
+    <Nav />
+    <slot />
+    <Footer />
+    <style>
+      .container {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding-left: 2.5rem /* 40px */;
+        padding-right: 2.5rem /* 40px */;
+      }
+    </style>
+  </body>
+</html>
