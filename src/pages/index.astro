@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/layout.astro'
+import {Icon} from 'astro-icon'
 
 const content = {
   title: 'Soham Sarkar',
@@ -7,4 +8,38 @@ const content = {
 }
 ---
 
-<Layout content={content}>body</Layout>
+<Layout content={content}>
+  <section class='flex items-center justify-between px-10 mt-7'>
+    <div class=''>
+      <h1 class='text-[54px] font-semibold leading-[78px] max-w-[1000px] w-full tracking-[-0.03em]'>
+        I'm a digital gardener and I build experiences on the web
+      </h1>
+      <h2
+        class='mt-[19px] mb-[70px] max-w-[600px] w-full tracking-[-0.02em] leading-[38px] text-[22px] text-secondary'
+      >
+        I can turn your ideas from a seed into a full tree 🌱 <br /> If you already have a garden, I
+        can turn it into a forest 🌲
+        <!-- <br /> Sharing my passions, my interests, and my experiences -->
+      </h2>
+
+      <div class='flex gap-5 flex-wrap'>
+        <button class='bg-white rounded-[38.5px] text-black w-[263px] h-[65px]'
+          >Let's work together</button
+        >
+        <button
+          class='rounded-[38.5px] text-white w-[263px] h-[65px] border-solid border-[2px] border-white'
+          >Read Blog</button
+        >
+      </div>
+    </div>
+
+    <div>
+      <img src='src/icons/panda-home.svg' alt='panda home' />
+    </div>
+  </section>
+
+  <div class='flex flex-col items-center justify-center mt-[100px]'>
+    <p class='mb-2'>Scroll for wonders</p>
+    <Icon name='ph:mouse-simple-thin' size='40' />
+  </div>
+</Layout>
