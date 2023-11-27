@@ -1,25 +1,15 @@
 ---
-import MainHead from '../components/MainHead.astro';
-import Footer from '../components/Footer.astro';
-import Nav from '../components/Nav.astro';
+import Spline404 from '../components/react/spline404'
+import Layout from '../layouts/layout.astro'
+
+const content = {
+  title: '404 | Soham Sarkar',
+  description: `Page not found`,
+}
 ---
 
-<html lang="en">
-	<head>
-		<MainHead title="Not Found" />
-		<style>
-			.wrapper {
-				margin-top: 2em;
-				margin-bottom: 2em;
-			}
-		</style>
-	</head>
-	<body>
-		<Nav />
-		<div class="wrapper">
-			<h1>Page Not Found</h1>
-			<p>Not found</p>
-		</div>
-		<Footer />
-	</body>
-</html>
+<Layout content={content}>
+  <div class=''>
+    <Spline404 client:load />
+  </div>
+</Layout>
