@@ -10,14 +10,10 @@ module.exports = {
         urbanist: ["'Urbanist'", 'sans-serif'],
       },
       colors: {
-        'secondary': '#CCDDE6',
-        'bg':'#1F2028'
+        secondary: '#CCDDE6',
+        bg: '#1F2028',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/aspect-ratio')],
 }
