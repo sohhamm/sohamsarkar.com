@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import '../styles/variables.css'
 const {title = 'Soham Sarkar', description = 'The personal site of Soham Sarkar'} = Astro.props
 ---
 
@@ -10,9 +11,21 @@ const {title = 'Soham Sarkar', description = 'The personal site of Soham Sarkar'
 <title>{title}</title>
 
 <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-<link rel='preconnect' href='https://fonts.googleapis.com' />
-<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+<!-- Preload fonts -->
 <link
-  href='https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700;900&display=swap'
-  rel='stylesheet'
+  rel='preload'
+  href='/fonts/VictorMono-Regular.woff2'
+  as='font'
+  type='font/woff2'
+  crossorigin
 />
+<link rel='preload' href='/fonts/VictorMono-Italic.woff2' as='font' type='font/woff2' crossorigin />
+<!-- <link rel='preload' href='/fonts/VictorMono-Medium.woff2' as='font' type='font/woff2' crossorigin />
+<link rel='preload' href='/fonts/VictorMono-Bold.woff2' as='font' type='font/woff2' crossorigin />
+<link
+  rel='preload'
+  href='/fonts/VictorMono-BoldItalic.woff2'
+  as='font'
+  type='font/woff2'
+  crossorigin
+/> -->

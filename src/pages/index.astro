@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/layout.astro'
-import {Icon} from 'astro-icon/components'
+// import AuroraBg from '../components/AuroraBg.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -9,62 +9,35 @@ const content = {
 ---
 
 <Layout content={content}>
-  <section class='flex items-center justify-between mt-7'>
-    <div class=''>
-      <h1 class='text-[54px] font-semibold leading-[78px] max-w-[1000px] w-full tracking-[-0.03em]'>
-        I'm a digital gardener and I build experiences on the web
-      </h1>
-      <h2
-        class='mt-[19px] mb-[70px] max-w-[600px] w-full tracking-[-0.02em] leading-[38px] text-[22px] text-secondary'
+  <!-- <AuroraBg> -->
+  <section class='flex flex-col'>
+    <div
+      class='flex relative flex-col items-center px-20 pt-8 pb-56 w-full min-h-[800px] max-md:px-5 max-md:pb-24 max-md:max-w-full'
+    >
+      <div
+        class='flex relative flex-col items-start -mb-11 w-full max-w-[1200px] max-md:mb-2.5 max-md:max-w-full'
       >
-        I can turn your ideas from a seed into a full tree 🌱 <br /> If you already have a garden, I
-        can turn it into a forest 🌲
-        <!-- <br /> Sharing my passions, my interests, and my experiences -->
-      </h2>
-
-      <div class='flex gap-5 flex-wrap'>
-        <button class='bg-white rounded-[38.5px] text-black w-[263px] h-[65px]'
-          >Let's work together</button
+        <h1
+          class='self-stretch mt-52 text-7xl tracking-tighter text-lime-400 leading-[72px] max-md:mt-10 max-md:max-w-full max-md:text-4xl max-md:leading-10'
         >
-        <button
-          class='rounded-[38.5px] text-white w-[263px] h-[65px] border-solid border-[2px] border-white'
-          >Read Blog</button
+          <span class='text-white'>I'm a digital gardener, and I</span>
+          <span class='italic text-zinc-500'>build experiences</span>
+          <span class='text-white'>on the web.</span>
+        </h1>
+        <p class='mt-6 text-base font-medium leading-5 text-zinc-500 max-md:max-w-full'>
+          I can turn your ideas from a seed into a full tree🌱 If you already have a garden, I can
+          turn it into a forest🌲
+        </p>
+        <a
+          href='#'
+          class='gap-2 self-stretch px-6 py-4 mt-6 text-xl tracking-tighter leading-none text-white border border-solid border-white border-opacity-60 rounded-[40px] shadow-[0px_0px_24px_rgba(255,255,255,0.34)] max-md:px-5'
+          tabindex='0'
+          role='button'
         >
-      </div>
-    </div>
-
-    <div>
-      <img src='/images/panda-home.svg' alt='panda home' />
-    </div>
-  </section>
-
-  <div class='flex flex-col items-center justify-center mt-[100px]'>
-    <p class='mb-2'>Scroll for wonders</p>
-    <Icon name='ph:mouse-simple-thin' size={40} />
-  </div>
-
-  <section class='flex items-center justify-between mt-12'>
-    <div>
-      <img src='/images/panda-home2.svg' alt='panda home' />
-    </div>
-    <div class=''>
-      <h1 class='text-[48px] font-semibold leading-[58px] max-w-[700px] w-full tracking-[-0.03em]'>
-        Playing with New Frameworks and Reading Books is my goto thing.
-      </h1>
-      <h2
-        class='mt-[19px] mb-[70px] max-w-[600px] w-full tracking-[-0.02em] leading-[38px] text-[22px] text-secondary'
-      >
-        I'm also a big extreme sports enthusiast. When I'm not hanging out with my family or at the
-        computer you can find me cruising around on my onewheel or hitting the slopes on my
-        snowboard when it's cold.
-      </h2>
-
-      <div>
-        <button
-          class='rounded-[38.5px] text-white w-[263px] h-[65px] border-solid border-[2px] border-white'
-          >Learn more about me</button
-        >
+          Work with me!
+        </a>
       </div>
     </div>
   </section>
+  <!-- </AuroraBg> -->
 </Layout>

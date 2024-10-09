@@ -6,12 +6,18 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      fontFamily: {
-        urbanist: ["'Urbanist'", 'sans-serif'],
-      },
       colors: {
         secondary: '#CCDDE6',
         bg: '#1F2028',
+      },
+      animation: {
+        'fade-in-up': 'fadeInUp 0.8s ease-in-out forwards',
+      },
+      keyframes: {
+        fadeInUp: {
+          '0%': {opacity: 0, transform: 'translateY(40px)'},
+          '100%': {opacity: 1, transform: 'translateY(0)'},
+        },
       },
     },
   },
