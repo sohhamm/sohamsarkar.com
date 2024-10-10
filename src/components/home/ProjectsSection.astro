@@ -1,0 +1,92 @@
+---
+import Button from '../Button.astro'
+import Project from './Project.astro'
+
+const projects = [
+  {
+    title: 'Personal Finance App',
+    description:
+      'A comprehensive personal finance management tool that helps users track expenses, set budgets, and achieve financial goals.',
+    link: '#',
+    image: '/path-to-finance-app-image.jpg',
+  },
+  {
+    title: 'Mentorship Booking Platform',
+    description:
+      'A sleek and efficient platform that connects mentors with mentees in the tech industry.',
+    link: '#',
+    image: '/path-to-mentorship-platform-image.jpg',
+  },
+  {
+    title: 'AI-Powered Resume Analyzer',
+    description:
+      'An innovative tool that uses AI to analyze resumes and provide personalized feedback for job seekers.',
+    link: '#',
+    image: '/path-to-resume-analyzer-image.jpg',
+  },
+  {
+    title: 'Tech Career Planning Dashboard',
+    description:
+      'A comprehensive career planning tool for tech professionals, offering insights into industry trends, salary data, and skill demand.',
+    link: '#',
+    image: '/path-to-career-dashboard-image.jpg',
+  },
+]
+---
+
+<section class='projects-section'>
+  <div class='projects-header'>
+    <h2>Digital Backyard</h2>
+    <Button href='/projects'>View all projects →</Button>
+  </div>
+
+  <div class='projects-container'>
+    {
+      projects.map(project => (
+        <Project
+          title={project.title}
+          description={project.description}
+          link={project.link}
+          image={project.image}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .projects-section {
+    padding: 60px 0;
+  }
+
+  .projects-header {
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .projects-header h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 3.5rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.28rem;
+  }
+
+  .projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .projects-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+</style>
