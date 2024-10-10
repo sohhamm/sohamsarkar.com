@@ -6,30 +6,24 @@ const projects = [
   {
     title: 'Personal Finance App',
     description:
-      'A comprehensive personal finance management tool that helps users track expenses, set budgets, and achieve financial goals.',
+      'Track expenses, set budgets, and achieve financial goals with this comprehensive tool.',
     link: '#',
-    image: '/path-to-finance-app-image.jpg',
+    image: '/projects/personal-finance-app.jpg',
+    tags: ['React', 'Node.js', 'MongoDB'],
   },
   {
-    title: 'Mentorship Booking Platform',
-    description:
-      'A sleek and efficient platform that connects mentors with mentees in the tech industry.',
+    title: 'Mentorship Platform',
+    description: 'Connect mentors and mentees in the tech industry efficiently.',
     link: '#',
     image: '/path-to-mentorship-platform-image.jpg',
+    tags: ['Vue.js', 'Express', 'PostgreSQL'],
   },
   {
-    title: 'AI-Powered Resume Analyzer',
-    description:
-      'An innovative tool that uses AI to analyze resumes and provide personalized feedback for job seekers.',
+    title: 'AI Resume Analyzer',
+    description: 'Get personalized feedback on your resume using advanced AI.',
     link: '#',
     image: '/path-to-resume-analyzer-image.jpg',
-  },
-  {
-    title: 'Tech Career Planning Dashboard',
-    description:
-      'A comprehensive career planning tool for tech professionals, offering insights into industry trends, salary data, and skill demand.',
-    link: '#',
-    image: '/path-to-career-dashboard-image.jpg',
+    tags: ['Python', 'TensorFlow', 'Flask'],
   },
 ]
 ---
@@ -48,6 +42,7 @@ const projects = [
           description={project.description}
           link={project.link}
           image={project.image}
+          tags={project.tags}
         />
       ))
     }
@@ -68,7 +63,7 @@ const projects = [
 
   .projects-header h2 {
     color: #fff;
-    text-align: center;
+    font-family: 'Victor Mono', monospace;
     font-size: 3.5rem;
     font-style: italic;
     font-weight: 400;
