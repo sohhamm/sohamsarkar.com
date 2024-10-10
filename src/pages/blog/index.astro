@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/layout.astro'
+import {getCollection} from 'astro:content'
+import BlogPost from '../../components/BlogPost.astro'
+
+const content = {
+  title: 'Blogs | Soham Sarkar',
+  description: "Soham Sarkar's Blogs",
+}
+
+const allPosts = await getCollection('blogs')
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+---
+
+<Layout content={content}>
+  <main>
+    <h1>Blog</h1>
+    <p>Documenting my learnings & (imo) best practices.</p>
+    <div class='blog-list'>
+      {
+        sortedPosts.map(post => (
+          <BlogPost
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            url={`/blog/${post.slug}`}
+          />
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .blog-list {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+</style>

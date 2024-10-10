@@ -1,158 +1,164 @@
 ---
-export const currentYear = new Date().getFullYear()
-
-const pathname = Astro.url.pathname
-
-const SOCIALS = [
-  {
-    label: 'LinkedIn',
-    to: 'https://linkedin.com/in/sohhamm',
-    iconName: 'ri:linkedin-box-fill',
-  },
-  {
-    label: 'Twitter',
-    to: 'https://twitter.com/sohamsarkartech',
-    iconName: 'ri:twitter-fill',
-  },
-  {
-    label: 'Github',
-    to: 'https://github.com/sohhamm',
-    iconName: 'ri:github-fill',
-  },
-  {
-    label: 'Instagram',
-    to: 'https://instagram.com/codebandit',
-    iconName: 'ri:instagram-fill',
-  },
-]
-
-const CONTACTS = [
-  {
-    href: 'mailto:sohamsarkar.work@gmail.com',
-    type: 'email',
-    label: 'Email',
-  },
-]
-
-const SITEMAP = [
-  {
-    label: 'Home',
-    href: '/',
-  },
-  {
-    label: 'Blog',
-    href: '/blog',
-  },
-  {
-    label: 'About',
-    href: '/about',
-  },
-  {
-    label: 'Work',
-    href: '/work',
-  },
-]
+// const currentYear = new Date().getFullYear()
 ---
 
-<footer
-  class='flex items-center justify-between border-t-solid border-t-[2px] border-t-[#4B4C5380]'
->
-  <div class='grid grid-cols-[1fr_1fr] gap-3'>
-    <div>
-      <p class='text-5xl font-semibold mb-[10px]'>Soham Sarkar</p>
-      <p class='text-2xl mb-[50px] text-secondary max-w-[410px] w-full'>
-        Full time react enthusiast making our world better
-      </p>
-
-      <div class='flex items-center gap-4 max-w-[410px] w-full'>
-        {
-          SOCIALS.map(social => (
-            <a href={social.to} target='_blank'>
-              icon
-            </a>
-          ))
-        }
+<footer>
+  <div class='footer-gradient'></div>
+  <div class='footer-content'>
+    <div class='footer-left'>
+      <p class='footer-tagline'>I do all that and more.</p>
+      <a href='#' class='work-with-me'>Work with me!</a>
+      <div class='location-info'>
+        <p>12.9716° N<br />77.5946° E</p>
+        <p>BASED IN BLR, IN<br />WORKING WORLDWIDE</p>
       </div>
     </div>
-
-    <div class='flex justify-around'>
-      <div>
-        <p class='text-xl font-semibold mb-[10px]'>Contact</p>
-
-        <div class='flex flex-col gap-2'>
-          {
-            CONTACTS.map(contact => (
-              <a href={contact.href} class='underlined'>
-                <p class='text-lg text-secondary'>{contact.label}</p>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-      <div>
-        <p class='text-xl font-semibold mb-[10px]'>Sitemap</p>
-
-        <div class='flex flex-col gap-2'>
-          {
-            SITEMAP.map(site => (
-              <a href={site.href} class={`underlined ${pathname === site.href ? 'is-active' : ''}`}>
-                <p class={`text-lg text-secondary`}>{site.label}</p>
-              </a>
-            ))
-          }
-        </div>
+    <div class='footer-right'>
+      <div class='social-links'>
+        <a href='https://sohamsarkar.work' target='_blank' rel='noopener noreferrer'
+          >@sohamsarkar.work</a
+        >
+        <a href='https://github.com/sohhamm' target='_blank' rel='noopener noreferrer'>@sohhamm</a>
+        <a href='https://linkedin.com/in/sohhamm' target='_blank' rel='noopener noreferrer'
+          >@sohhamm</a
+        >
+        <a href='https://twitter.com/sohamsarkartech' target='_blank' rel='noopener noreferrer'
+          >@sohamsarkartech</a
+        >
+        <a href='https://instagram.com/codebandit' target='_blank' rel='noopener noreferrer'
+          >@codebandit</a
+        >
       </div>
     </div>
   </div>
-
-  <div>
-    <img src='/images/panda-footer.svg' />
-  </div>
+  <nav class='footer-nav'>
+    <a href='/'>WORK</a>
+    <a href='/about'>ABOUT</a>
+    <a href='/blog'>BLOG</a>
+  </nav>
+  <!-- <div class='footer-image'></div> -->
 </footer>
 
 <style>
-  .underlined {
+  footer {
+    background-color: #000;
+    color: #fff;
+    padding: 4rem 2rem 0;
+    font-family: 'Victor Mono', monospace;
     position: relative;
-    text-decoration: none !important;
+    overflow: hidden;
   }
 
-  .is-active:after,
-  .underlined:after {
-    bottom: -4px;
-    content: '';
-    display: block;
-    height: 2px;
-    left: 0;
+  .footer-gradient {
     position: absolute;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.25s ease;
-    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      #fff 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
   }
 
-  .underlined:focus {
-    outline: none;
-    text-decoration: none !important;
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
   }
 
-  .underlined:hover:after,
-  .underlined:focus:after,
-  .is-active.underlined:after {
-    background-color: currentColor;
-    transform: scaleX(1);
-    color: white;
+  .footer-tagline {
+    color: #fff;
+    font-size: 3.5rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.28rem;
+    margin-bottom: 1rem;
   }
 
-  @media (prefers-reduced-motion) {
-    .underlined:after {
-      opacity: 0;
-      transition: opacity 0.25s ease;
+  .work-with-me {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #fff;
+    border-radius: 2rem;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1rem;
+  }
+
+  .work-with-me:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .location-info {
+    color: #fff;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+    letter-spacing: -0.04rem;
+    text-transform: uppercase;
+  }
+
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .social-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .social-links a:hover {
+    opacity: 0.7;
+  }
+
+  .footer-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer-nav a:hover {
+    opacity: 0.7;
+  }
+
+  .footer-image {
+    height: 200px;
+    background-image: url('../assets/footer-bottom.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 2rem;
     }
 
-    .underlined:hover:after,
-    .underlined:focus:after,
-    .active.underlined:after {
-      opacity: 1;
+    .footer-tagline {
+      font-size: 2.5rem;
+    }
+
+    .footer-nav {
+      justify-content: center;
     }
   }
 </style>
