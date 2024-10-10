@@ -1,25 +1,159 @@
 ---
-const currentYear = new Date().getFullYear();
+import {Icon} from 'astro-icon/components'
+export const currentYear = new Date().getFullYear()
+
+const pathname = Astro.url.pathname
+
+const SOCIALS = [
+  {
+    label: 'LinkedIn',
+    to: 'https://linkedin.com/in/sohhamm',
+    iconName: 'ri:linkedin-box-fill',
+  },
+  {
+    label: 'Twitter',
+    to: 'https://twitter.com/sohamsarkartech',
+    iconName: 'ri:twitter-fill',
+  },
+  {
+    label: 'Github',
+    to: 'https://github.com/sohhamm',
+    iconName: 'ri:github-fill',
+  },
+  {
+    label: 'Instagram',
+    to: 'https://instagram.com/codebandit',
+    iconName: 'ri:instagram-fill',
+  },
+]
+
+const CONTACTS = [
+  {
+    href: 'mailto:sohamsarkar.work@gmail.com',
+    type: 'email',
+    label: 'Email',
+  },
+]
+
+const SITEMAP = [
+  {
+    label: 'Home',
+    href: '/',
+  },
+  {
+    label: 'Blog',
+    href: '/blog',
+  },
+  {
+    label: 'About',
+    href: '/about',
+  },
+  {
+    label: 'Work',
+    href: '/work',
+  },
+]
 ---
 
-<footer>
-	&copy; {currentYear} Soham Sarkar
-	<small class="byline">🚀 Built by Astro</small>
-</footer>
-<style>
-	footer {
-		text-align: center;
-		padding-top: 8rem;
-		padding-right: 2rem;
-		padding-bottom: 4rem;
-		padding-left: 2rem;
-	}
+<footer
+  class='flex items-center justify-between border-t-solid border-t-[2px] border-t-[#4B4C5380]'
+>
+  <div class='grid grid-cols-[1fr_1fr] gap-3'>
+    <div>
+      <p class='text-5xl font-semibold mb-[10px]'>Soham Sarkar</p>
+      <p class='text-2xl mb-[50px] text-secondary max-w-[410px] w-full'>
+        Full time react enthusiast making our world better
+      </p>
 
-	.byline {
-		display: block;
-		margin-top: 1rem;
-		color: var(--t-subdue);
-		font-size: var(--f-d2);
-		text-transform: uppercase;
-	}
+      <div class='flex items-center gap-4 max-w-[410px] w-full'>
+        {
+          SOCIALS.map(social => (
+            <a href={social.to} target='_blank'>
+              <Icon name={social.iconName} size={46} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class='flex justify-around'>
+      <div>
+        <p class='text-xl font-semibold mb-[10px]'>Contact</p>
+
+        <div class='flex flex-col gap-2'>
+          {
+            CONTACTS.map(contact => (
+              <a href={contact.href} class='underlined'>
+                <p class='text-lg text-secondary'>{contact.label}</p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div>
+        <p class='text-xl font-semibold mb-[10px]'>Sitemap</p>
+
+        <div class='flex flex-col gap-2'>
+          {
+            SITEMAP.map(site => (
+              <a href={site.href} class={`underlined ${pathname === site.href ? 'is-active' : ''}`}>
+                <p class={`text-lg text-secondary`}>{site.label}</p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <img src='/images/panda-footer.svg' />
+  </div>
+</footer>
+
+<style>
+  .underlined {
+    position: relative;
+    text-decoration: none !important;
+  }
+
+  .is-active:after,
+  .underlined:after {
+    bottom: -4px;
+    content: '';
+    display: block;
+    height: 2px;
+    left: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+    width: 100%;
+  }
+
+  .underlined:focus {
+    outline: none;
+    text-decoration: none !important;
+  }
+
+  .underlined:hover:after,
+  .underlined:focus:after,
+  .is-active.underlined:after {
+    background-color: currentColor;
+    transform: scaleX(1);
+    color: white;
+  }
+
+  @media (prefers-reduced-motion) {
+    .underlined:after {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .underlined:hover:after,
+    .underlined:focus:after,
+    .active.underlined:after {
+      opacity: 1;
+    }
+  }
 </style>
