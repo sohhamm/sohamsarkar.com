@@ -1,8 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap');
+@font-face {
+  font-family: 'Victor Mono';
+  src: url('/fonts/VictorMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
+@font-face {
+  font-family: 'Victor Mono';
+  src: url('/fonts/VictorMono-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
 
-:root {
---bg-color: #1F2028;
+@font-face {
+  font-family: 'Victor Mono';
+  src: url('/fonts/VictorMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Victor Mono';
+  src: url('/fonts/VictorMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Victor Mono';
+  src: url('/fonts/VictorMono-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
 }
 
 /*
@@ -25,7 +58,7 @@
 html,
 body {
   height: 100%;
-  font-family: 'Urbanist', sans-serif;
+  font-family: 'Victor Mono', monospace;
 }
 /*
 	Typographic tweaks!
@@ -76,9 +109,7 @@ h6 {
   isolation: isolate;
 }
 
-
-
-body{
-background-color: var(--bg-color);
-color: white
+body {
+  background-color: var(--bg-color);
+  color: white;
 }

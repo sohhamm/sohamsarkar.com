@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/layout.astro'
-import {Icon} from 'astro-icon/components'
+import Button from '../components/Button.astro'
+import ProjectsSection from '../components/home/ProjectsSection.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -9,62 +10,73 @@ const content = {
 ---
 
 <Layout content={content}>
-  <section class='flex items-center justify-between mt-7'>
-    <div class=''>
-      <h1 class='text-[54px] font-semibold leading-[78px] max-w-[1000px] w-full tracking-[-0.03em]'>
-        I'm a digital gardener and I build experiences on the web
+  <section class='hero-section'>
+    <div class='hero-text'>
+      <h1>
+        I'm a <span>digital gardener</span>, and I
+        <span class='italic-text'>craft impactful software experiences</span>
+        with code.
       </h1>
-      <h2
-        class='mt-[19px] mb-[70px] max-w-[600px] w-full tracking-[-0.02em] leading-[38px] text-[22px] text-secondary'
-      >
-        I can turn your ideas from a seed into a full tree 🌱 <br /> If you already have a garden, I
-        can turn it into a forest 🌲
-        <!-- <br /> Sharing my passions, my interests, and my experiences -->
-      </h2>
-
-      <div class='flex gap-5 flex-wrap'>
-        <button class='bg-white rounded-[38.5px] text-black w-[263px] h-[65px]'
-          >Let's work together</button
-        >
-        <button
-          class='rounded-[38.5px] text-white w-[263px] h-[65px] border-solid border-[2px] border-white'
-          >Read Blog</button
-        >
-      </div>
-    </div>
-
-    <div>
-      <img src='/images/panda-home.svg' alt='panda home' />
+      <p>
+        I'll grow your ideas from tiny seeds into towering trees 🌱.<br /> Already have a garden? Let's
+        transform it into a thriving forest 🌲.
+      </p>
+      <Button href='https://cal.com/soham-sarkar-work'>Let's grow together!</Button>
     </div>
   </section>
 
-  <div class='flex flex-col items-center justify-center mt-[100px]'>
-    <p class='mb-2'>Scroll for wonders</p>
-    <Icon name='ph:mouse-simple-thin' size={40} />
-  </div>
+  <ProjectsSection />
 
-  <section class='flex items-center justify-between mt-12'>
-    <div>
-      <img src='/images/panda-home2.svg' alt='panda home' />
-    </div>
-    <div class=''>
-      <h1 class='text-[48px] font-semibold leading-[58px] max-w-[700px] w-full tracking-[-0.03em]'>
-        Playing with New Frameworks and Reading Books is my goto thing.
-      </h1>
-      <h2
-        class='mt-[19px] mb-[70px] max-w-[600px] w-full tracking-[-0.02em] leading-[38px] text-[22px] text-secondary'
-      >
-        I'm also a big extreme sports enthusiast. When I'm not hanging out with my family or at the
-        computer you can find me cruising around on my onewheel or hitting the slopes on my
-        snowboard when it's cold.
-      </h2>
+  <style>
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 65dvh;
+      background: radial-gradient(circle, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
+      color: #ffffff;
+    }
 
-      <div>
-        <button
-          class='rounded-[38.5px] text-white w-[263px] h-[65px] border-solid border-[2px] border-white'
-          >Learn more about me</button
-        >
-      </div>
-    </div>
-  </section>
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 4.5rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.36rem;
+    }
+
+    .italic-text {
+      font-style: italic;
+      color: #7f7f7f;
+    }
+
+    p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #71717a;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 3.5rem;
+        letter-spacing: -0.28rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.5rem;
+        letter-spacing: -0.2rem;
+      }
+    }
+  </style>
 </Layout>

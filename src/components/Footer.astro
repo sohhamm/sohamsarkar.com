@@ -1,5 +1,4 @@
 ---
-import {Icon} from 'astro-icon/components'
 export const currentYear = new Date().getFullYear()
 
 const pathname = Astro.url.pathname
@@ -69,7 +68,7 @@ const SITEMAP = [
         {
           SOCIALS.map(social => (
             <a href={social.to} target='_blank'>
-              <Icon name={social.iconName} size={46} />
+              icon
             </a>
           ))
         }

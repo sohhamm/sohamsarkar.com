@@ -1,0 +1,42 @@
+---
+
+---
+
+<style>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  @layer components {
+    .aurora-background {
+      @apply relative overflow-hidden;
+    }
+    .aurora {
+      @apply absolute w-full h-full top-0 left-0;
+      background: radial-gradient(circle at 10% 20%, rgba(0, 175, 255, 0.4), transparent 25%),
+        radial-gradient(circle at 80% 0%, rgba(0, 255, 200, 0.3), transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 200, 0.2), transparent 25%);
+      animation: moveAurora 15s linear infinite;
+      background-size: cover;
+    }
+  }
+
+  @keyframes moveAurora {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10%) rotate(180deg);
+    }
+    100% {
+      transform: translateY(0) rotate(360deg);
+    }
+  }
+</style>
+
+<div class='aurora-background'>
+  <div class='aurora'></div>
+  <div class='relative'>
+    <slot />
+  </div>
+</div>
