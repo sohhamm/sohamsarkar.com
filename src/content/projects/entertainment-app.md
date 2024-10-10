@@ -3,11 +3,11 @@ title: 'Entertainment App'
 description: 'All-in-one entertainment content aggregator'
 status: 'Started'
 priority: 'P2'
-tags: ['PostgreSQL']
+tags: ['SolidJS', 'Go Fiber', 'PostgreSQL']
 image: '/projects/entertainment-app.jpg'
-sourceCode: 'https://github.com/yourusername/entertainment-app'
-link: 'https://test.com'
-order: 3
+sourceCode: 'https://github.com/sohhamm/entertainment-app/'
+link: 'https://entertainment-app.soham.app/'
+order: 4
 ---
 
 Entertainment App

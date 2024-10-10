@@ -3,10 +3,10 @@ title: 'Connect Four'
 description: 'Classic Connect Four game implementation'
 status: 'Ongoing'
 priority: 'P1'
-tags: []
+tags: ['SolidJS']
 image: '/projects/connect-four.jpg'
-sourceCode: 'https://github.com/yourusername/connect-four'
-link: 'https://test.com'
+sourceCode: 'https://github.com/sohhamm/connect-four'
+link: 'https://connect-four.sohamprojects.xyz'
 order: 9
 ---
 

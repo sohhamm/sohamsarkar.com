@@ -1,13 +1,13 @@
 ---
-title: 'Password Generator App'
+title: 'Password Generator'
 description: 'Secure password generation tool'
 status: 'Completed'
 priority: 'Done'
-tags: []
+tags: ['Svelte']
 image: '/projects/password-generator-app.jpg'
-sourceCode: 'https://github.com/yourusername/password-generator-app'
-link: 'https://test.com'
-order: 4
+sourceCode: 'https://github.com/sohhamm/password-generator'
+link: 'https://passwordxgenerator.vercel.app/'
+order: 2
 ---
 
 Password Generator App

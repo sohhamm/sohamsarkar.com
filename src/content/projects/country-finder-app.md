@@ -1,13 +1,13 @@
 ---
-title: 'Country Finder App'
+title: 'Country Finder'
 description: 'Application for exploring country information and statistics'
 status: 'Needs Revamp'
 priority: 'P2'
-tags: []
+tags: ['React', 'REST', 'Chakra UI']
 image: '/projects/country-finder-app.jpg'
-sourceCode: 'https://github.com/sohhamm/country-finder-app'
-link: 'https://test.com'
-order: 8
+sourceCode: 'https://github.com/sohhamm/country-finder'
+link: 'https://awesome-country-finder.netlify.app/'
+order: 5
 ---
 
 Country Finder App

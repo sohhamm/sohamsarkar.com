@@ -4,9 +4,9 @@ description: 'Real-time weather information and forecasting application'
 status: 'Started'
 priority: 'P3'
 tags: ['React']
-image: '/projects/weather-app.jpg'
-sourceCode: 'https://github.com/sohhamm/weather-app'
-link: 'https://test.com'
+image: '/projects/weather-app.jpeg'
+sourceCode: 'https://github.com/sohhamm/weather-app/'
+link: 'https://weather-app.soham.app/'
 order: 10
 ---
 

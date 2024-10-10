@@ -1,13 +1,13 @@
 ---
-title: 'Product Feedback App'
+title: 'Product Feedback'
 description: 'Platform for collecting and managing product feedback'
 status: 'Ongoing'
 priority: 'P1'
-tags: ['PostgreSQL']
+tags: ['NextJS', 'Go', 'PostgreSQL']
 image: '/projects/product-feedback-app.jpg'
-sourceCode: 'https://github.com/yourusername/product-feedback-app'
-link: 'https://test.com'
-order: 2
+sourceCode: 'https://github.com/sohhamm/product-feedback-client'
+link: 'https://product-feedback-application.vercel.app/'
+order: 3
 ---
 
 Product Feedback App

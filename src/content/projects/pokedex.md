@@ -5,8 +5,8 @@ status: 'Not Started'
 priority: 'P4'
 tags: []
 image: '/projects/pokedex.jpg'
-sourceCode: 'https://github.com/yourusername/pokedex'
-link: 'https://test.com'
+sourceCode: 'https://github.com/sohhamm/pokemon-react'
+link: 'https://pokedex.soham.app/'
 order: 11
 ---
 

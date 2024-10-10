@@ -3,11 +3,11 @@ title: 'Invoice App'
 description: 'Streamlined invoicing solution for freelancers and small businesses'
 status: 'Ongoing'
 priority: 'P1'
-tags: ['PostgreSQL', 'React']
+tags: ['Fastify', 'PostgreSQL', 'React', 'TurboRepo']
 image: '/projects/invoice-app.jpg'
-sourceCode: 'https://github.com/yourusername/invoice-app'
-link: 'https://test.com'
-order: 5
+sourceCode: 'https://github.com/sohhamm/invoice-app'
+link: 'https://invoice.codebandit.dev/'
+order: 1
 ---
 
 Invoice App
