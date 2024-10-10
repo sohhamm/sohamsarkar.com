@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/layout.astro'
-// import AuroraBg from '../components/AuroraBg.astro'
+import Button from '../components/Button.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -9,35 +9,84 @@ const content = {
 ---
 
 <Layout content={content}>
-  <!-- <AuroraBg> -->
-  <section class='flex flex-col'>
-    <div
-      class='flex relative flex-col items-center px-20 pt-8 pb-56 w-full min-h-[800px] max-md:px-5 max-md:pb-24 max-md:max-w-full'
-    >
-      <div
-        class='flex relative flex-col items-start -mb-11 w-full max-w-[1200px] max-md:mb-2.5 max-md:max-w-full'
-      >
-        <h1
-          class='self-stretch mt-52 text-7xl tracking-tighter text-lime-400 leading-[72px] max-md:mt-10 max-md:max-w-full max-md:text-4xl max-md:leading-10'
-        >
-          <span class='text-white'>I'm a digital gardener, and I</span>
-          <span class='italic text-zinc-500'>build experiences</span>
-          <span class='text-white'>on the web.</span>
-        </h1>
-        <p class='mt-6 text-base font-medium leading-5 text-zinc-500 max-md:max-w-full'>
-          I can turn your ideas from a seed into a full tree🌱 If you already have a garden, I can
-          turn it into a forest🌲
-        </p>
-        <a
-          href='#'
-          class='gap-2 self-stretch px-6 py-4 mt-6 text-xl tracking-tighter leading-none text-white border border-solid border-white border-opacity-60 rounded-[40px] shadow-[0px_0px_24px_rgba(255,255,255,0.34)] max-md:px-5'
-          tabindex='0'
-          role='button'
-        >
-          Work with me!
-        </a>
-      </div>
+  <section class='hero-section'>
+    <div class='hero-text'>
+      <h1>
+        I'm a <span>digital gardener</span>, and I
+        <span class='italic-text'>craft impactful software experiences</span>
+        with code.
+      </h1>
+
+      <p>
+        I'll grow your ideas from tiny seeds into towering trees 🌱.<br /> Already have a garden? Let's
+        transform it into a thriving forest 🌲.
+      </p>
+      <Button href='https://cal.com/soham-sarkar-work'>Let's grow together!</Button>
     </div>
   </section>
-  <!-- </AuroraBg> -->
+
+  <style>
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 65dvh;
+      background: radial-gradient(circle, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
+      color: #ffffff;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 4.5rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.36rem;
+    }
+
+    .italic-text {
+      font-style: italic;
+      color: #7f7f7f;
+    }
+
+    p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #71717a;
+    }
+
+    .cta-button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 40px;
+      background: transparent;
+      text-decoration: none;
+      box-shadow: 0px 0px 24px rgba(255, 255, 255, 0.34);
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: 768px) {
+    }
+
+    @media (max-width: 480px) {
+    }
+  </style>
 </Layout>

@@ -1,7 +1,7 @@
 {
-  "name": "soham-personal-site",
+  "name": "sohamsarkar.com",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -13,22 +13,8 @@
   "dependencies": {
     "@astrojs/react": "^3.6.2",
     "@astrojs/sitemap": "^3.2.0",
-    "@astrojs/tailwind": "^5.1.1",
-    "@iconify-json/ph": "^1.2.0",
-    "@iconify-json/ri": "^1.2.0",
-    "@splinetool/react-spline": "^4.0.0",
-    "@splinetool/runtime": "^1.9.29",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
     "astro": "^4.15.12",
-    "astro-icon": "^1.1.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwindcss": "^3.4.13"
-  },
-  "devDependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/line-clamp": "^0.4.4",
-    "@tailwindcss/typography": "^0.5.15"
+    "react-dom": "^18.3.1"
   }
 }
