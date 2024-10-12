@@ -1,7 +1,7 @@
 ---
 export const LINKS = [
   {name: 'home', to: '/'},
-  {name: 'work', to: '/work'},
+  {name: 'projects', to: '/projects'},
   {name: 'about', to: '/about'},
   {name: 'blog', to: '/blog'},
 ]
@@ -65,19 +65,21 @@ const currentPath = Astro.url.pathname
 
   <ul class='nav-links'>
     {
-      LINKS.map(link => (
-        <li
-          class={`nav-item ${currentPath === link.to ? 'active text-caption-italic-bold' : 'text-caption'}`}
-        >
-          <a
-            href={link.to}
-            class={`nav-link${currentPath === link.to ? ' active' : ''}`}
-            aria-current={currentPath === link.to ? 'page' : undefined}
-          >
-            {link.name}
-          </a>
-        </li>
-      ))
+      LINKS.map(link => {
+        const isActive =
+          currentPath === link.to || (link.to !== '/' && currentPath.startsWith(link.to))
+        return (
+          <li class={`nav-item ${isActive ? 'active text-caption-italic-bold' : 'text-caption'}`}>
+            <a
+              href={link.to}
+              class={`nav-link${isActive ? ' active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {link.name}
+            </a>
+          </li>
+        )
+      })
     }
   </ul>
 </nav>

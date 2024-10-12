@@ -1,0 +1,44 @@
+---
+export interface Props {
+  title: string
+  date: Date
+  description: string
+  url: string
+}
+
+const {title, date, description, url} = Astro.props
+---
+
+<article class='blog-post'>
+  <h3><a href={url}>{title}</a></h3>
+  <time datetime={date.toISOString()}>
+    {
+      date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
+  </time>
+  <p>{description}</p>
+</article>
+
+<style>
+  .blog-post {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+  time {
+    font-size: 0.8rem;
+    color: #888;
+  }
+</style>

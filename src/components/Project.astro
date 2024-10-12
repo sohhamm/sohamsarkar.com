@@ -5,9 +5,10 @@ export interface Props {
   link: string
   image: string
   tags: string[]
+  sourceCode: string
 }
 
-const {title, description, link, image, tags} = Astro.props
+const {title, description, link, image, tags, sourceCode} = Astro.props
 ---
 
 <div class='project-item'>
@@ -20,7 +21,26 @@ const {title, description, link, image, tags} = Astro.props
     <div class='project-tags'>
       {tags.map(tag => <span class='tag'>{tag}</span>)}
     </div>
-    <a href={link} target='_blank' rel='noopener noreferrer'>View Project →</a>
+    <div class='project-links'>
+      <a href={link} target='_blank' rel='noopener noreferrer'>View Project →</a>
+      <a href={sourceCode} target='_blank' rel='noopener noreferrer' class='source-code-link'>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+        >
+          <path
+            d='M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22'
+          ></path>
+        </svg>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -32,14 +52,6 @@ const {title, description, link, image, tags} = Astro.props
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(0, 0, 0, 0.4);
     overflow: hidden;
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
-  }
-
-  .project-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
   .project-image {
@@ -57,25 +69,23 @@ const {title, description, link, image, tags} = Astro.props
     padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
   }
 
   h3 {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 400;
     line-height: 100%;
-    letter-spacing: -0.2rem;
+    letter-spacing: -0.25rem;
   }
 
   p {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: 1rem;
     font-weight: 400;
     line-height: 150%;
-    letter-spacing: -0.05rem;
+    letter-spacing: -0.1rem;
   }
 
   .project-tags {
@@ -93,6 +103,13 @@ const {title, description, link, image, tags} = Astro.props
     font-family: 'Victor Mono', monospace;
   }
 
+  .project-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
   a {
     color: #fff;
     text-decoration: none;
@@ -100,10 +117,14 @@ const {title, description, link, image, tags} = Astro.props
     font-size: 1rem;
     font-weight: 400;
     transition: opacity 0.3s ease;
-    margin-top: auto;
   }
 
   a:hover {
     opacity: 0.8;
+  }
+
+  .source-code-link svg {
+    width: 20px;
+    height: 20px;
   }
 </style>
