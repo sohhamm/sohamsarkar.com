@@ -1,38 +1,6 @@
 ---
-
+/* No frontmatter needed */
 ---
-
-<style>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-
-  @layer components {
-    .aurora-background {
-      @apply relative overflow-hidden;
-    }
-    .aurora {
-      @apply absolute w-full h-full top-0 left-0;
-      background: radial-gradient(circle at 10% 20%, rgba(0, 175, 255, 0.4), transparent 25%),
-        radial-gradient(circle at 80% 0%, rgba(0, 255, 200, 0.3), transparent 25%),
-        radial-gradient(circle at 50% 50%, rgba(255, 0, 200, 0.2), transparent 25%);
-      animation: moveAurora 15s linear infinite;
-      background-size: cover;
-    }
-  }
-
-  @keyframes moveAurora {
-    0% {
-      transform: translateY(0) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-10%) rotate(180deg);
-    }
-    100% {
-      transform: translateY(0) rotate(360deg);
-    }
-  }
-</style>
 
 <div class='aurora-background'>
   <div class='aurora'></div>
@@ -40,3 +8,82 @@
     <slot />
   </div>
 </div>
+
+<style>
+  :root {
+    --transparent: rgba(0, 0, 0, 0);
+    --black: #000;
+
+    /* Softer Aurora Colors: Choose colors that blend more smoothly */
+    --aurora-start: #2a2f4a; /* deep indigo */
+    --aurora-mid: #3b4e6a; /* a bluish-gray */
+    --aurora-end: #5f728e; /* lighter slate blue */
+
+    /* Create a more subtle linear gradient with soft transitions */
+    --aurora-gradient: linear-gradient(
+      100deg,
+      var(--aurora-start) 0%,
+      var(--aurora-mid) 30%,
+      var(--aurora-end) 60%,
+      var(--aurora-mid) 90%
+    );
+  }
+
+  @keyframes aurora {
+    from {
+      background-position: 50% 50%;
+    }
+    to {
+      background-position: 200% 50%;
+    }
+  }
+
+  .aurora-background {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    /* Use a simpler gradient and soften transitions */
+    background-image: var(--aurora-gradient);
+    background-size: 200% 200%;
+    background-position: 50% 50%;
+
+    /* Try a blend mode that subtly interacts with the black background */
+    mix-blend-mode: overlay;
+
+    /* Add a stronger blur to soften the gradient edges */
+    filter: blur(20px);
+
+    /* Slow down the animation for a more ambient feel */
+    animation: aurora 120s linear infinite;
+
+    /* Optional: Add a subtle radial mask to fade out edges */
+    mask-image: radial-gradient(ellipse at center, #fff 60%, transparent 100%);
+  }
+
+  .relative {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+
+    /* Add a subtle overlay behind content to ensure readability */
+    /* This can be a slightly transparent dark background */
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0%, transparent 80%);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+  }
+</style>
