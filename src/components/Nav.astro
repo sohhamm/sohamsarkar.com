@@ -87,15 +87,19 @@ const currentPath = Astro.url.pathname
 <style>
   .navbar {
     display: flex;
-    position: relative;
+    position: fixed;
     justify-content: center;
     width: 100%;
     padding: 24px 0;
+    z-index: 1000; /* Ensure nav stays above other content */
+    background: rgba(0, 0, 0, 0.5); /* Optional: add slight background */
+    backdrop-filter: blur(8px); /* Optional: add blur effect */
   }
 
   .logo {
     position: absolute;
-    left: 0;
+    /* left: 0; */
+    left: 24px;
   }
 
   .nav-links {
@@ -138,6 +142,9 @@ const currentPath = Astro.url.pathname
   }
 
   @media (max-width: 768px) {
+    .logo {
+      left: 12px;
+    }
     .navbar {
       flex-direction: column;
       padding: 12px 0;
