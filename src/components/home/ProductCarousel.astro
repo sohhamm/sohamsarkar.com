@@ -1,0 +1,298 @@
+---
+import ProductCard from './ProductCard.astro'
+
+export interface Product {
+  id: number
+  title: string
+  description: string
+  image: string
+  link: string
+  status: string
+  category: string
+}
+
+export interface Props {
+  products: Product[]
+}
+
+const {products} = Astro.props
+---
+
+<div class='product-carousel-container'>
+  <div class='product-carousel' id='productCarousel'>
+    {
+      products.map((product, index) => (
+        <div class='carousel-slide' data-slide={index}>
+          <ProductCard product={product} />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    products.length > 1 && (
+      <div class='carousel-controls'>
+        <button class='carousel-btn prev-btn' id='prevBtn' aria-label='Previous product'>
+          <svg
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+          >
+            <path d='M15 18l-6-6 6-6' />
+          </svg>
+        </button>
+
+        <div class='carousel-indicators'>
+          {products.map((_, index) => (
+            <button
+              class={`indicator ${index === 0 ? 'active' : ''}`}
+              data-slide={index}
+              aria-label={`Go to product ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <button class='carousel-btn next-btn' id='nextBtn' aria-label='Next product'>
+          <svg
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+          >
+            <path d='M9 18l6-6-6-6' />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .product-carousel-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .product-carousel {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    gap: 16px;
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    flex-shrink: 0;
+  }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .carousel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .carousel-btn:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+  }
+
+  .carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .carousel-indicators {
+    display: flex;
+    gap: 8px;
+  }
+
+  .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .indicator.active {
+    background: #fff;
+    transform: scale(1.2);
+  }
+
+  .indicator:hover {
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    .carousel-controls {
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<script>
+  class ProductCarousel {
+    private carousel: HTMLElement
+    private slides: NodeListOf<HTMLElement>
+    private indicators: NodeListOf<HTMLElement>
+    private prevBtn: HTMLElement
+    private nextBtn: HTMLElement
+    private currentSlide: number = 0
+    private totalSlides: number
+    private autoPlayInterval: number | null = null
+
+    constructor() {
+      this.carousel = document.getElementById('productCarousel')!
+      this.slides = this.carousel.querySelectorAll('.carousel-slide')
+      this.indicators = document.querySelectorAll('.indicator')
+      this.prevBtn = document.getElementById('prevBtn')!
+      this.nextBtn = document.getElementById('nextBtn')!
+      this.totalSlides = this.slides.length
+
+      this.init()
+    }
+
+    init() {
+      if (this.totalSlides <= 1) return
+
+      this.bindEvents()
+      this.startAutoPlay()
+      this.updateControls()
+    }
+
+    bindEvents() {
+      this.prevBtn?.addEventListener('click', () => this.prevSlide())
+      this.nextBtn?.addEventListener('click', () => this.nextSlide())
+
+      this.indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goToSlide(index))
+      })
+
+      // Pause autoplay on hover
+      this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay())
+      this.carousel.addEventListener('mouseleave', () => this.startAutoPlay())
+
+      // Keyboard navigation
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') this.prevSlide()
+        if (e.key === 'ArrowRight') this.nextSlide()
+      })
+
+      // Touch/swipe support
+      let touchStartX = 0
+      let touchEndX = 0
+
+      this.carousel.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX
+      })
+
+      this.carousel.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX
+        this.handleSwipe(touchStartX, touchEndX)
+      })
+    }
+
+    handleSwipe(startX: number, endX: number) {
+      const swipeThreshold = 50
+      const diff = startX - endX
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          this.nextSlide()
+        } else {
+          this.prevSlide()
+        }
+      }
+    }
+
+    goToSlide(index: number) {
+      this.currentSlide = index
+      this.updateCarousel()
+      this.updateControls()
+      this.resetAutoPlay()
+    }
+
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.totalSlides
+      this.updateCarousel()
+      this.updateControls()
+      this.resetAutoPlay()
+    }
+
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides
+      this.updateCarousel()
+      this.updateControls()
+      this.resetAutoPlay()
+    }
+
+    updateCarousel() {
+      const translateX = -this.currentSlide * 100
+      this.carousel.style.transform = `translateX(${translateX}%)`
+    }
+
+    updateControls() {
+      // Update indicators
+      this.indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === this.currentSlide)
+      })
+    }
+
+    startAutoPlay() {
+      if (this.totalSlides <= 1) return
+
+      this.autoPlayInterval = window.setInterval(() => {
+        this.nextSlide()
+      }, 5000) // Change slide every 5 seconds
+    }
+
+    stopAutoPlay() {
+      if (this.autoPlayInterval) {
+        clearInterval(this.autoPlayInterval)
+        this.autoPlayInterval = null
+      }
+    }
+
+    resetAutoPlay() {
+      this.stopAutoPlay()
+      this.startAutoPlay()
+    }
+  }
+
+  // Initialize carousel when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new ProductCarousel()
+  })
+</script>

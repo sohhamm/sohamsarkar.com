@@ -1,0 +1,377 @@
+---
+export interface Product {
+  id: number
+  title: string
+  description: string
+  image: string
+  link: string
+  status: string
+  category: string
+}
+
+export interface Props {
+  product: Product
+}
+
+const {product} = Astro.props
+---
+
+<div class='product-card'>
+  <div class='product-content'>
+    <div class='product-text'>
+      <div class='product-header'>
+        <h3 class='product-title'>{product.title}</h3>
+        <div class='product-meta'>
+          <span class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}>
+            {product.status}
+          </span>
+          <span class='category-badge'>{product.category}</span>
+        </div>
+      </div>
+
+      <p class='product-description'>{product.description}</p>
+
+      <div class='product-actions'>
+        <a href={product.link} target='_blank' rel='noopener noreferrer' class='product-link'>
+          <span>View Product</span>
+          <svg
+            width='20'
+            height='20'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+          >
+            <path d='M7 17L17 7'></path>
+            <path d='M7 7h10v10'></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class='product-visual'>
+      <div class='product-image-container'>
+        <img
+          src={product.image}
+          alt={`${product.title} interface`}
+          class='product-image'
+          loading='lazy'
+        />
+        <div class='image-overlay'></div>
+      </div>
+    </div>
+  </div>
+
+  <div class='card-glow'></div>
+</div>
+
+<style>
+  .product-card {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 542px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 auto;
+  }
+
+  .product-card:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-8px);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 60px rgba(255, 255, 255, 0.1);
+  }
+
+  .product-card:hover .card-glow {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .card-glow {
+    position: absolute;
+    inset: -2px;
+    border-radius: 26px;
+    background: linear-gradient(
+      45deg,
+      rgba(59, 130, 246, 0.3),
+      rgba(139, 92, 246, 0.3),
+      rgba(236, 72, 153, 0.3),
+      rgba(59, 130, 246, 0.3)
+    );
+    background-size: 400% 400%;
+    opacity: 0;
+    z-index: -1;
+    transition: all 0.6s ease;
+    animation: gradientShift 8s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .product-content {
+    display: flex;
+    height: 100%;
+    padding: 48px;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .product-text {
+    flex: 1;
+    z-index: 2;
+  }
+
+  .product-header {
+    margin-bottom: 24px;
+  }
+
+  .product-title {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.2rem;
+    margin-bottom: 16px;
+    transition: color 0.3s ease;
+  }
+
+  .product-card:hover .product-title {
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .product-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .status-badge,
+  .category-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  .status-badge {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+
+  .status-badge.status-beta {
+    background: rgba(249, 115, 22, 0.2);
+    color: #f97316;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+  }
+
+  .status-badge.status-coming-soon {
+    background: rgba(139, 92, 246, 0.2);
+    color: #8b5cf6;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+  }
+
+  .category-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .product-description {
+    color: #7f7f7f;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: -0.1rem;
+    margin-bottom: 32px;
+    transition: color 0.3s ease;
+  }
+
+  .product-card:hover .product-description {
+    color: #a1a1aa;
+  }
+
+  .product-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1.125rem;
+    font-weight: 400;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .product-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(4px);
+  }
+
+  .product-visual {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1.5;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.6s ease;
+  }
+
+  .product-card:hover .product-image-container {
+    transform: scale(1.05) rotateY(5deg);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.1);
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card:hover .image-overlay {
+    opacity: 1;
+  }
+
+  .card-content {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .card-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #3b82f6;
+  }
+
+  .card-text {
+    flex: 1;
+  }
+
+  .card-line {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    margin-bottom: 4px;
+  }
+
+  .card-line.short {
+    width: 60%;
+  }
+
+  .card-chart {
+    display: flex;
+    gap: 4px;
+    align-items: end;
+  }
+
+  .chart-bar {
+    width: 8px;
+    background: #8b5cf6;
+    border-radius: 2px;
+  }
+
+  .chart-bar:nth-child(1) {
+    height: 20px;
+  }
+  .chart-bar:nth-child(2) {
+    height: 32px;
+  }
+  .chart-bar:nth-child(3) {
+    height: 16px;
+  }
+
+  @media (max-width: 1024px) {
+    .product-card {
+      height: auto;
+      min-height: 400px;
+    }
+
+    .product-content {
+      flex-direction: column;
+      padding: 32px;
+      gap: 32px;
+    }
+
+    .product-title {
+      font-size: 2rem;
+    }
+
+    .product-description {
+      font-size: 1.125rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-card {
+      height: auto;
+      min-height: 350px;
+    }
+
+    .product-content {
+      padding: 24px;
+      gap: 24px;
+    }
+
+    .product-title {
+      font-size: 1.75rem;
+      letter-spacing: -0.1rem;
+    }
+
+    .product-description {
+      font-size: 1rem;
+    }
+
+    .floating-card {
+      display: none;
+    }
+  }
+</style>

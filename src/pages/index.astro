@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
-import ProjectsSection from '../components/ProjectsSection.astro'
 import BlogsSection from '../components/BlogsSection.astro'
+import ProjectsSection from '../components/ProjectsSection.astro'
+import ProductsSection from '../components/home/ProductsSection.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -25,6 +26,8 @@ const content = {
       <Button href='https://cal.com/soham-sarkar-work'>Let's grow together!</Button>
     </div>
   </section>
+
+  <ProductsSection />
 
   <ProjectsSection isHomePage />
 

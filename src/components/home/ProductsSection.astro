@@ -1,0 +1,64 @@
+---
+import ProductCarousel from './ProductCarousel.astro'
+
+const products = [
+  {
+    id: 1,
+    title: 'SuperDivide',
+    description:
+      'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
+    image: '/products/superdivide.webp',
+    link: 'https://www.superdivide.com',
+    status: 'Live',
+    category: 'SaaS',
+  },
+  //   {
+  //     id: 2,
+  //     title: 'TaskFlow Pro',
+  //     description:
+  //       'Streamline your workflow with intelligent task management and team collaboration tools.',
+  //     image: '/products/taskflow.jpg',
+  //     link: 'https://taskflow.app',
+  //     status: 'Beta',
+  //     category: 'Productivity',
+  //   },
+]
+---
+
+<section class='products-section'>
+  <div class='products-header'>
+    <div class='header-content'>
+      <h2>Built & Building.</h2>
+    </div>
+  </div>
+
+  <ProductCarousel products={products} />
+</section>
+
+<style>
+  .products-section {
+    padding: 60px 0;
+    margin-bottom: 40px;
+  }
+
+  .products-header {
+    margin-bottom: 40px;
+  }
+
+  .header-content h2 {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.08em;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .products-section {
+      padding: 40px 0;
+    }
+  }
+</style>
