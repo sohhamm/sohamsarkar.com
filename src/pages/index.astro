@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
-import ProjectsSection from '../components/home/ProjectsSection.astro'
+import ProjectsSection from '../components/ProjectsSection.astro'
+import BlogsSection from '../components/BlogsSection.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -25,7 +26,9 @@ const content = {
     </div>
   </section>
 
-  <ProjectsSection />
+  <ProjectsSection isHomePage />
+
+  <BlogsSection />
 
   <style>
     .hero-section {
@@ -36,6 +39,10 @@ const content = {
       min-height: 65dvh;
       background: radial-gradient(circle, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
       color: #ffffff;
+    }
+
+    .hero-section::selection {
+      background: limegreen;
     }
 
     .hero-text {

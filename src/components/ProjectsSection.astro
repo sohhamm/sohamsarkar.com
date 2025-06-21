@@ -1,0 +1,75 @@
+---
+import Button from './Button.astro'
+import Project from './Project.astro'
+import {getCollection} from 'astro:content'
+
+export interface Props {
+  isHomePage?: boolean
+}
+
+const {isHomePage = false} = Astro.props
+
+const allProjects = await getCollection('projects')
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order)
+const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
+---
+
+<section class='projects-section'>
+  <div class='projects-header'>
+    <h2>{isHomePage ? 'Digital Backyard' : 'Projects'}</h2>
+    {isHomePage && <Button href='/projects'>View all projects →</Button>}
+  </div>
+
+  <div class='projects-container'>
+    {
+      projects.map(project => (
+        <Project
+          title={project.data.title}
+          description={project.data.description}
+          link={project.data.link}
+          image={project.data.image}
+          tags={project.data.tags}
+          sourceCode={project.data.sourceCode}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .projects-section {
+    padding: 60px 0;
+  }
+
+  .projects-header {
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .projects-header h2 {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.08em;
+  }
+
+  .projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .projects-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

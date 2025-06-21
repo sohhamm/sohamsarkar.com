@@ -1,0 +1,130 @@
+---
+export interface Props {
+  title: string
+  description: string
+  link: string
+  image: string
+  tags: string[]
+  sourceCode: string
+}
+
+const {title, description, link, image, tags, sourceCode} = Astro.props
+---
+
+<div class='project-item'>
+  <div class='project-image'>
+    <img src={image} alt={`${title} Screenshot`} />
+  </div>
+  <div class='project-content'>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class='project-tags'>
+      {tags.map(tag => <span class='tag'>{tag}</span>)}
+    </div>
+    <div class='project-links'>
+      <a href={link} target='_blank' rel='noopener noreferrer'>View Project →</a>
+      <a href={sourceCode} target='_blank' rel='noopener noreferrer' class='source-code-link'>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+        >
+          <path
+            d='M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22'
+          ></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .project-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+
+  .project-image {
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  h3 {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.25rem;
+  }
+
+  p {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: -0.1rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  .project-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    transition: opacity 0.3s ease;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+
+  .source-code-link svg {
+    width: 20px;
+    height: 20px;
+  }
+</style>

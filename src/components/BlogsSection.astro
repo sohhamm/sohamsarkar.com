@@ -1,0 +1,46 @@
+---
+import {getCollection} from 'astro:content'
+import BlogPost from './BlogPost.astro'
+
+const allPosts = await getCollection('blogs')
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const recentPosts = sortedPosts.slice(0, 5)
+---
+
+<section class='blogs-section'>
+  <h2>Recent Writings</h2>
+  <div class='blog-list'>
+    {
+      recentPosts.map(post => (
+        <BlogPost
+          title={post.data.title}
+          date={post.data.date}
+          description={post.data.description}
+          url={`/blog/${post.slug}`}
+        />
+      ))
+    }
+  </div>
+  <a href='/blog' class='view-all'>View all posts →</a>
+</section>
+
+<style>
+  .blogs-section {
+    padding: 60px 0;
+  }
+  h2 {
+    font-family: 'Victor Mono', monospace;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .blog-list {
+    display: grid;
+    gap: 1rem;
+  }
+  .view-all {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #fff;
+    text-decoration: none;
+  }
+</style>

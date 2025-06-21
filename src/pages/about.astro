@@ -1,10 +1,200 @@
 ---
 import Layout from '../layouts/layout.astro'
+import {Image} from 'astro:assets'
+import profileImage from '../assets/pfp.png'
 
-const content = {
-  title: 'About | Soham Sarkar',
-  description: `About Soham Sarkar`,
-}
+const title = 'About Soham Sarkar | Tech Enthusiast & App Developer'
+const description =
+  "Learn about Soham Sarkar's journey, philosophy, and approach to building innovative and user-centric applications."
 ---
 
-<Layout content={content}>about me</Layout>
+<Layout content={{title, description}}>
+  <main class='about-page'>
+    <h1>About Soham Sarkar</h1>
+
+    <section class='profile'>
+      <Image src={profileImage} alt='Soham Sarkar' width={300} height={300} />
+      <div>
+        <h2>Tech Enthusiast, Problem Solver, and App Developer</h2>
+        <p>
+          Hello! I'm Soham Sarkar, a passionate app developer based in Bangalore, India. With a
+          diverse background spanning technology, product development, sales, marketing, and
+          problem-solving, I bring a unique perspective to every project I undertake.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>My Journey</h2>
+      <p>
+        My journey in the tech world began with a simple realization: technology has the power to
+        solve real-world problems. This insight has guided my career and shaped my approach to app
+        development. From my early days of coding to my current role as a full-stack developer, I've
+        always been driven by the desire to create solutions that make a tangible difference in
+        people's lives.
+      </p>
+    </section>
+
+    <section>
+      <h2>My Philosophy on Building Apps</h2>
+
+      <h3>Solving Real Problems Through Personal Experience</h3>
+      <p>
+        At the heart of my development process is a simple yet powerful philosophy: <strong
+          >I build apps to solve problems I've personally encountered</strong
+        >. This approach ensures that every application I create is:
+      </p>
+      <ul>
+        <li>Rooted in real-world needs</li>
+        <li>Designed with genuine user empathy</li>
+        <li>Practical and immediately useful</li>
+      </ul>
+      <p>
+        By addressing challenges I've faced firsthand, I can anticipate user needs more effectively
+        and create solutions that resonate on a personal level.
+      </p>
+
+      <h3>Leveraging Diverse Expertise</h3>
+      <p>My multifaceted background allows me to approach app development from various angles:</p>
+      <ul>
+        <li>
+          <strong>Technology:</strong> Staying at the forefront of coding languages and development frameworks
+        </li>
+        <li>
+          <strong>Product Development:</strong> Crafting user-centric products that meet market needs
+        </li>
+        <li>
+          <strong>Sales and Marketing:</strong> Understanding how to position and promote apps effectively
+        </li>
+        <li>
+          <strong>Problem-Solving:</strong> Approaching challenges with creativity and analytical thinking
+        </li>
+      </ul>
+
+      <h3>A Deep Commitment to Design Excellence</h3>
+      <p>
+        I believe that <strong
+          >great design is the cornerstone of every successful application</strong
+        >. My commitment to design excellence encompasses:
+      </p>
+      <ul>
+        <li>
+          <strong>Efficiency:</strong> Creating apps that perform seamlessly with quick load times
+        </li>
+        <li>
+          <strong>Intuitive User Experience:</strong> Designing interfaces that are easy to navigate
+          and enjoyable to use
+        </li>
+        <li>
+          <strong>Attention to Detail:</strong> Meticulously refining every element for a polished result
+        </li>
+        <li>
+          <strong>Performance Optimization:</strong> Leveraging cutting-edge technologies for speed and
+          responsiveness
+        </li>
+        <li>
+          <strong>Accessibility:</strong> Ensuring apps are usable for people with varying abilities
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Let's Connect</h2>
+      <p>
+        I'm always excited to take on new challenges and collaborate on innovative projects. Whether
+        you have a specific app idea in mind or just want to discuss the latest in tech, I'd love to
+        hear from you.
+      </p>
+      <p>
+        Feel free to explore my projects and learn more about my work right here on my website. If
+        you'd like to connect, don't hesitate to reach out through any of the social links below or
+        drop me an email.
+      </p>
+      <p>Thank you for visiting my digital space. Let's build something amazing together!</p>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .about-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .profile img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 1rem;
+  }
+
+  ul li::before {
+    content: '•';
+    color: #4a90e2;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+
+  @media (max-width: 768px) {
+    .profile {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+  }
+</style>

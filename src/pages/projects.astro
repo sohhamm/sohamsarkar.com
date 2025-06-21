@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/layout.astro'
+import ProjectsSection from '../components/ProjectsSection.astro'
+
+const content = {
+  title: 'Projects | Soham Sarkar',
+  description: "Soham Sarkar's projects",
+}
+---
+
+<Layout content={content}>
+  <main>
+    <ProjectsSection />
+  </main>
+
+  <script>
+    // Client-side filtering logic
+    const tags = document.querySelectorAll('.tag')
+    const projects = document.querySelectorAll('.project-item') as NodeListOf<HTMLElement>
+
+    tags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        const selectedTag = tag.textContent
+        projects.forEach(project => {
+          const projectTags = project.querySelectorAll('.tag')
+          const hasTag = Array.from(projectTags).some(t => t.textContent === selectedTag)
+          project.style.display = hasTag ? 'flex' : 'none'
+        })
+      })
+    })
+  </script>
+</Layout>

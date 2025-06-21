@@ -3,23 +3,54 @@ import MainHead from '../components/MainHead.astro'
 import Nav from '../components/Nav.astro'
 // import Footer from '../components/Footer.astro'
 
-const {content} = Astro.props
+interface Props {
+  content: {
+    title: string
+    description: string
+  }
+}
+
+const {content} = Astro.props as Props
 ---
 
 <html lang={'en'}>
   <head>
     <MainHead title={content.title} description={content.description} />
   </head>
-  <body class='container'>
+  <body>
     <Nav />
-    <slot />
-    <!-- <Footer /> -->
+    <main class='main-content'>
+      <div class='container'>
+        <slot />
+        <Footer />
+      </div>
+      <div class='footer-image'></div>
+    </main>
+
     <style>
+      .main-content {
+        width: 100%;
+        padding-top: 100px;
+      }
+
       .container {
         max-width: 1200px;
         margin: 0 auto;
         padding-left: 20px;
         padding-right: 20px;
+      }
+      .footer-image {
+        height: 200px;
+        background-image: url('../assets/footer-bottom.png');
+        background-size: contain;
+        background-position: bottom;
+        background-repeat: no-repeat;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 64px;
+        }
       }
     </style>
   </body>
