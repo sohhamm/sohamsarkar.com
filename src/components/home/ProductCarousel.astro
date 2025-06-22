@@ -1,15 +1,6 @@
 ---
 import ProductCard from './ProductCard.astro'
-
-export interface Product {
-  id: number
-  title: string
-  description: string
-  image: string
-  link: string
-  status: string
-  category: string
-}
+import type {Product} from './ProductsSection.astro'
 
 export interface Props {
   products: Product[]
@@ -18,8 +9,8 @@ export interface Props {
 const {products} = Astro.props
 ---
 
-<div class='product-carousel-container'>
-  <div class='product-carousel' id='productCarousel'>
+<div class='product-carousel-container' data-carousel-container>
+  <div class='product-carousel' data-carousel>
     {
       products.map((product, index) => (
         <div class='carousel-slide' data-slide={index}>
@@ -31,8 +22,8 @@ const {products} = Astro.props
 
   {
     products.length > 1 && (
-      <div class='carousel-controls'>
-        <button class='carousel-btn prev-btn' id='prevBtn' aria-label='Previous product'>
+      <div class='carousel-controls' data-controls>
+        <button class='carousel-btn prev-btn' data-prev-btn aria-label='Previous product'>
           <svg
             width='20'
             height='20'
@@ -49,13 +40,13 @@ const {products} = Astro.props
           {products.map((_, index) => (
             <button
               class={`indicator ${index === 0 ? 'active' : ''}`}
-              data-slide={index}
+              data-indicator={index}
               aria-label={`Go to product ${index + 1}`}
             />
           ))}
         </div>
 
-        <button class='carousel-btn next-btn' id='nextBtn' aria-label='Next product'>
+        <button class='carousel-btn next-btn' data-next-btn aria-label='Next product'>
           <svg
             width='20'
             height='20'
@@ -83,6 +74,7 @@ const {products} = Astro.props
     display: flex;
     width: 100%;
     will-change: transform;
+    transition: none; /* Let Motion handle transitions */
   }
 
   .carousel-slide {
@@ -98,8 +90,7 @@ const {products} = Astro.props
     justify-content: center;
     gap: 24px;
     margin-top: 40px;
-    opacity: 0;
-    transform: translateY(20px);
+    /* Remove initial opacity/transform - let Motion handle it */
   }
 
   .carousel-btn {
@@ -115,11 +106,17 @@ const {products} = Astro.props
     cursor: pointer;
     backdrop-filter: blur(12px);
     will-change: transform;
+    transition: none; /* Let Motion handle transitions */
   }
 
   .carousel-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  .carousel-btn:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .carousel-indicators {
@@ -135,6 +132,7 @@ const {products} = Astro.props
     background: rgba(255, 255, 255, 0.3);
     cursor: pointer;
     will-change: transform, background-color;
+    transition: none; /* Let Motion handle transitions */
   }
 
   .indicator.active {
@@ -159,69 +157,100 @@ const {products} = Astro.props
   import {animate} from 'motion'
 
   class ProductCarousel {
+    private container: HTMLElement | null = null
     private carousel: HTMLElement | null = null
-    private slides: NodeListOf<HTMLElement> = document.querySelectorAll('')
-    private indicators: NodeListOf<HTMLElement> = document.querySelectorAll('')
+    private slides: NodeListOf<HTMLElement>
+    private indicators: NodeListOf<HTMLElement>
     private prevBtn: HTMLElement | null = null
     private nextBtn: HTMLElement | null = null
     private controls: HTMLElement | null = null
     private currentSlide: number = 0
     private totalSlides: number = 0
     private autoPlayInterval: number | null = null
+    private isInitialized: boolean = false
 
     constructor() {
-      this.carousel = document.getElementById('productCarousel')
-      if (!this.carousel) return
-
-      this.slides = this.carousel.querySelectorAll('.carousel-slide')
-      this.indicators = document.querySelectorAll('.indicator')
-      this.prevBtn = document.getElementById('prevBtn')
-      this.nextBtn = document.getElementById('nextBtn')
-      this.controls = document.querySelector('.carousel-controls')
-      this.totalSlides = this.slides.length
-
+      this.slides = document.querySelectorAll('.carousel-slide')
+      this.indicators = document.querySelectorAll('[data-indicator]')
       this.init()
     }
 
-    init() {
-      if (this.totalSlides <= 1) return
-
-      this.bindEvents()
-      this.setupButtonAnimations()
-      this.setupIndicatorAnimations()
-      this.startAutoPlay()
-      this.updateControls()
-      this.animateInitialLoad()
+    private init() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup())
+      } else {
+        // Use small delay to ensure all components are ready
+        setTimeout(() => this.setup(), 100)
+      }
     }
 
-    animateInitialLoad() {
+    private setup() {
+      this.container = document.querySelector('[data-carousel-container]')
+      this.carousel = document.querySelector('[data-carousel]')
+      this.slides = document.querySelectorAll('.carousel-slide')
+      this.indicators = document.querySelectorAll('[data-indicator]')
+      this.prevBtn = document.querySelector('[data-prev-btn]')
+      this.nextBtn = document.querySelector('[data-next-btn]')
+      this.controls = document.querySelector('[data-controls]')
+
+      this.totalSlides = this.slides.length
+
+      console.log('Carousel setup:', {
+        container: !!this.container,
+        carousel: !!this.carousel,
+        totalSlides: this.totalSlides,
+        controls: !!this.controls,
+      })
+
+      if (!this.carousel || this.totalSlides <= 1) {
+        console.log('Carousel not needed or not found')
+        return
+      }
+
+      this.bindEvents()
+      this.setupAnimations()
+      this.startAutoPlay()
+      this.animateInitialLoad()
+      this.isInitialized = true
+    }
+
+    private animateInitialLoad() {
       if (!this.controls) return
 
+      // Set initial state
+      this.controls.style.opacity = '0'
+      this.controls.style.transform = 'translateY(20px)'
+
+      // Animate controls in
       animate(
         this.controls,
         {
-          opacity: [0, 1],
-          y: [20, 0],
+          opacity: 1,
+          transform: 'translateY(0px)',
         },
         {
           duration: 0.6,
           delay: 0.3,
+          ease: [0.22, 1, 0.36, 1],
         },
       )
     }
 
-    setupButtonAnimations() {
-      const buttons = [this.prevBtn, this.nextBtn].filter(Boolean) as HTMLElement[]
+    private setupAnimations() {
+      // Setup button hover animations
+      const buttons = [this.prevBtn, this.nextBtn].filter(Boolean)
 
       buttons.forEach(button => {
+        if (!button) return
+
         button.addEventListener('mouseenter', () => {
           animate(
             button,
             {
-              scale: [1, 1.05],
-              y: [0, -2],
+              scale: 1.05,
+              transform: 'translateY(-2px) scale(1.05)',
             },
-            {duration: 0.2},
+            {duration: 0.2, ease: [0.22, 1, 0.36, 1]},
           )
         })
 
@@ -229,32 +258,31 @@ const {products} = Astro.props
           animate(
             button,
             {
-              scale: [1.05, 1],
-              y: [-2, 0],
+              scale: 1,
+              transform: 'translateY(0px) scale(1)',
             },
-            {duration: 0.2},
+            {duration: 0.2, ease: [0.22, 1, 0.36, 1]},
           )
         })
 
         button.addEventListener('mousedown', () => {
-          animate(button, {scale: [1.05, 0.95]}, {duration: 0.1})
+          animate(button, {scale: 0.95}, {duration: 0.1})
         })
 
         button.addEventListener('mouseup', () => {
-          animate(button, {scale: [0.95, 1.05]}, {duration: 0.1})
+          animate(button, {scale: 1.05}, {duration: 0.1})
         })
       })
-    }
 
-    setupIndicatorAnimations() {
+      // Setup indicator hover animations
       this.indicators.forEach(indicator => {
         indicator.addEventListener('mouseenter', () => {
           if (!indicator.classList.contains('active')) {
             animate(
               indicator,
               {
-                scale: [1, 1.2],
-                backgroundColor: ['rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.6)'],
+                scale: 1.2,
+                backgroundColor: 'rgba(255, 255, 255, 0.6)',
               },
               {duration: 0.2},
             )
@@ -266,8 +294,8 @@ const {products} = Astro.props
             animate(
               indicator,
               {
-                scale: [1.2, 1],
-                backgroundColor: ['rgba(255, 255, 255, 0.6)', 'rgba(255, 255, 255, 0.3)'],
+                scale: 1,
+                backgroundColor: 'rgba(255, 255, 255, 0.3)',
               },
               {duration: 0.2},
             )
@@ -276,7 +304,7 @@ const {products} = Astro.props
       })
     }
 
-    bindEvents() {
+    private bindEvents() {
       this.prevBtn?.addEventListener('click', () => this.prevSlide())
       this.nextBtn?.addEventListener('click', () => this.nextSlide())
 
@@ -284,30 +312,66 @@ const {products} = Astro.props
         indicator.addEventListener('click', () => this.goToSlide(index))
       })
 
-      if (this.carousel) {
-        this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay())
-        this.carousel.addEventListener('mouseleave', () => this.startAutoPlay())
-      }
+      // Auto-play controls
+      this.container?.addEventListener('mouseenter', () => this.stopAutoPlay())
+      this.container?.addEventListener('mouseleave', () => this.startAutoPlay())
 
+      // Keyboard navigation
       document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowLeft') this.prevSlide()
-        if (e.key === 'ArrowRight') this.nextSlide()
+        if (!this.isInitialized) return
+
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault()
+          this.prevSlide()
+        }
+        if (e.key === 'ArrowRight') {
+          e.preventDefault()
+          this.nextSlide()
+        }
       })
+
+      // Touch/swipe support
+      this.setupTouchEvents()
+    }
+
+    private setupTouchEvents() {
+      if (!this.carousel) return
 
       let touchStartX = 0
       let touchEndX = 0
+      let isDragging = false
 
-      this.carousel?.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX
-      })
+      this.carousel.addEventListener(
+        'touchstart',
+        e => {
+          touchStartX = e.changedTouches[0].screenX
+          isDragging = true
+        },
+        {passive: true},
+      )
 
-      this.carousel?.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX
-        this.handleSwipe(touchStartX, touchEndX)
-      })
+      this.carousel.addEventListener(
+        'touchmove',
+        e => {
+          if (!isDragging) return
+          e.preventDefault()
+        },
+        {passive: false},
+      )
+
+      this.carousel.addEventListener(
+        'touchend',
+        e => {
+          if (!isDragging) return
+          touchEndX = e.changedTouches[0].screenX
+          this.handleSwipe(touchStartX, touchEndX)
+          isDragging = false
+        },
+        {passive: true},
+      )
     }
 
-    handleSwipe(startX: number, endX: number) {
+    private handleSwipe(startX: number, endX: number) {
       const swipeThreshold = 50
       const diff = startX - endX
 
@@ -320,28 +384,30 @@ const {products} = Astro.props
       }
     }
 
-    goToSlide(index: number) {
+    private goToSlide(index: number) {
+      if (index === this.currentSlide) return
+
       this.currentSlide = index
       this.updateCarousel()
-      this.updateControls()
+      this.updateIndicators()
       this.resetAutoPlay()
     }
 
-    nextSlide() {
+    private nextSlide() {
       this.currentSlide = (this.currentSlide + 1) % this.totalSlides
       this.updateCarousel()
-      this.updateControls()
+      this.updateIndicators()
       this.resetAutoPlay()
     }
 
-    prevSlide() {
+    private prevSlide() {
       this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides
       this.updateCarousel()
-      this.updateControls()
+      this.updateIndicators()
       this.resetAutoPlay()
     }
 
-    updateCarousel() {
+    private updateCarousel() {
       if (!this.carousel) return
 
       const translateX = -this.currentSlide * 100
@@ -349,16 +415,16 @@ const {products} = Astro.props
       animate(
         this.carousel,
         {
-          transform: [
-            `translateX(${this.carousel.style.transform || 'translateX(0%)'})`,
-            `translateX(${translateX}%)`,
-          ],
+          transform: `translateX(${translateX}%)`,
         },
-        {duration: 0.8},
+        {
+          duration: 0.8,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        },
       )
     }
 
-    updateControls() {
+    private updateIndicators() {
       this.indicators.forEach((indicator, index) => {
         const isActive = index === this.currentSlide
 
@@ -367,26 +433,26 @@ const {products} = Astro.props
           animate(
             indicator,
             {
-              scale: [1, 1.4],
-              backgroundColor: ['rgba(255, 255, 255, 0.3)', '#fff'],
+              scale: 1.4,
+              backgroundColor: '#fff',
             },
-            {duration: 0.3},
+            {duration: 0.3, ease: [0.22, 1, 0.36, 1]},
           )
         } else if (!isActive && indicator.classList.contains('active')) {
           indicator.classList.remove('active')
           animate(
             indicator,
             {
-              scale: [1.4, 1],
-              backgroundColor: ['#fff', 'rgba(255, 255, 255, 0.3)'],
+              scale: 1,
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
             },
-            {duration: 0.3},
+            {duration: 0.3, ease: [0.22, 1, 0.36, 1]},
           )
         }
       })
     }
 
-    startAutoPlay() {
+    private startAutoPlay() {
       if (this.totalSlides <= 1) return
 
       this.autoPlayInterval = window.setInterval(() => {
@@ -394,20 +460,26 @@ const {products} = Astro.props
       }, 6000)
     }
 
-    stopAutoPlay() {
+    private stopAutoPlay() {
       if (this.autoPlayInterval) {
         clearInterval(this.autoPlayInterval)
         this.autoPlayInterval = null
       }
     }
 
-    resetAutoPlay() {
+    private resetAutoPlay() {
       this.stopAutoPlay()
       this.startAutoPlay()
     }
+
+    public destroy() {
+      this.stopAutoPlay()
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    new ProductCarousel()
+  new ProductCarousel()
+
+  document.addEventListener('astro:before-preparation', () => {
+    // Cleanup before page navigation
   })
 </script>

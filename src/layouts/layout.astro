@@ -18,6 +18,23 @@ const {content} = Astro.props as Props
     <MainHead title={content.title} description={content.description} />
   </head>
   <body>
+    <!-- Spotlight Effects -->
+    <div class='spotlight-container'>
+      <!-- Left spotlight group -->
+      <div class='spotlight-group spotlight-left'>
+        <div class='spotlight-beam spotlight-beam-1'></div>
+        <div class='spotlight-beam spotlight-beam-2'></div>
+        <div class='spotlight-beam spotlight-beam-3'></div>
+      </div>
+
+      <!-- Right spotlight group -->
+      <div class='spotlight-group spotlight-right'>
+        <div class='spotlight-beam spotlight-beam-1'></div>
+        <div class='spotlight-beam spotlight-beam-2'></div>
+        <div class='spotlight-beam spotlight-beam-3'></div>
+      </div>
+    </div>
+
     <Nav />
     <main class='main-content'>
       <div class='container'>
@@ -28,15 +45,159 @@ const {content} = Astro.props as Props
     </main>
 
     <style>
+      .spotlight-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .spotlight-group {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        z-index: 40;
+        pointer-events: none;
+      }
+
+      .spotlight-left {
+        top: 0;
+        left: 0;
+        animation: spotlight-move-left 7s ease-in-out infinite alternate;
+      }
+
+      .spotlight-right {
+        top: 0;
+        right: 0;
+        animation: spotlight-move-right 7s ease-in-out infinite alternate;
+      }
+
+      .spotlight-beam {
+        position: absolute;
+        top: 0;
+      }
+
+      /* Left spotlight beams */
+      .spotlight-left .spotlight-beam-1 {
+        left: 0;
+        width: 560px;
+        height: 1380px;
+        transform: translateY(-350px) rotate(-45deg);
+        background: radial-gradient(
+          68.54% 68.72% at 55.02% 31.46%,
+          hsla(0, 0%, 100%, 0.08) 0%,
+          hsla(0, 0%, 100%, 0.04) 50%,
+          hsla(0, 0%, 100%, 0) 80%
+        );
+      }
+
+      .spotlight-left .spotlight-beam-2 {
+        left: 0;
+        width: 240px;
+        height: 1380px;
+        transform: rotate(-45deg) translate(5%, -50%);
+        transform-origin: top left;
+        background: radial-gradient(
+          50% 50% at 50% 50%,
+          hsla(0, 0%, 100%, 0.06) 0%,
+          hsla(0, 0%, 100%, 0.02) 80%,
+          transparent 100%
+        );
+      }
+
+      .spotlight-left .spotlight-beam-3 {
+        left: 0;
+        width: 240px;
+        height: 1380px;
+        transform: rotate(-45deg) translate(-180%, -70%);
+        transform-origin: top left;
+        background: radial-gradient(
+          50% 50% at 50% 50%,
+          hsla(0, 0%, 100%, 0.04) 0%,
+          hsla(0, 0%, 100%, 0.015) 80%,
+          transparent 100%
+        );
+      }
+
+      /* Right spotlight beams */
+      .spotlight-right .spotlight-beam-1 {
+        right: 0;
+        width: 560px;
+        height: 1380px;
+        transform: translateY(-350px) rotate(45deg);
+        background: radial-gradient(
+          68.54% 68.72% at 55.02% 31.46%,
+          hsla(0, 0%, 100%, 0.08) 0%,
+          hsla(0, 0%, 100%, 0.04) 50%,
+          hsla(0, 0%, 100%, 0) 80%
+        );
+      }
+
+      .spotlight-right .spotlight-beam-2 {
+        right: 0;
+        width: 240px;
+        height: 1380px;
+        transform: rotate(45deg) translate(-5%, -50%);
+        transform-origin: top right;
+        background: radial-gradient(
+          50% 50% at 50% 50%,
+          hsla(0, 0%, 100%, 0.06) 0%,
+          hsla(0, 0%, 100%, 0.02) 80%,
+          transparent 100%
+        );
+      }
+
+      .spotlight-right .spotlight-beam-3 {
+        right: 0;
+        width: 240px;
+        height: 1380px;
+        transform: rotate(45deg) translate(180%, -70%);
+        transform-origin: top right;
+        background: radial-gradient(
+          50% 50% at 50% 50%,
+          hsla(0, 0%, 100%, 0.04) 0%,
+          hsla(0, 0%, 100%, 0.015) 80%,
+          transparent 100%
+        );
+      }
+
+      @keyframes spotlight-move-left {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(100px);
+        }
+      }
+
+      @keyframes spotlight-move-right {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(-100px);
+        }
+      }
+
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        .spotlight-left,
+        .spotlight-right {
+          animation: none;
+        }
+      }
+
       .main-content {
         width: 100%;
         padding-top: 100px;
-      }
-
-      .noise-main-bg {
-        background:
-          url('/noise.png') lightgray 0% 0% / 100px 100px repeat,
-          #161515;
+        position: relative;
+        z-index: 2;
       }
 
       .container {
@@ -44,18 +205,38 @@ const {content} = Astro.props as Props
         margin: 0 auto;
         padding-left: 20px;
         padding-right: 20px;
+        position: relative;
+        z-index: 2;
       }
+
       .footer-image {
         height: 200px;
         background-image: url('../assets/footer-bottom.png');
         background-size: contain;
         background-position: bottom;
         background-repeat: no-repeat;
+        position: relative;
+        z-index: 2;
       }
 
       @media (max-width: 768px) {
-        body {
+        .main-content {
           padding-top: 64px;
+        }
+
+        /* Scale down spotlights on mobile */
+        .spotlight-left .spotlight-beam-1,
+        .spotlight-right .spotlight-beam-1 {
+          width: 400px;
+          height: 1000px;
+        }
+
+        .spotlight-left .spotlight-beam-2,
+        .spotlight-left .spotlight-beam-3,
+        .spotlight-right .spotlight-beam-2,
+        .spotlight-right .spotlight-beam-3 {
+          width: 180px;
+          height: 1000px;
         }
       }
     </style>

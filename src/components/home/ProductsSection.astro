@@ -1,7 +1,17 @@
 ---
 import ProductCarousel from './ProductCarousel.astro'
 
-const products = [
+export interface Product {
+  id: number
+  title: string
+  description: string
+  image: string
+  link: string
+  status: string
+  category: string
+}
+
+const products: Product[] = [
   {
     id: 1,
     title: 'SuperDivide',
@@ -9,15 +19,15 @@ const products = [
       'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
     image: '/products/superdivide.webp',
     link: 'https://www.superdivide.com',
-    status: 'Live',
+    status: 'Coming Soon',
     category: 'Finance',
   },
   {
     id: 2,
-    title: 'SuperHabits',
-    description: 'The best free habit tracker out there',
+    title: 'HabitWise',
+    description: 'The best free habit tracker out there.',
     image: '/products/superdivide.webp',
-    link: 'https://www.superdivide.com',
+    link: 'https://www.tryhabitwise.com',
     status: 'Planned',
     category: 'Productivity',
   },
@@ -62,19 +72,12 @@ const products = [
   .header-content h2 {
     color: #fff;
     font-family: 'Victor Mono', monospace;
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2rem, 6vw, 3.5rem);
     font-style: italic;
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.08em;
     margin-bottom: 20px;
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  .carousel-wrapper {
-    opacity: 0;
-    transform: translateY(40px);
   }
 
   @media (max-width: 768px) {
@@ -86,59 +89,104 @@ const products = [
     .products-header {
       margin-bottom: 40px;
     }
-
-    .header-subtitle {
-      font-size: 1rem;
-      padding: 0 20px;
-    }
   }
 </style>
 
 <script>
-  import {animate, stagger} from 'motion'
+  import {animate} from 'motion'
 
-  function initProductsSection() {
-    const section = document.querySelector('[data-products-section]')
-    if (!section) return
+  class ProductsSection {
+    private section: HTMLElement | null = null
+    private observer: IntersectionObserver | null = null
 
-    const title = section.querySelector('[data-products-title]')
-    const subtitle = section.querySelector('[data-products-subtitle]')
-    const carouselWrapper = section.querySelector('[data-carousel-wrapper]')
+    constructor() {
+      this.init()
+    }
 
-    // Intersection Observer for scroll-triggered animations
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Animate elements in sequence
-            const elements = [title, subtitle, carouselWrapper].filter(Boolean)
+    private init() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup())
+      } else {
+        this.setup()
+      }
+    }
 
-            animate(
-              elements,
-              {
-                opacity: [0, 1],
-                y: [30, 0],
-              },
-              {
-                duration: 0.8,
-                delay: stagger(0.2),
-              },
-            )
+    private setup() {
+      this.section = document.querySelector('[data-products-section]')
+      if (!this.section) {
+        console.warn('Products section not found')
+        return
+      }
 
-            // Stop observing after animation triggers
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px',
-      },
-    )
+      this.setupIntersectionObserver()
+    }
 
-    observer.observe(section)
+    private setupIntersectionObserver() {
+      if (!this.section) return
+
+      this.observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.animateElements()
+              this.observer?.unobserve(entry.target)
+            }
+          })
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '0px 0px -100px 0px',
+        },
+      )
+
+      this.observer.observe(this.section)
+    }
+
+    private animateElements() {
+      const title = this.section?.querySelector('[data-products-title]') as HTMLElement
+      const carouselWrapper = this.section?.querySelector('[data-carousel-wrapper]') as HTMLElement
+
+      const elements = [title, carouselWrapper].filter(Boolean)
+
+      if (elements.length === 0) {
+        console.warn('No elements found to animate')
+        return
+      }
+
+      console.log('Animating products section elements:', elements.length)
+
+      // Animate each element individually with staggered delay
+      elements.forEach((el, index) => {
+        if (el) {
+          // Set initial state
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(30px)'
+
+          // Animate to final state
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: 'translateY(0px)',
+            },
+            {
+              duration: 0.8,
+              delay: index * 0.2,
+              ease: [0.22, 1, 0.36, 1],
+            },
+          )
+        }
+      })
+    }
+
+    destroy() {
+      this.observer?.disconnect()
+    }
   }
 
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', initProductsSection)
+  new ProductsSection()
+
+  document.addEventListener('astro:before-preparation', () => {
+    // Cleanup before page navigation
+  })
 </script>
