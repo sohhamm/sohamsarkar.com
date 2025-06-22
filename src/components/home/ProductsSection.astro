@@ -10,55 +10,135 @@ const products = [
     image: '/products/superdivide.webp',
     link: 'https://www.superdivide.com',
     status: 'Live',
-    category: 'SaaS',
+    category: 'Finance',
   },
-  //   {
-  //     id: 2,
-  //     title: 'TaskFlow Pro',
-  //     description:
-  //       'Streamline your workflow with intelligent task management and team collaboration tools.',
-  //     image: '/products/taskflow.jpg',
-  //     link: 'https://taskflow.app',
-  //     status: 'Beta',
-  //     category: 'Productivity',
-  //   },
+  {
+    id: 2,
+    title: 'SuperHabits',
+    description: 'The best free habit tracker out there',
+    image: '/products/superdivide.webp',
+    link: 'https://www.superdivide.com',
+    status: 'Planned',
+    category: 'Productivity',
+  },
 ]
 ---
 
-<section class='products-section'>
+<section class='products-section' data-products-section>
   <div class='products-header'>
     <div class='header-content'>
-      <h2>Built & Building.</h2>
+      <h2 data-products-title>You can just build things.</h2>
     </div>
   </div>
 
-  <ProductCarousel products={products} />
+  <div class='carousel-wrapper' data-carousel-wrapper>
+    <ProductCarousel products={products} />
+  </div>
 </section>
 
 <style>
   .products-section {
-    padding: 60px 0;
-    margin-bottom: 40px;
+    padding: 80px 0;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .products-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   }
 
   .products-header {
-    margin-bottom: 40px;
+    margin-bottom: 60px;
+    text-align: left;
   }
 
   .header-content h2 {
     color: #fff;
     font-family: 'Victor Mono', monospace;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     font-style: italic;
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.08em;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .carousel-wrapper {
+    opacity: 0;
+    transform: translateY(40px);
   }
 
   @media (max-width: 768px) {
     .products-section {
-      padding: 40px 0;
+      padding: 60px 0;
+      margin-bottom: 40px;
+    }
+
+    .products-header {
+      margin-bottom: 40px;
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      padding: 0 20px;
     }
   }
 </style>
+
+<script>
+  import {animate, stagger} from 'motion'
+
+  function initProductsSection() {
+    const section = document.querySelector('[data-products-section]')
+    if (!section) return
+
+    const title = section.querySelector('[data-products-title]')
+    const subtitle = section.querySelector('[data-products-subtitle]')
+    const carouselWrapper = section.querySelector('[data-carousel-wrapper]')
+
+    // Intersection Observer for scroll-triggered animations
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Animate elements in sequence
+            const elements = [title, subtitle, carouselWrapper].filter(Boolean)
+
+            animate(
+              elements,
+              {
+                opacity: [0, 1],
+                y: [30, 0],
+              },
+              {
+                duration: 0.8,
+                delay: stagger(0.2),
+              },
+            )
+
+            // Stop observing after animation triggers
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px',
+      },
+    )
+
+    observer.observe(section)
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initProductsSection)
+</script>

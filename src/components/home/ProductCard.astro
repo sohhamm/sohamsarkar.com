@@ -16,126 +16,102 @@ export interface Props {
 const {product} = Astro.props
 ---
 
-<div class='product-card'>
+<div class='product-card' data-product-card>
   <div class='product-content'>
     <div class='product-text'>
       <div class='product-header'>
-        <h3 class='product-title'>{product.title}</h3>
-        <div class='product-meta'>
-          <span class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}>
+        <a
+          href={product.link}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='product-title-link'
+          data-title-link
+        >
+          <h3 class='product-title' data-title>{product.title}</h3>
+        </a>
+        <div class='product-meta' data-meta>
+          <span
+            class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}
+            data-status
+          >
             {product.status}
           </span>
-          <span class='category-badge'>{product.category}</span>
+          <span class='category-badge' data-category>{product.category}</span>
         </div>
       </div>
 
-      <p class='product-description'>{product.description}</p>
-
-      <div class='product-actions'>
-        <a href={product.link} target='_blank' rel='noopener noreferrer' class='product-link'>
-          <span>View Product</span>
-          <svg
-            width='20'
-            height='20'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            stroke-width='2'
-          >
-            <path d='M7 17L17 7'></path>
-            <path d='M7 7h10v10'></path>
-          </svg>
-        </a>
-      </div>
+      <p class='product-description' data-description>{product.description}</p>
     </div>
 
     <div class='product-visual'>
-      <div class='product-image-container'>
+      <div class='product-image-container' data-image-container>
         <img
           src={product.image}
           alt={`${product.title} interface`}
           class='product-image'
           loading='lazy'
+          data-image
         />
-        <div class='image-overlay'></div>
+        <div class='image-overlay' data-overlay></div>
       </div>
     </div>
   </div>
 
-  <div class='card-glow'></div>
+  <div class='card-border' data-border></div>
 </div>
 
 <style>
   .product-card {
     position: relative;
     width: 100%;
-    max-width: 1200px;
-    height: 542px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: #000;
+    max-width: 1100px;
+    height: 500px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.6);
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     margin: 0 auto;
+    backdrop-filter: blur(20px);
+    will-change: transform;
   }
 
-  .product-card:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-8px);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.3),
-      0 0 60px rgba(255, 255, 255, 0.1);
-  }
-
-  .product-card:hover .card-glow {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-
-  .card-glow {
+  .card-border {
     position: absolute;
-    inset: -2px;
-    border-radius: 26px;
+    inset: -1px;
+    border-radius: 21px;
     background: linear-gradient(
-      45deg,
-      rgba(59, 130, 246, 0.3),
-      rgba(139, 92, 246, 0.3),
-      rgba(236, 72, 153, 0.3),
-      rgba(59, 130, 246, 0.3)
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.1)
     );
-    background-size: 400% 400%;
     opacity: 0;
     z-index: -1;
-    transition: all 0.6s ease;
-    animation: gradientShift 8s ease infinite;
-  }
-
-  @keyframes gradientShift {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
+    will-change: opacity;
   }
 
   .product-content {
     display: flex;
     height: 100%;
     padding: 48px;
-    gap: 48px;
+    gap: 32px;
     align-items: center;
   }
 
   .product-text {
-    flex: 1;
+    flex: 0 0 45%;
     z-index: 2;
   }
 
   .product-header {
     margin-bottom: 24px;
+  }
+
+  .product-title-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 
   .product-title {
@@ -146,20 +122,23 @@ const {product} = Astro.props
     line-height: 100%;
     letter-spacing: -0.2rem;
     margin-bottom: 16px;
+    will-change: transform, color;
+    opacity: 0;
+    transform: translateY(20px);
     transition: color 0.3s ease;
   }
 
-  .product-card:hover .product-title {
-    background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .product-title:hover {
+    color: #e5e5e5;
   }
 
   .product-meta {
     display: flex;
     gap: 12px;
     align-items: center;
+    will-change: transform;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .status-badge,
@@ -169,30 +148,31 @@ const {product} = Astro.props
     font-size: 0.875rem;
     font-weight: 500;
     font-family: 'Victor Mono', monospace;
+    will-change: transform;
   }
 
   .status-badge {
-    background: rgba(34, 197, 94, 0.2);
-    color: #22c55e;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .status-badge.status-beta {
-    background: rgba(249, 115, 22, 0.2);
-    color: #f97316;
-    border: 1px solid rgba(249, 115, 22, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .status-badge.status-coming-soon {
-    background: rgba(139, 92, 246, 0.2);
-    color: #8b5cf6;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .category-badge {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: #a1a1aa;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .product-description {
@@ -202,35 +182,9 @@ const {product} = Astro.props
     font-weight: 400;
     line-height: 130%;
     letter-spacing: -0.1rem;
-    margin-bottom: 32px;
-    transition: color 0.3s ease;
-  }
-
-  .product-card:hover .product-description {
-    color: #a1a1aa;
-  }
-
-  .product-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Victor Mono', monospace;
-    font-size: 1.125rem;
-    font-weight: 400;
-    padding: 12px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-  }
-
-  .product-link:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateX(4px);
+    will-change: color;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .product-visual {
@@ -245,88 +199,27 @@ const {product} = Astro.props
   .product-image-container {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    aspect-ratio: 1.5;
+    height: 80%;
     border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.6s ease;
-  }
-
-  .product-card:hover .product-image-container {
-    transform: scale(1.05) rotateY(5deg);
+    will-change: transform;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .product-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-
-  .product-card:hover .product-image {
-    transform: scale(1.1);
+    will-change: transform;
   }
 
   .image-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .product-card:hover .image-overlay {
-    opacity: 1;
-  }
-
-  .card-content {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .card-icon {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #3b82f6;
-  }
-
-  .card-text {
-    flex: 1;
-  }
-
-  .card-line {
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    margin-bottom: 4px;
-  }
-
-  .card-line.short {
-    width: 60%;
-  }
-
-  .card-chart {
-    display: flex;
-    gap: 4px;
-    align-items: end;
-  }
-
-  .chart-bar {
-    width: 8px;
-    background: #8b5cf6;
-    border-radius: 2px;
-  }
-
-  .chart-bar:nth-child(1) {
-    height: 20px;
-  }
-  .chart-bar:nth-child(2) {
-    height: 32px;
-  }
-  .chart-bar:nth-child(3) {
-    height: 16px;
+    will-change: opacity;
   }
 
   @media (max-width: 1024px) {
@@ -339,6 +232,10 @@ const {product} = Astro.props
       flex-direction: column;
       padding: 32px;
       gap: 32px;
+    }
+
+    .product-text {
+      flex: none;
     }
 
     .product-title {
@@ -369,9 +266,166 @@ const {product} = Astro.props
     .product-description {
       font-size: 1rem;
     }
-
-    .floating-card {
-      display: none;
-    }
   }
 </style>
+
+<script>
+  import {animate, stagger} from 'motion'
+
+  function initProductCardAnimations() {
+    const cards = document.querySelectorAll('[data-product-card]')
+
+    cards.forEach(card => {
+      const title = card.querySelector('[data-title]')
+      const titleLink = card.querySelector('[data-title-link]')
+      const meta = card.querySelector('[data-meta]')
+      const description = card.querySelector('[data-description]')
+      const imageContainer = card.querySelector('[data-image-container]')
+      const image = card.querySelector('[data-image]')
+      const overlay = card.querySelector('[data-overlay]')
+      const border = card.querySelector('[data-border]')
+
+      // Initial animation on load with staggered entrance
+      const elements = [title, meta, description, imageContainer].filter(Boolean)
+
+      animate(
+        elements,
+        {
+          opacity: [0, 1],
+          y: [20, 0],
+        },
+        {
+          duration: 0.6,
+          delay: stagger(0.1),
+        },
+      )
+
+      // Hover animations
+      card.addEventListener('mouseenter', () => {
+        // Card elevation
+        animate(
+          card,
+          {
+            y: [0, -6],
+            borderColor: ['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.2)'],
+          },
+          {duration: 0.4},
+        )
+
+        // Border glow effect
+        if (border) {
+          animate(border, {opacity: [0, 1]}, {duration: 0.4})
+        }
+
+        // Description color change
+        if (description) {
+          animate(description, {color: ['#7f7f7f', '#a1a1aa']}, {duration: 0.3})
+        }
+
+        // Image container subtle scale
+        if (imageContainer) {
+          animate(
+            imageContainer,
+            {
+              scale: [1, 1.02],
+            },
+            {duration: 0.4},
+          )
+        }
+
+        // Image zoom
+        if (image) {
+          animate(image, {scale: [1, 1.05]}, {duration: 0.6})
+        }
+
+        // Overlay fade in
+        if (overlay) {
+          animate(overlay, {opacity: [0, 1]}, {duration: 0.3})
+        }
+
+        // Meta badges subtle animation
+        const badges = card.querySelectorAll('[data-status], [data-category]')
+        animate(
+          badges,
+          {
+            scale: [1, 1.02],
+            y: [0, -1],
+          },
+          {
+            duration: 0.3,
+            delay: stagger(0.05),
+          },
+        )
+      })
+
+      card.addEventListener('mouseleave', () => {
+        // Reset card position and border
+        animate(
+          card,
+          {
+            y: [-6, 0],
+            borderColor: ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.1)'],
+          },
+          {duration: 0.4},
+        )
+
+        // Reset border glow
+        if (border) {
+          animate(border, {opacity: [1, 0]}, {duration: 0.4})
+        }
+
+        // Reset description
+        if (description) {
+          animate(description, {color: ['#a1a1aa', '#7f7f7f']}, {duration: 0.3})
+        }
+
+        // Reset image container
+        if (imageContainer) {
+          animate(
+            imageContainer,
+            {
+              scale: [1.02, 1],
+            },
+            {duration: 0.4},
+          )
+        }
+
+        // Reset image
+        if (image) {
+          animate(image, {scale: [1.05, 1]}, {duration: 0.6})
+        }
+
+        // Reset overlay
+        if (overlay) {
+          animate(overlay, {opacity: [1, 0]}, {duration: 0.3})
+        }
+
+        // Reset badges
+        const badges = card.querySelectorAll('[data-status], [data-category]')
+        animate(
+          badges,
+          {
+            scale: [1.02, 1],
+            y: [-1, 0],
+          },
+          {
+            duration: 0.3,
+            delay: stagger(0.05),
+          },
+        )
+      })
+
+      // Click animation
+      card.addEventListener('mousedown', () => {
+        animate(card, {scale: [1, 0.98]}, {duration: 0.1})
+      })
+
+      card.addEventListener('mouseup', () => {
+        animate(card, {scale: [0.98, 1]}, {duration: 0.2})
+      })
+    })
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initProductCardAnimations)
+</script>
