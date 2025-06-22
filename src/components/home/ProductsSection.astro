@@ -1,0 +1,192 @@
+---
+import ProductCarousel from './ProductCarousel.astro'
+
+export interface Product {
+  id: number
+  title: string
+  description: string
+  image: string
+  link: string
+  status: string
+  category: string
+}
+
+const products: Product[] = [
+  {
+    id: 1,
+    title: 'SuperDivide',
+    description:
+      'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
+    image: '/products/superdivide.webp',
+    link: 'https://www.superdivide.com',
+    status: 'Coming Soon',
+    category: 'Finance',
+  },
+  {
+    id: 2,
+    title: 'HabitWise',
+    description: 'The best free habit tracker out there.',
+    image: '/products/superdivide.webp',
+    link: 'https://www.tryhabitwise.com',
+    status: 'Planned',
+    category: 'Productivity',
+  },
+]
+---
+
+<section class='products-section' data-products-section>
+  <div class='products-header'>
+    <div class='header-content'>
+      <h2 data-products-title>You can just build things.</h2>
+    </div>
+  </div>
+
+  <div class='carousel-wrapper' data-carousel-wrapper>
+    <ProductCarousel products={products} />
+  </div>
+</section>
+
+<style>
+  .products-section {
+    padding: 80px 0;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .products-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  }
+
+  .products-header {
+    margin-bottom: 60px;
+    text-align: left;
+  }
+
+  .header-content h2 {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.08em;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .products-section {
+      padding: 60px 0;
+      margin-bottom: 40px;
+    }
+
+    .products-header {
+      margin-bottom: 40px;
+    }
+  }
+</style>
+
+<script>
+  import {animate} from 'motion'
+
+  class ProductsSection {
+    private section: HTMLElement | null = null
+    private observer: IntersectionObserver | null = null
+
+    constructor() {
+      this.init()
+    }
+
+    private init() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup())
+      } else {
+        this.setup()
+      }
+    }
+
+    private setup() {
+      this.section = document.querySelector('[data-products-section]')
+      if (!this.section) {
+        console.warn('Products section not found')
+        return
+      }
+
+      this.setupIntersectionObserver()
+    }
+
+    private setupIntersectionObserver() {
+      if (!this.section) return
+
+      this.observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.animateElements()
+              this.observer?.unobserve(entry.target)
+            }
+          })
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '0px 0px -100px 0px',
+        },
+      )
+
+      this.observer.observe(this.section)
+    }
+
+    private animateElements() {
+      const title = this.section?.querySelector('[data-products-title]') as HTMLElement
+      const carouselWrapper = this.section?.querySelector('[data-carousel-wrapper]') as HTMLElement
+
+      const elements = [title, carouselWrapper].filter(Boolean)
+
+      if (elements.length === 0) {
+        console.warn('No elements found to animate')
+        return
+      }
+
+      console.log('Animating products section elements:', elements.length)
+
+      // Animate each element individually with staggered delay
+      elements.forEach((el, index) => {
+        if (el) {
+          // Set initial state
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(30px)'
+
+          // Animate to final state
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: 'translateY(0px)',
+            },
+            {
+              duration: 0.8,
+              delay: index * 0.2,
+              ease: [0.22, 1, 0.36, 1],
+            },
+          )
+        }
+      })
+    }
+
+    destroy() {
+      this.observer?.disconnect()
+    }
+  }
+
+  new ProductsSection()
+
+  document.addEventListener('astro:before-preparation', () => {
+    // Cleanup before page navigation
+  })
+</script>
