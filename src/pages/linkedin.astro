@@ -1,13 +1,9 @@
-<script>
-  window.location.href = 'https://linkedin.com/in/sohhamm'
-</script>
-
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>Redirecting to LinkedIn - Soham Sarkar</title>
-    <meta http-equiv='refresh' content='0; url=https://linkedin.com/in/sohhamm' />
+    <meta http-equiv='refresh' content='2; url=https://linkedin.com/in/sohhamm' />
     <link rel='canonical' href='https://linkedin.com/in/sohhamm' />
 
     <!-- Preconnect for faster redirect -->
@@ -45,9 +41,16 @@
             <circle cx='4' cy='4' r='2'></circle>
           </svg>
         </div>
-        <h1>Redirecting to LinkedIn...</h1>
+        <h1>Connecting to LinkedIn...</h1>
         <p>Taking you to Soham Sarkar's LinkedIn profile</p>
-        <div class='loading-spinner'></div>
+
+        <div class='loading-container'>
+          <div class='progress-bar'>
+            <div class='progress-fill'></div>
+          </div>
+          <div class='loading-spinner'></div>
+        </div>
+
         <p class='fallback-text'>
           If you're not redirected automatically,
           <a href='https://linkedin.com/in/sohhamm' class='redirect-link'>click here</a>
@@ -70,28 +73,94 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        opacity: 0;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
       }
 
       .redirect-container {
         text-align: center;
         max-width: 400px;
         padding: 2rem;
+        transform: translateY(20px);
+        animation: slideUp 0.5s ease-out 0.1s forwards;
+      }
+
+      @keyframes slideUp {
+        to {
+          transform: translateY(0);
+        }
       }
 
       .logo {
         margin-bottom: 1.5rem;
-        opacity: 0.9;
+        opacity: 0;
+        animation: logoFadeIn 0.4s ease-out 0.3s forwards;
+        transition: transform 0.3s ease;
+      }
+
+      @keyframes logoFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .logo:hover {
+        transform: scale(1.1);
       }
 
       h1 {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
         font-weight: 400;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.5s forwards;
       }
 
       p {
         margin-bottom: 1rem;
-        opacity: 0.8;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.6s forwards;
+      }
+
+      .loading-container {
+        margin: 2rem 0;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.7s forwards;
+      }
+
+      @keyframes textFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffffff, #e6f3ff);
+        border-radius: 2px;
+        width: 0%;
+        animation: progressFill 1.5s ease-out forwards;
+      }
+
+      @keyframes progressFill {
+        to {
+          width: 100%;
+        }
       }
 
       .loading-spinner {
@@ -101,7 +170,7 @@
         border-top: 3px solid white;
         border-radius: 50%;
         animation: spin 1s linear infinite;
-        margin: 1rem auto;
+        margin: 0 auto;
       }
 
       @keyframes spin {
@@ -116,17 +185,88 @@
       .fallback-text {
         font-size: 0.9rem;
         margin-top: 1.5rem;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.8s forwards;
       }
 
       .redirect-link {
         color: white;
         text-decoration: underline;
         font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
       }
 
       .redirect-link:hover {
-        opacity: 0.8;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      }
+
+      .redirect-link:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 480px) {
+        .redirect-container {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 1.3rem;
+        }
       }
     </style>
+
+    <script>
+      // function trackRedirect() {
+      //   if (typeof gtag !== 'undefined') {
+      //     gtag('event', 'redirect_click', {
+      //       platform: 'linkedin',
+      //       source: 'direct_link',
+      //     })
+      //   }
+      //   console.log('Redirect: LinkedIn profile accessed')
+      // }
+
+      function performRedirect() {
+        // trackRedirect()
+
+        const audio = new Audio('/sounds/bloop.mp3')
+        audio.volume = 0.1
+        audio.play().catch(() => {}) // Fail silently if audio blocked
+
+        document.body.style.animation = 'fadeOut 0.3s ease-out forwards'
+
+        setTimeout(() => {
+          window.location.href = 'https://linkedin.com/in/sohhamm'
+        }, 300)
+      }
+
+      const style = document.createElement('style')
+      style.textContent = `
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+    `
+      document.head.appendChild(style)
+
+      setTimeout(performRedirect, 1500)
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const fallbackLink = document.querySelector('.redirect-link')
+        if (fallbackLink) {
+          fallbackLink.addEventListener('click', e => {
+            e.preventDefault()
+            performRedirect()
+          })
+        }
+      })
+    </script>
   </body>
 </html>
