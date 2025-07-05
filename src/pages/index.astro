@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
-import ProjectsSection from '../components/ProjectsSection.astro'
 import BlogsSection from '../components/BlogsSection.astro'
+import ProjectsSection from '../components/ProjectsSection.astro'
+import ProductsSection from '../components/home/ProductsSection.astro'
 
 const content = {
   title: 'Soham Sarkar',
@@ -26,6 +27,8 @@ const content = {
     </div>
   </section>
 
+  <ProductsSection />
+
   <ProjectsSection isHomePage />
 
   <BlogsSection />
@@ -37,7 +40,6 @@ const content = {
       align-items: center;
       justify-content: center;
       min-height: 65dvh;
-      background: radial-gradient(circle, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
       color: #ffffff;
     }
 
@@ -49,7 +51,6 @@ const content = {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-
       gap: 24px;
       width: 100%;
     }

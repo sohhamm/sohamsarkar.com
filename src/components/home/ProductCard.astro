@@ -1,0 +1,569 @@
+---
+import type {Product} from './ProductsSection.astro'
+
+export interface Props {
+  product: Product
+}
+
+const {product} = Astro.props
+---
+
+<div class='product-card' data-product-card={product.id}>
+  <div class='product-content'>
+    <div class='product-text'>
+      <div class='product-header'>
+        <a
+          href={product.link}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='product-title-link'
+          data-title-link
+        >
+          <h3 class='product-title' data-title>{product.title}</h3>
+        </a>
+        <div class='product-meta' data-meta>
+          <span
+            class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}
+            data-status
+          >
+            {product.status}
+          </span>
+          <span class='category-badge' data-category>{product.category}</span>
+        </div>
+      </div>
+
+      <p class='product-description' data-description>{product.description}</p>
+    </div>
+
+    <div class='product-visual'>
+      <div class='product-image-container' data-image-container>
+        <img
+          src={product.image}
+          alt={`${product.title} interface`}
+          class='product-image'
+          loading='lazy'
+          data-image
+        />
+        <div class='image-overlay' data-overlay></div>
+      </div>
+    </div>
+  </div>
+
+  <div class='card-border' data-border></div>
+</div>
+
+<style>
+  .product-card {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    height: 500px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0 auto;
+    backdrop-filter: blur(20px);
+    will-change: transform;
+    transition: none; /* Let Motion handle all transitions */
+  }
+
+  .card-border {
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.1)
+    );
+    opacity: 0;
+    z-index: -1;
+    will-change: opacity;
+  }
+
+  .product-content {
+    display: flex;
+    height: 100%;
+    padding: 48px;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .product-text {
+    flex: 0 0 45%;
+    z-index: 2;
+  }
+
+  .product-header {
+    margin-bottom: 24px;
+  }
+
+  .product-title-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-title {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.2rem;
+    margin-bottom: 16px;
+    will-change: transform, color;
+    transition: color 0.3s ease;
+  }
+
+  .product-title:hover {
+    color: #e5e5e5;
+  }
+
+  .product-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    will-change: transform;
+  }
+
+  .status-badge,
+  .category-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: 'Victor Mono', monospace;
+    will-change: transform;
+    transition: none; /* Let Motion handle transitions */
+  }
+
+  .status-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .status-badge.status-live {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+
+  .status-badge.status-planned {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .status-badge.status-beta {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .status-badge.status-coming-soon {
+    background: rgba(139, 69, 19, 0.1);
+    color: #d2691e;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+  }
+
+  .category-badge {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .product-description {
+    color: #7f7f7f;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: -0.1rem;
+    will-change: color;
+    transition: none; /* Let Motion handle transitions */
+  }
+
+  .product-visual {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image-container {
+    position: relative;
+    width: 100%;
+    height: 80%;
+    border-radius: 16px;
+    overflow: hidden;
+    will-change: transform;
+    transition: none; /* Let Motion handle transitions */
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    transition: none; /* Let Motion handle transitions */
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    opacity: 0;
+    will-change: opacity;
+    transition: none; /* Let Motion handle transitions */
+  }
+
+  @media (max-width: 1024px) {
+    .product-card {
+      height: auto;
+      min-height: 400px;
+    }
+
+    .product-content {
+      flex-direction: column;
+      padding: 32px;
+      gap: 32px;
+    }
+
+    .product-text {
+      flex: none;
+    }
+
+    .product-title {
+      font-size: 2rem;
+    }
+
+    .product-description {
+      font-size: 1.125rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-card {
+      height: auto;
+      min-height: 350px;
+    }
+
+    .product-content {
+      padding: 24px;
+      gap: 24px;
+    }
+
+    .product-title {
+      font-size: 1.75rem;
+      letter-spacing: -0.1rem;
+    }
+
+    .product-description {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-card {
+      min-height: 320px;
+    }
+
+    .product-content {
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .product-title {
+      font-size: 1.5rem;
+      letter-spacing: -0.05rem;
+    }
+
+    .product-description {
+      font-size: 0.9rem;
+      line-height: 140%;
+    }
+
+    .status-badge,
+    .category-badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+    }
+  }
+</style>
+
+<script>
+  import {animate} from 'motion'
+
+  class ProductCard {
+    private cards: NodeListOf<HTMLElement>
+    private observers: IntersectionObserver[] = []
+    private animatedCards: Set<HTMLElement> = new Set()
+
+    constructor() {
+      this.cards = document.querySelectorAll('[data-product-card]')
+      this.init()
+    }
+
+    private init() {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup())
+      } else {
+        // Small delay to ensure all components are ready
+        setTimeout(() => this.setup(), 100)
+      }
+    }
+
+    private setup() {
+      this.cards = document.querySelectorAll('[data-product-card]')
+
+      if (this.cards.length === 0) {
+        console.warn('No product cards found')
+        return
+      }
+
+      console.log('Initializing', this.cards.length, 'product cards')
+
+      this.cards.forEach(card => {
+        this.initializeCard(card)
+        this.setupCardAnimations(card)
+      })
+    }
+
+    private initializeCard(card: HTMLElement) {
+      // Setup intersection observer for entrance animation
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !this.animatedCards.has(entry.target as HTMLElement)) {
+              this.animateCardEntrance(entry.target as HTMLElement)
+              this.animatedCards.add(entry.target as HTMLElement)
+              observer.unobserve(entry.target)
+            }
+          })
+        },
+        {
+          threshold: 0.2,
+          rootMargin: '0px 0px -50px 0px',
+        },
+      )
+
+      observer.observe(card)
+      this.observers.push(observer)
+    }
+
+    private animateCardEntrance(card: HTMLElement) {
+      const title = card.querySelector('[data-title]') as HTMLElement
+      const meta = card.querySelector('[data-meta]') as HTMLElement
+      const description = card.querySelector('[data-description]') as HTMLElement
+      const imageContainer = card.querySelector('[data-image-container]') as HTMLElement
+
+      const elements = [title, meta, description, imageContainer].filter(Boolean)
+
+      console.log(
+        'Animating card entrance for:',
+        card.dataset.productCard,
+        'elements:',
+        elements.length,
+      )
+
+      // Animate each element individually with staggered delay
+      elements.forEach((el, index) => {
+        if (el) {
+          // Set initial state
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(20px)'
+
+          // Animate to final state
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: 'translateY(0px)',
+            },
+            {
+              duration: 0.6,
+              delay: index * 0.1,
+              ease: [0.22, 1, 0.36, 1],
+            },
+          )
+        }
+      })
+    }
+
+    private setupCardAnimations(card: HTMLElement) {
+      const title = card.querySelector('[data-title]')
+      const titleLink = card.querySelector('[data-title-link]')
+      const meta = card.querySelector('[data-meta]')
+      const description = card.querySelector('[data-description]')
+      const imageContainer = card.querySelector('[data-image-container]')
+      const image = card.querySelector('[data-image]')
+      const overlay = card.querySelector('[data-overlay]')
+      const border = card.querySelector('[data-border]')
+
+      // Hover animations
+      const handleMouseEnter = () => {
+        // Card elevation and border glow
+        animate(
+          card,
+          {
+            transform: 'translateY(-6px)',
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+          },
+          {duration: 0.4, ease: [0.22, 1, 0.36, 1]},
+        )
+
+        // Border glow effect
+        if (border) {
+          animate(border, {opacity: 1}, {duration: 0.4})
+        }
+
+        // Description color change
+        if (description) {
+          animate(description, {color: '#a1a1aa'}, {duration: 0.3})
+        }
+
+        // Image container scale
+        if (imageContainer) {
+          animate(imageContainer, {scale: 1.02}, {duration: 0.4, ease: [0.22, 1, 0.36, 1]})
+        }
+
+        // Image zoom
+        if (image) {
+          animate(image, {scale: 1.05}, {duration: 0.6, ease: [0.22, 1, 0.36, 1]})
+        }
+
+        // Overlay fade in
+        if (overlay) {
+          animate(overlay, {opacity: 1}, {duration: 0.3})
+        }
+
+        // Meta badges animation with staggered timing
+        const badges = card.querySelectorAll('[data-status], [data-category]')
+        badges.forEach((badge, index) => {
+          setTimeout(() => {
+            animate(
+              badge as HTMLElement,
+              {
+                scale: 1.02,
+                transform: 'translateY(-1px) scale(1.02)',
+              },
+              {
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              },
+            )
+          }, index * 50)
+        })
+      }
+
+      const handleMouseLeave = () => {
+        // Reset card position and border
+        animate(
+          card,
+          {
+            transform: 'translateY(0px)',
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+          },
+          {duration: 0.4, ease: [0.22, 1, 0.36, 1]},
+        )
+
+        // Reset border glow
+        if (border) {
+          animate(border, {opacity: 0}, {duration: 0.4})
+        }
+
+        // Reset description color
+        if (description) {
+          animate(description, {color: '#7f7f7f'}, {duration: 0.3})
+        }
+
+        // Reset image container
+        if (imageContainer) {
+          animate(imageContainer, {scale: 1}, {duration: 0.4, ease: [0.22, 1, 0.36, 1]})
+        }
+
+        // Reset image
+        if (image) {
+          animate(image, {scale: 1}, {duration: 0.6, ease: [0.22, 1, 0.36, 1]})
+        }
+
+        // Reset overlay
+        if (overlay) {
+          animate(overlay, {opacity: 0}, {duration: 0.3})
+        }
+
+        // Reset badges with staggered timing
+        const badges = card.querySelectorAll('[data-status], [data-category]')
+        badges.forEach((badge, index) => {
+          setTimeout(() => {
+            animate(
+              badge as HTMLElement,
+              {
+                scale: 1,
+                transform: 'translateY(0px) scale(1)',
+              },
+              {
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              },
+            )
+          }, index * 50)
+        })
+      }
+
+      const handleMouseDown = () => {
+        animate(card, {scale: 0.98}, {duration: 0.1})
+      }
+
+      const handleMouseUp = () => {
+        animate(card, {scale: 1}, {duration: 0.2})
+      }
+
+      // Add event listeners
+      card.addEventListener('mouseenter', handleMouseEnter)
+      card.addEventListener('mouseleave', handleMouseLeave)
+      card.addEventListener('mousedown', handleMouseDown)
+      card.addEventListener('mouseup', handleMouseUp)
+
+      // Handle click navigation
+      card.addEventListener('click', e => {
+        // Don't navigate if clicking on the title link directly
+        if (e.target === titleLink || titleLink?.contains(e.target as Node)) {
+          return
+        }
+
+        // Navigate to product link
+        if (titleLink) {
+          const href = titleLink.getAttribute('href')
+          if (href) {
+            window.open(href, '_blank', 'noopener,noreferrer')
+          }
+        }
+      })
+
+      // Prevent double-click text selection
+      card.addEventListener('selectstart', e => {
+        e.preventDefault()
+      })
+    }
+
+    public destroy() {
+      this.observers.forEach(observer => observer.disconnect())
+      this.observers = []
+      this.animatedCards.clear()
+    }
+  }
+
+  new ProductCard()
+
+  document.addEventListener('astro:before-preparation', () => {
+    // Cleanup before page navigation
+  })
+</script>

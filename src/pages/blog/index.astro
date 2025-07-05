@@ -14,8 +14,8 @@ const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.
 
 <Layout content={content}>
   <main>
-    <h1>Blog</h1>
-    <p>Documenting my learnings & (imo) best practices.</p>
+    <h1>Blogs</h1>
+    <p>Documenting my learnings in short excerpts.</p>
     <div class='blog-list'>
       {
         sortedPosts.map(post => (
