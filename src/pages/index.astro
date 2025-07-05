@@ -5,12 +5,49 @@ import BlogsSection from '../components/BlogsSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import ProductsSection from '../components/home/ProductsSection.astro'
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Soham Sarkar',
+  jobTitle: 'Product | Tech | Builder',
+  description:
+    'Digital gardener and full-stack developer specializing in React, TypeScript, Go, and modern web technologies.',
+  url: 'https://sohamsarkar.com',
+  sameAs: [
+    'https://github.com/sohhamm',
+    'https://linkedin.com/in/sohhamm',
+    'https://twitter.com/sohamsarkartech',
+    'https://instagram.com/codebandit',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Bangalore',
+    addressRegion: 'Karnataka',
+    addressCountry: 'India',
+  },
+  knowsAbout: [
+    'React',
+    'TypeScript',
+    'JavaScript',
+    'Go',
+    'Node.js',
+    'PostgreSQL',
+    'Full-Stack Development',
+    'Web Development',
+    'Software Engineering',
+  ],
+}
+
 const content = {
-  title: 'Soham Sarkar',
-  description: `Soham's personal site`,
+  title: 'Soham Sarkar - Digital Gardener & Full-Stack Developer',
+  description:
+    'I craft impactful software experiences with code. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies. Based in Bangalore, working worldwide.',
+  ogImage: '/og-home.jpg',
+  structuredData,
 }
 ---
 
+<!-- src/pages/index.astro - Homepage with structured data -->
 <Layout content={content}>
   <section class='hero-section'>
     <div class='hero-text'>
@@ -28,9 +65,7 @@ const content = {
   </section>
 
   <ProductsSection />
-
   <ProjectsSection isHomePage />
-
   <BlogsSection />
 
   <style>
