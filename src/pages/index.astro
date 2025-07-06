@@ -4,6 +4,7 @@ import Button from '../components/Button.astro'
 import BlogsSection from '../components/BlogsSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import ProductsSection from '../components/home/ProductsSection.astro'
+import {Icon} from 'astro-icon/components'
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -47,7 +48,6 @@ const content = {
 }
 ---
 
-<!-- src/pages/index.astro - Homepage with structured data -->
 <Layout content={content}>
   <section class='hero-section'>
     <div class='hero-text'>
@@ -60,7 +60,9 @@ const content = {
         I'll grow your ideas from tiny seeds into towering trees 🌱.<br /> Already have a garden? Let's
         transform it into a thriving forest 🌲.
       </p>
-      <Button href='https://cal.com/soham-sarkar-work'>Let's grow together!</Button>
+      <Button href='https://cal.com/soham-sarkar-work'
+        >Contact Me <Icon name='arrow-right' /></Button
+      >
     </div>
   </section>
 
