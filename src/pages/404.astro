@@ -1,12 +1,294 @@
 ---
 import Layout from '../layouts/layout.astro'
+import Button from '../components/Button.astro'
+import {Icon} from 'astro-icon/components'
 
 const content = {
-  title: '404 | Soham Sarkar',
-  description: `Page not found`,
+  title: '404 - Page Not Found | Soham Sarkar',
+  description: `The page you're looking for doesn't exist. Return to explore my work and projects.`,
 }
 ---
 
 <Layout content={content}>
-  <div class=''>Not found</div>
+  <section class='error-section'>
+    <div class='error-content'>
+      <div class='error-code'>
+        <span class='error-number'>404</span>
+        <div class='error-glitch'></div>
+      </div>
+      
+      <div class='error-text'>
+        <h1>Page not found</h1>
+        <p>
+          Looks like this page took a detour into the void. 
+          <br />Let's get you back to exploring my digital garden.
+        </p>
+      </div>
+
+      <div class='error-actions'>
+        <Button href='/'>
+          <Icon name='home' />
+          Back to Home
+        </Button>
+        <Button href='/projects' variant='secondary'>
+          View Projects
+          <Icon name='arrow-right' />
+        </Button>
+      </div>
+    </div>
+
+    <div class='floating-elements'>
+      <div class='floating-dot floating-dot-1'></div>
+      <div class='floating-dot floating-dot-2'></div>
+      <div class='floating-dot floating-dot-3'></div>
+      <div class='floating-line floating-line-1'></div>
+      <div class='floating-line floating-line-2'></div>
+    </div>
+  </section>
+
+  <style>
+    .error-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      color: #ffffff;
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .error-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .error-code {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-number {
+      font-size: 12rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.5rem;
+      color: #fff;
+      background: linear-gradient(135deg, #fff 0%, #7f7f7f 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-glitch {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+      animation: glitch 3s ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+      }
+      91%, 99% {
+        opacity: 1;
+        transform: translateX(2px);
+      }
+      92%, 98% {
+        transform: translateX(-2px);
+      }
+      93%, 97% {
+        transform: translateX(4px);
+      }
+    }
+
+    .error-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+    }
+
+    .error-text h1 {
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.24rem;
+      color: #fff;
+      margin: 0;
+    }
+
+    .error-text p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #71717a;
+      line-height: 140%;
+      margin: 0;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-dot-1 {
+      top: 20%;
+      left: 15%;
+      animation-delay: 0s;
+    }
+
+    .floating-dot-2 {
+      top: 60%;
+      right: 20%;
+      animation-delay: 2s;
+    }
+
+    .floating-dot-3 {
+      bottom: 30%;
+      left: 25%;
+      animation-delay: 4s;
+    }
+
+    .floating-line {
+      position: absolute;
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+      animation: float-line 8s ease-in-out infinite;
+    }
+
+    .floating-line-1 {
+      top: 35%;
+      right: 15%;
+      transform: rotate(45deg);
+      animation-delay: 1s;
+    }
+
+    .floating-line-2 {
+      bottom: 45%;
+      left: 20%;
+      transform: rotate(-30deg);
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateY(-20px) scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes float-line {
+      0%, 100% {
+        transform: translateY(0) rotate(var(--rotation, 45deg));
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-15px) rotate(var(--rotation, 45deg));
+        opacity: 0.6;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .error-number {
+        font-size: 8rem;
+        letter-spacing: -0.32rem;
+      }
+
+      .error-text h1 {
+        font-size: 2.5rem;
+        letter-spacing: -0.2rem;
+      }
+
+      .error-text p {
+        font-size: 1.1rem;
+      }
+
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .error-actions :global(.button) {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .error-section {
+        min-height: 60vh;
+        padding: 1rem 0;
+      }
+
+      .error-content {
+        gap: 2rem;
+      }
+
+      .error-number {
+        font-size: 6rem;
+        letter-spacing: -0.24rem;
+      }
+
+      .error-text h1 {
+        font-size: 2rem;
+        letter-spacing: -0.16rem;
+      }
+
+      .error-text p {
+        font-size: 1rem;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .error-glitch,
+      .floating-dot,
+      .floating-line {
+        animation: none;
+      }
+    }
+  </style>
 </Layout>

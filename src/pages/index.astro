@@ -10,9 +10,7 @@ const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Soham Sarkar',
-  jobTitle: 'Product | Tech | Builder',
-  description:
-    'Digital gardener and full-stack developer specializing in React, TypeScript, Go, and modern web technologies.',
+  description: 'Product | Tech | Builder',
   url: 'https://sohamsarkar.com',
   sameAs: [
     'https://github.com/sohhamm',
@@ -40,10 +38,10 @@ const structuredData = {
 }
 
 const content = {
-  title: 'Soham Sarkar - Digital Gardener & Full-Stack Developer',
+  title: 'Soham Sarkar - Product | Tech | Builder',
   description:
     'I craft impactful software experiences with code. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies. Based in Bangalore, working worldwide.',
-  ogImage: '/og-home.jpg',
+  ogImage: '/opengraph.png',
   structuredData,
 }
 ---
@@ -66,8 +64,8 @@ const content = {
     </div>
   </section>
 
-  <ProductsSection />
   <ProjectsSection isHomePage />
+  <ProductsSection />
   <BlogsSection />
 
   <style>

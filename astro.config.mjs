@@ -6,6 +6,9 @@ import icon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sohamsarkar.com',
+  experimental: {
+    serverIslands: true,
+  },
   integrations: [sitemap({
     changefreq: 'weekly',
     priority: 0.7,

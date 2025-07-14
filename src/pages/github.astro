@@ -1,13 +1,9 @@
-<script>
-  window.location.href = 'https://github.com/sohhamm'
-</script>
-
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>Redirecting to GitHub - Soham Sarkar</title>
-    <meta http-equiv='refresh' content='0; url=https://github.com/sohhamm' />
+    <meta http-equiv='refresh' content='4; url=https://github.com/sohhamm' />
     <link rel='canonical' href='https://github.com/sohhamm' />
 
     <!-- Preconnect for faster redirect -->
@@ -25,6 +21,7 @@
     <meta property='og:description' content="Visit Soham Sarkar's GitHub profile" />
     <meta property='og:type' content='website' />
     <meta property='og:url' content='https://sohamsarkar.com/github' />
+    <meta property='og:image' content='https://sohamsarkar.com/opengraph.png' />
   </head>
   <body>
     <div class='redirect-container'>
@@ -42,9 +39,15 @@
             ></path>
           </svg>
         </div>
-        <h1>Redirecting to GitHub...</h1>
+        <h1>Connecting to GitHub...</h1>
         <p>Taking you to Soham Sarkar's GitHub profile</p>
-        <div class='loading-spinner'></div>
+
+        <div class='loading-container'>
+          <div class='progress-bar'>
+            <div class='progress-fill'></div>
+          </div>
+          <div class='loading-spinner'></div>
+        </div>
         <p class='fallback-text'>
           If you're not redirected automatically,
           <a href='https://github.com/sohhamm' class='redirect-link'>click here</a>
@@ -67,28 +70,94 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        opacity: 0;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
       }
 
       .redirect-container {
         text-align: center;
         max-width: 400px;
         padding: 2rem;
+        transform: translateY(20px);
+        animation: slideUp 0.5s ease-out 0.1s forwards;
+      }
+
+      @keyframes slideUp {
+        to {
+          transform: translateY(0);
+        }
       }
 
       .logo {
         margin-bottom: 1.5rem;
-        opacity: 0.9;
+        opacity: 0;
+        animation: logoFadeIn 0.4s ease-out 0.3s forwards;
+        transition: transform 0.3s ease;
+      }
+
+      @keyframes logoFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .logo:hover {
+        transform: scale(1.1);
       }
 
       h1 {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
         font-weight: 400;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.5s forwards;
       }
 
       p {
         margin-bottom: 1rem;
-        opacity: 0.8;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.6s forwards;
+      }
+
+      .loading-container {
+        margin: 2rem 0;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.7s forwards;
+      }
+
+      @keyframes textFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffffff, #e6f3ff);
+        border-radius: 2px;
+        width: 0%;
+        animation: progressFill 2.5s ease-out forwards;
+      }
+
+      @keyframes progressFill {
+        to {
+          width: 100%;
+        }
       }
 
       .loading-spinner {
@@ -98,7 +167,7 @@
         border-top: 3px solid white;
         border-radius: 50%;
         animation: spin 1s linear infinite;
-        margin: 1rem auto;
+        margin: 0 auto;
       }
 
       @keyframes spin {
@@ -113,17 +182,114 @@
       .fallback-text {
         font-size: 0.9rem;
         margin-top: 1.5rem;
+        opacity: 0;
+        animation: textFadeIn 0.4s ease-out 0.8s forwards;
       }
 
       .redirect-link {
         color: white;
         text-decoration: underline;
         font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
       }
 
       .redirect-link:hover {
-        opacity: 0.8;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      }
+
+      .redirect-link:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 480px) {
+        .redirect-container {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 1.3rem;
+        }
       }
     </style>
+
+    <script>
+      function playAudio() {
+        try {
+          const audio = new Audio('/sounds/bloop.mp3')
+          audio.volume = 0.1
+          return audio.play().catch(() => {}) 
+        } catch (e) {
+          return Promise.resolve()
+        }
+      }
+
+      function performRedirect() {
+        playAudio()
+
+        document.body.style.animation = 'fadeOut 0.3s ease-out forwards'
+
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        const redirectUrl = isMobile 
+          ? 'github://user?username=sohhamm' 
+          : 'https://github.com/sohhamm'
+
+        setTimeout(() => {
+          if (isMobile) {
+            // Try app first, fallback to web
+            window.location.href = redirectUrl
+            setTimeout(() => {
+              window.location.href = 'https://github.com/sohhamm'
+            }, 1000)
+          } else {
+            window.location.href = redirectUrl
+          }
+        }, 300)
+      }
+
+      const style = document.createElement('style')
+      style.textContent = `
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+    `
+      document.head.appendChild(style)
+
+      let audioEnabled = false
+      
+      // Enable audio on any user interaction
+      function enableAudio() {
+        if (!audioEnabled) {
+          audioEnabled = true
+          document.removeEventListener('click', enableAudio)
+          document.removeEventListener('keydown', enableAudio)
+          document.removeEventListener('touchstart', enableAudio)
+        }
+      }
+
+      document.addEventListener('click', enableAudio)
+      document.addEventListener('keydown', enableAudio) 
+      document.addEventListener('touchstart', enableAudio)
+
+      setTimeout(performRedirect, 2500)
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const fallbackLink = document.querySelector('.redirect-link')
+        if (fallbackLink) {
+          fallbackLink.addEventListener('click', e => {
+            e.preventDefault()
+            enableAudio()
+            performRedirect()
+          })
+        }
+      })
+    </script>
   </body>
 </html>

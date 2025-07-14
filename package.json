@@ -14,10 +14,10 @@
     "@astrojs/sitemap": "^3.4.1",
     "astro": "^5.11.0",
     "astro-icon": "^1.1.5",
-    "motion": "^12.18.1"
+    "motion": "^12.23.3"
   },
   "devDependencies": {
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.3"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.13.1"
 }
