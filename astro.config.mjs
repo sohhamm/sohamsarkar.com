@@ -1,6 +1,8 @@
 import sitemap from '@astrojs/sitemap'
 import {defineConfig} from 'astro/config'
 
+import icon from 'astro-icon'
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sohamsarkar.com',
@@ -33,6 +35,7 @@ export default defineConfig({
       //   return !page.includes('/admin/') && !page.includes('/private/')
       // }
     }),
+    icon(),
   ],
   vite: {
     build: {

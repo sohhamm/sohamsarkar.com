@@ -61,7 +61,7 @@ const {product} = Astro.props
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.6);
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to prevent cutoff */
     cursor: pointer;
     margin: 0 auto;
     backdrop-filter: blur(20px);
@@ -195,6 +195,8 @@ const {product} = Astro.props
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Add padding to prevent cutoff during hover animation */
+    padding: 8px 0;
   }
 
   .product-image-container {
@@ -224,10 +226,27 @@ const {product} = Astro.props
     transition: none; /* Let Motion handle transitions */
   }
 
+  @media (max-width: 1200px) {
+    .product-card {
+      max-width: 950px;
+      height: 450px;
+    }
+
+    .product-content {
+      padding: 40px;
+      gap: 28px;
+    }
+
+    .product-title {
+      font-size: 2.25rem;
+    }
+  }
+
   @media (max-width: 1024px) {
     .product-card {
       height: auto;
       min-height: 400px;
+      max-width: 800px;
     }
 
     .product-content {
@@ -253,6 +272,8 @@ const {product} = Astro.props
     .product-card {
       height: auto;
       min-height: 350px;
+      max-width: 100%;
+      margin: 0 16px;
     }
 
     .product-content {
@@ -268,11 +289,25 @@ const {product} = Astro.props
     .product-description {
       font-size: 1rem;
     }
+
+    .product-visual {
+      order: -1;
+    }
+
+    .product-image-container {
+      height: 200px;
+    }
+
+    .product-meta {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
   }
 
   @media (max-width: 480px) {
     .product-card {
       min-height: 320px;
+      margin: 0 12px;
     }
 
     .product-content {
@@ -290,10 +325,38 @@ const {product} = Astro.props
       line-height: 140%;
     }
 
+    .product-image-container {
+      height: 180px;
+    }
+
     .status-badge,
     .category-badge {
       font-size: 0.75rem;
       padding: 4px 8px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .product-card {
+      margin: 0 8px;
+      min-height: 300px;
+    }
+
+    .product-content {
+      padding: 16px;
+      gap: 16px;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+    }
+
+    .product-description {
+      font-size: 0.85rem;
+    }
+
+    .product-image-container {
+      height: 150px;
     }
   }
 </style>

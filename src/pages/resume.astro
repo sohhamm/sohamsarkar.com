@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/layout.astro'
+---
+
+<Layout content={{
+  title: "Resume • Soham Sarkar",
+  description: "Interactive resume of Soham Sarkar - Full Stack Developer"
+}}>
+  
+  <div id="resume-container">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading resume...</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  #resume-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .spinner + p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+</style>
+
+<script>
+  // Dynamic import for performance
+  const loadResumeComponent = async () => {
+    try {
+      const { default: ResumeComponent } = await import('../components/InteractiveResume.js');
+      const container = document.getElementById('resume-container');
+      if (container) {
+        container.innerHTML = '';
+        const resumeEl = document.createElement('div');
+        resumeEl.id = 'interactive-resume';
+        container.appendChild(resumeEl);
+        
+        // Initialize the component
+        new ResumeComponent(resumeEl);
+      }
+    } catch (error) {
+      console.error('Failed to load resume component:', error);
+      const container = document.getElementById('resume-container');
+      if (container) {
+        container.innerHTML = '<p>Failed to load resume. Please try again.</p>';
+      }
+    }
+  };
+
+  // Load component when page is ready
+  document.addEventListener('DOMContentLoaded', loadResumeComponent);
+</script>

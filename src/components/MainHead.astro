@@ -15,17 +15,16 @@ interface Props {
 }
 
 const {
-  title = 'Soham Sarkar - Digital Gardener & Full-Stack Developer',
+  title = 'Soham Sarkar - Software Engineer | Builder | Tech | Product',
   description = 'I craft impactful software experiences with code. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies. Based in Bangalore, working worldwide.',
   canonicalUrl = new URL(Astro.url.pathname, Astro.site).href,
-  ogImage = '/og-image.jpg',
+  ogImage = '/opengraph.png',
   ogType = 'website',
   twitterCard = 'summary_large_image',
   noindex = false,
   structuredData,
 } = Astro.props as Props
 
-// Generate absolute URLs for Open Graph
 const absoluteOgImage = new URL(ogImage, Astro.site).href
 ---
 
@@ -94,6 +93,3 @@ const absoluteOgImage = new URL(ogImage, Astro.site).href
   })(window, document, 'script', 'dataLayer', 'GTM-WCR6CCD9')
 </script>
 <!-- End Google Tag Manager -->
-
-<!-- Plausible Analytics -->
-<script defer data-domain='sohamsarkar.com' src='https://plausible.io/js/script.js'></script>

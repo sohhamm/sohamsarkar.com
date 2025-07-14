@@ -1,20 +1,365 @@
 ---
 import Layout from '../layouts/layout.astro'
+import Button from '../components/Button.astro'
+import {Icon} from 'astro-icon/components'
 
 interface Props {
-  error: unknown
+  error?: unknown
 }
 
 const {error} = Astro.props
 
 const content = {
-  title: '500 | Soham Sarkar',
-  description: `Something went wrong`,
+  title: '500 - Server Error | Soham Sarkar',
+  description: `Internal server error. Our digital garden is experiencing some technical difficulties.`,
 }
 ---
 
 <Layout content={content}>
-  <div>
-    {error instanceof Error ? error.message : 'Something went wrong, please try again later'}
-  </div>
+  <section class='error-section'>
+    <div class='error-content'>
+      <div class='error-code'>
+        <span class='error-number'>500</span>
+        <div class='error-spark'></div>
+        <div class='error-spark-2'></div>
+      </div>
+      
+      <div class='error-text'>
+        <h1>Server Error</h1>
+        <p>
+          Oops! Our digital garden hit a technical snag. 
+          <br />The seeds are still growing, but something went wrong on our end.
+        </p>
+        {error instanceof Error && (
+          <details class='error-details'>
+            <summary>Technical Details</summary>
+            <code>{error.message}</code>
+          </details>
+        )}
+      </div>
+
+      <div class='error-actions'>
+        <Button href='/'>
+          <Icon name='home' />
+          Back to Home
+        </Button>
+        <Button href='javascript:window.location.reload()' variant='secondary'>
+          Try Again
+          <Icon name='arrow-right' />
+        </Button>
+      </div>
+    </div>
+
+    <div class='floating-elements'>
+      <div class='floating-circuit floating-circuit-1'></div>
+      <div class='floating-circuit floating-circuit-2'></div>
+      <div class='floating-circuit floating-circuit-3'></div>
+      <div class='error-wave'></div>
+    </div>
+  </section>
+
+  <style>
+    .error-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      color: #ffffff;
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .error-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .error-code {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-number {
+      font-size: 12rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.5rem;
+      color: #fff;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #fff 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-spark,
+    .error-spark-2 {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffd93d;
+      border-radius: 50%;
+      animation: spark 2s ease-in-out infinite;
+      box-shadow: 0 0 10px #ffd93d;
+    }
+
+    .error-spark {
+      top: 20%;
+      right: 10%;
+      animation-delay: 0s;
+    }
+
+    .error-spark-2 {
+      bottom: 30%;
+      left: 15%;
+      animation-delay: 1s;
+    }
+
+    @keyframes spark {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      20%, 80% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    }
+
+    .error-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+    }
+
+    .error-text h1 {
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.24rem;
+      color: #fff;
+      margin: 0;
+    }
+
+    .error-text p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #71717a;
+      line-height: 140%;
+      margin: 0;
+    }
+
+    .error-details {
+      margin-top: 1rem;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .error-details summary {
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #a1a1aa;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+
+    .error-details summary:hover {
+      color: #fff;
+    }
+
+    .error-details code {
+      font-family: 'Victor Mono', monospace;
+      font-size: 0.85rem;
+      color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.1);
+      padding: 0.5rem;
+      border-radius: 4px;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-circuit {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 215, 61, 0.3);
+      border-radius: 4px;
+      animation: circuit-float 8s ease-in-out infinite;
+    }
+
+    .floating-circuit::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 215, 61, 0.5);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .floating-circuit-1 {
+      top: 25%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-circuit-2 {
+      top: 45%;
+      right: 15%;
+      animation-delay: 2.5s;
+      transform: rotate(45deg);
+    }
+
+    .floating-circuit-3 {
+      bottom: 35%;
+      left: 20%;
+      animation-delay: 5s;
+      transform: rotate(-30deg);
+    }
+
+    .error-wave {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 107, 107, 0.4) 50%, transparent 100%);
+      animation: wave 3s ease-in-out infinite;
+      transform: translateX(-50%);
+    }
+
+    @keyframes circuit-float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.3;
+      }
+      25% {
+        transform: translateY(-15px) rotate(90deg);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(-10px) rotate(180deg);
+        opacity: 0.4;
+      }
+      75% {
+        transform: translateY(-20px) rotate(270deg);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes wave {
+      0%, 100% {
+        transform: translateX(-50%) scaleX(1);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateX(-50%) scaleX(1.5);
+        opacity: 0.8;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .error-number {
+        font-size: 8rem;
+        letter-spacing: -0.32rem;
+      }
+
+      .error-text h1 {
+        font-size: 2.5rem;
+        letter-spacing: -0.2rem;
+      }
+
+      .error-text p {
+        font-size: 1.1rem;
+      }
+
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .error-actions :global(.button) {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .error-details {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .error-section {
+        min-height: 60vh;
+        padding: 1rem 0;
+      }
+
+      .error-content {
+        gap: 2rem;
+      }
+
+      .error-number {
+        font-size: 6rem;
+        letter-spacing: -0.24rem;
+      }
+
+      .error-text h1 {
+        font-size: 2rem;
+        letter-spacing: -0.16rem;
+      }
+
+      .error-text p {
+        font-size: 1rem;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .error-spark,
+      .error-spark-2,
+      .floating-circuit,
+      .error-wave {
+        animation: none;
+      }
+    }
+  </style>
 </Layout>

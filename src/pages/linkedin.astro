@@ -231,17 +231,37 @@
       //   console.log('Redirect: LinkedIn profile accessed')
       // }
 
+      function playAudio() {
+        try {
+          const audio = new Audio('/sounds/bloop.mp3')
+          audio.volume = 0.1
+          return audio.play().catch(() => {}) 
+        } catch (e) {
+          return Promise.resolve()
+        }
+      }
+
       function performRedirect() {
         // trackRedirect()
-
-        const audio = new Audio('/sounds/bloop.mp3')
-        audio.volume = 0.1
-        audio.play().catch(() => {}) // Fail silently if audio blocked
+        playAudio()
 
         document.body.style.animation = 'fadeOut 0.3s ease-out forwards'
 
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        const redirectUrl = isMobile 
+          ? 'linkedin://profile/sohhamm' 
+          : 'https://linkedin.com/in/sohhamm'
+
         setTimeout(() => {
-          window.location.href = 'https://linkedin.com/in/sohhamm'
+          if (isMobile) {
+            // Try app first, fallback to web
+            window.location.href = redirectUrl
+            setTimeout(() => {
+              window.location.href = 'https://linkedin.com/in/sohhamm'
+            }, 1000)
+          } else {
+            window.location.href = redirectUrl
+          }
         }, 300)
       }
 
@@ -256,6 +276,22 @@
     `
       document.head.appendChild(style)
 
+      let audioEnabled = false
+      
+      // Enable audio on any user interaction
+      function enableAudio() {
+        if (!audioEnabled) {
+          audioEnabled = true
+          document.removeEventListener('click', enableAudio)
+          document.removeEventListener('keydown', enableAudio)
+          document.removeEventListener('touchstart', enableAudio)
+        }
+      }
+
+      document.addEventListener('click', enableAudio)
+      document.addEventListener('keydown', enableAudio) 
+      document.addEventListener('touchstart', enableAudio)
+
       setTimeout(performRedirect, 1500)
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -263,6 +299,7 @@
         if (fallbackLink) {
           fallbackLink.addEventListener('click', e => {
             e.preventDefault()
+            enableAudio()
             performRedirect()
           })
         }

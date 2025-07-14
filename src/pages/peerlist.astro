@@ -2,25 +2,25 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Redirecting to X/Twitter - Soham Sarkar</title>
-    <meta http-equiv='refresh' content='4; url=https://x.com/sohamsarkartech' />
-    <link rel='canonical' href='https://x.com/sohamsarkartech' />
+    <title>Redirecting to Peerlist - Soham Sarkar</title>
+    <meta http-equiv='refresh' content='4; url=https://peerlist.io/soham' />
+    <link rel='canonical' href='https://peerlist.io/soham' />
 
     <!-- Preconnect for faster redirect -->
-    <link rel='preconnect' href='https://x.com' />
+    <link rel='preconnect' href='https://peerlist.io' />
 
     <!-- Favicon -->
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 
     <!-- SEO Meta Tags -->
-    <meta name='description' content="Redirecting to Soham Sarkar's X/Twitter profile" />
+    <meta name='description' content="Redirecting to Soham Sarkar's Peerlist profile" />
     <meta name='robots' content='noindex, nofollow' />
 
     <!-- Open Graph -->
-    <meta property='og:title' content='Soham Sarkar - X/Twitter' />
-    <meta property='og:description' content="Visit Soham Sarkar's X/Twitter profile" />
+    <meta property='og:title' content='Soham Sarkar - Peerlist' />
+    <meta property='og:description' content="Visit Soham Sarkar's Peerlist profile" />
     <meta property='og:type' content='website' />
-    <meta property='og:url' content='https://sohamsarkar.com/x' />
+    <meta property='og:url' content='https://sohamsarkar.com/peerlist' />
     <meta property='og:image' content='https://sohamsarkar.com/opengraph.png' />
   </head>
   <body>
@@ -31,16 +31,15 @@
             xmlns='http://www.w3.org/2000/svg'
             width='60'
             height='60'
-            viewBox='0 0 24 24'
-            fill='currentColor'
+            viewBox='0 0 100 100'
+            fill='none'
           >
-            <path
-              d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'
-            ></path>
+            <rect width='100' height='100' rx='20' fill='#00AA45'/>
+            <path d='M25 75V25h20c11.046 0 20 8.954 20 20s-8.954 20-20 20H35v10H25zm10-25h10c5.523 0 10-4.477 10-10s-4.477-10-10-10H35v20z' fill='white'/>
           </svg>
         </div>
-        <h1>Connecting to X...</h1>
-        <p>Taking you to Soham Sarkar's X/Twitter profile</p>
+        <h1>Connecting to Peerlist...</h1>
+        <p>Taking you to Soham Sarkar's Peerlist profile</p>
 
         <div class='loading-container'>
           <div class='progress-bar'>
@@ -50,7 +49,7 @@
         </div>
         <p class='fallback-text'>
           If you're not redirected automatically,
-          <a href='https://twitter.com/sohamsarkartech' class='redirect-link'>click here</a>
+          <a href='https://peerlist.io/soham' class='redirect-link'>click here</a>
         </p>
       </div>
     </div>
@@ -64,7 +63,7 @@
 
       body {
         font-family: 'Victor Mono', monospace;
-        background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        background: linear-gradient(135deg, #00aa45 0%, #008a36 100%);
         color: white;
         min-height: 100vh;
         display: flex;
@@ -233,21 +232,8 @@
 
         document.body.style.animation = 'fadeOut 0.3s ease-out forwards'
 
-        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-        const redirectUrl = isMobile 
-          ? 'twitter://user?screen_name=sohamsarkartech' 
-          : 'https://x.com/sohamsarkartech'
-
         setTimeout(() => {
-          if (isMobile) {
-            // Try app first, fallback to web
-            window.location.href = redirectUrl
-            setTimeout(() => {
-              window.location.href = 'https://x.com/sohamsarkartech'
-            }, 1000)
-          } else {
-            window.location.href = redirectUrl
-          }
+          window.location.href = 'https://peerlist.io/soham'
         }, 300)
       }
 
