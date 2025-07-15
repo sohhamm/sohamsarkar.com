@@ -2,7 +2,7 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Redirecting to LinkedIn - Soham Sarkar</title>
+    <title>Redirecting to LinkedIn | Soham Sarkar</title>
     <meta http-equiv='refresh' content='2; url=https://linkedin.com/in/sohhamm' />
     <link rel='canonical' href='https://linkedin.com/in/sohhamm' />
 
@@ -17,7 +17,7 @@
     <meta name='robots' content='noindex, nofollow' />
 
     <!-- Open Graph -->
-    <meta property='og:title' content='Soham Sarkar - LinkedIn' />
+    <meta property='og:title' content='Redirecting to LinkedIn | Soham Sarkar' />
     <meta property='og:description' content="Visit Soham Sarkar's LinkedIn profile" />
     <meta property='og:type' content='website' />
     <meta property='og:url' content='https://sohamsarkar.com/linkedin' />
@@ -235,7 +235,7 @@
         try {
           const audio = new Audio('/sounds/bloop.mp3')
           audio.volume = 0.1
-          return audio.play().catch(() => {}) 
+          return audio.play().catch(() => {})
         } catch (e) {
           return Promise.resolve()
         }
@@ -247,9 +247,11 @@
 
         document.body.style.animation = 'fadeOut 0.3s ease-out forwards'
 
-        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-        const redirectUrl = isMobile 
-          ? 'linkedin://profile/sohhamm' 
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        )
+        const redirectUrl = isMobile
+          ? 'linkedin://profile/sohhamm'
           : 'https://linkedin.com/in/sohhamm'
 
         setTimeout(() => {
@@ -277,7 +279,7 @@
       document.head.appendChild(style)
 
       let audioEnabled = false
-      
+
       // Enable audio on any user interaction
       function enableAudio() {
         if (!audioEnabled) {
@@ -289,7 +291,7 @@
       }
 
       document.addEventListener('click', enableAudio)
-      document.addEventListener('keydown', enableAudio) 
+      document.addEventListener('keydown', enableAudio)
       document.addEventListener('touchstart', enableAudio)
 
       setTimeout(performRedirect, 1500)

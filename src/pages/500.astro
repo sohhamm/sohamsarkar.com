@@ -23,19 +23,21 @@ const content = {
         <div class='error-spark'></div>
         <div class='error-spark-2'></div>
       </div>
-      
+
       <div class='error-text'>
         <h1>Server Error</h1>
         <p>
-          Oops! Our digital garden hit a technical snag. 
+          Oops! Our digital garden hit a technical snag.
           <br />The seeds are still growing, but something went wrong on our end.
         </p>
-        {error instanceof Error && (
-          <details class='error-details'>
-            <summary>Technical Details</summary>
-            <code>{error.message}</code>
-          </details>
-        )}
+        {
+          error instanceof Error && (
+            <details class='error-details'>
+              <summary>Technical Details</summary>
+              <code>{error.message}</code>
+            </details>
+          )
+        }
       </div>
 
       <div class='error-actions'>
@@ -125,11 +127,13 @@ const content = {
     }
 
     @keyframes spark {
-      0%, 100% {
+      0%,
+      100% {
         opacity: 0;
         transform: scale(0.5);
       }
-      20%, 80% {
+      20%,
+      80% {
         opacity: 1;
         transform: scale(1);
       }
@@ -260,13 +264,19 @@ const content = {
       left: 50%;
       width: 100px;
       height: 2px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 107, 107, 0.4) 50%, transparent 100%);
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 107, 107, 0.4) 50%,
+        transparent 100%
+      );
       animation: wave 3s ease-in-out infinite;
       transform: translateX(-50%);
     }
 
     @keyframes circuit-float {
-      0%, 100% {
+      0%,
+      100% {
         transform: translateY(0) rotate(0deg);
         opacity: 0.3;
       }
@@ -285,7 +295,8 @@ const content = {
     }
 
     @keyframes wave {
-      0%, 100% {
+      0%,
+      100% {
         transform: translateX(-50%) scaleX(1);
         opacity: 0.4;
       }

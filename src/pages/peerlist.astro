@@ -2,7 +2,7 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Redirecting to Peerlist - Soham Sarkar</title>
+    <title>Redirecting to Peerlist | Soham Sarkar</title>
     <meta http-equiv='refresh' content='4; url=https://peerlist.io/soham' />
     <link rel='canonical' href='https://peerlist.io/soham' />
 
@@ -17,7 +17,7 @@
     <meta name='robots' content='noindex, nofollow' />
 
     <!-- Open Graph -->
-    <meta property='og:title' content='Soham Sarkar - Peerlist' />
+    <meta property='og:title' content='Redirecting to Peerlist | Soham Sarkar' />
     <meta property='og:description' content="Visit Soham Sarkar's Peerlist profile" />
     <meta property='og:type' content='website' />
     <meta property='og:url' content='https://sohamsarkar.com/peerlist' />
@@ -34,8 +34,10 @@
             viewBox='0 0 100 100'
             fill='none'
           >
-            <rect width='100' height='100' rx='20' fill='#00AA45'/>
-            <path d='M25 75V25h20c11.046 0 20 8.954 20 20s-8.954 20-20 20H35v10H25zm10-25h10c5.523 0 10-4.477 10-10s-4.477-10-10-10H35v20z' fill='white'/>
+            <rect width='100' height='100' rx='20' fill='#00AA45'></rect>
+            <path
+              d='M25 75V25h20c11.046 0 20 8.954 20 20s-8.954 20-20 20H35v10H25zm10-25h10c5.523 0 10-4.477 10-10s-4.477-10-10-10H35v20z'
+              fill='white'></path>
           </svg>
         </div>
         <h1>Connecting to Peerlist...</h1>
@@ -221,7 +223,7 @@
         try {
           const audio = new Audio('/sounds/bloop.mp3')
           audio.volume = 0.1
-          return audio.play().catch(() => {}) 
+          return audio.play().catch(() => {})
         } catch (e) {
           return Promise.resolve()
         }
@@ -249,7 +251,7 @@
       document.head.appendChild(style)
 
       let audioEnabled = false
-      
+
       // Enable audio on any user interaction
       function enableAudio() {
         if (!audioEnabled) {
@@ -261,7 +263,7 @@
       }
 
       document.addEventListener('click', enableAudio)
-      document.addEventListener('keydown', enableAudio) 
+      document.addEventListener('keydown', enableAudio)
       document.addEventListener('touchstart', enableAudio)
 
       setTimeout(performRedirect, 2500)

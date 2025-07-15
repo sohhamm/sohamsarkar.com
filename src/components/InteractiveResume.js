@@ -1,14 +1,14 @@
 export default class InteractiveResume {
   constructor(container) {
-    this.container = container;
-    this.currentSection = 'overview';
-    this.init();
+    this.container = container
+    this.currentSection = 'experience'
+    this.init()
   }
 
   init() {
-    this.render();
-    this.bindEvents();
-    this.animateIn();
+    this.render()
+    this.bindEvents()
+    this.animateIn()
   }
 
   render() {
@@ -16,54 +16,158 @@ export default class InteractiveResume {
       <div class="resume-wrapper">
         <div class="resume-header">
           <div class="avatar">
-            <img src="/assets/pfp.png" alt="Soham Sarkar" />
+            <img src="/src/assets/tiger-pfp.jpg" alt="Soham Sarkar" />
           </div>
           <div class="header-content">
             <h1 class="name">Soham Sarkar</h1>
-            <p class="title">Full Stack Developer</p>
-            <div class="contact-links">
-              <a href="mailto:sohamsarkar.work@gmail.com" class="contact-link">
-                <span class="icon">📧</span>
-                <span>Email</span>
-              </a>
-              <a href="https://github.com/sohhamm" class="contact-link" target="_blank">
-                <span class="icon">🐙</span>
-                <span>GitHub</span>
-              </a>
-              <a href="https://www.linkedin.com/in/sohhamm" class="contact-link" target="_blank">
-                <span class="icon">💼</span>
-                <span>LinkedIn</span>
-              </a>
-              <a href="https://twitter.com/sohhamm_" class="contact-link" target="_blank">
-                <span class="icon">🐦</span>
-                <span>Twitter</span>
-              </a>
-            </div>
+            <p class="title">Software Engineer</p>
           </div>
         </div>
 
         <div class="resume-nav">
-          <button class="nav-btn active" data-section="overview">Overview</button>
+          <button class="nav-btn active" data-section="experience">Experience</button>
           <button class="nav-btn" data-section="skills">Skills</button>
-          <button class="nav-btn" data-section="projects">Projects</button>
+          <button class="nav-btn" data-section="education">Education</button>
+          <button class="nav-btn" data-section="languages">Languages</button>
           <button class="nav-btn" data-section="download">Download</button>
         </div>
 
         <div class="resume-content">
-          <div class="section active" data-section="overview">
-            <h2>About Me</h2>
-            <div class="overview-grid">
-              <div class="overview-card">
-                <h3>🚀 Passion</h3>
-                <p>Building intuitive web experiences with modern technologies</p>
+          <div class="section active" data-section="experience">
+            <h2>Work Experience</h2>
+            <div class="experience-timeline">
+              <div class="experience-company">
+                <div class="company-header">
+                  <div class="company-logo">
+                    <img src="/src/assets/resume/zenadmin-logo.jpeg" alt="ZenAdmin" class="company-logo-img" />
+                  </div>
+                  <div class="company-info">
+                    <h3 class="company-name">
+                      <a href="https://zenadmin.ai/" target="_blank" rel="noopener noreferrer" class="company-link">
+                        ZenAdmin
+                        <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <span class="company-duration">Full-time · 3 yrs 1 mo</span>
+                    <div class="industry-tags">
+                      <span class="industry-tag">B2B SaaS</span>
+                      <span class="industry-tag">IT</span>
+                      <span class="industry-tag">ITSM</span>
+                      <span class="industry-tag">HRIS</span>
+                      <span class="industry-tag">Integrations</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="role-timeline">
+                  <div class="role-item">
+                    <div class="role-header">
+                      <h4>Technical Lead</h4>
+                      <span class="role-duration">Apr 2024 - Present · 1 yr 4 mos</span>
+                      <span class="role-location">Bengaluru, Karnataka, India · Remote</span>
+                    </div>
+                  </div>
+                  
+                  <div class="role-item">
+                    <div class="role-header">
+                      <h4>Senior Software Engineer</h4>
+                      <span class="role-duration">Apr 2023 - Apr 2024 · 1 yr 1 mo</span>
+                    </div>
+                  </div>
+                  
+                  <div class="role-item">
+                    <div class="role-header">
+                      <h4>Founding Engineer</h4>
+                      <span class="role-duration">Jul 2022 - Apr 2023 · 10 mos</span>
+                      <span class="role-location">Bengaluru, Karnataka, India · Remote</span>
+                    </div>
+                    <p class="role-description">Leading the frontend team and overseeing the frontend hiring process. Built the MVP from scratch in 2 months using React and built the landing page using NextJS. Setup modern libraries and tooling for our codebase, established best practices, made our internal UI library called Hybrid UI and setup the complete CI/CD pipeline using Github Actions, S3, CloudFront and Route 53. Built APIs for our services using Node. Helping companies manage their company in a hassle free manner through our B2B SAAS for their IT & HR needs.</p>
+                    <div class="role-skills">
+                      <span class="skill-badge">GraphQL</span>
+                      <span class="skill-badge">Git</span>
+                      <span class="skill-badge">+14 skills</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="overview-card">
-                <h3>💡 Focus</h3>
-                <p>Full-stack development with React, TypeScript, and Node.js</p>
+              
+              <div class="experience-company">
+                <div class="company-header">
+                  <div class="company-logo">
+                    <img src="/src/assets/resume/greedygame-logo.jpeg" alt="GreedyGame" class="company-logo-img" />
+                  </div>
+                  <div class="company-info">
+                    <h3 class="company-name">
+                      <a href="https://greedygame.com/" target="_blank" rel="noopener noreferrer" class="company-link">
+                        GreedyGame
+                        <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <span class="company-duration">Full-time</span>
+                    <div class="industry-tags">
+                      <span class="industry-tag">AdTech</span>
+                      <span class="industry-tag">Programmatic</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="role-timeline">
+                  <div class="role-item">
+                    <div class="role-header">
+                      <h4>Frontend Developer</h4>
+                      <span class="role-duration">Sep 2021 - Jul 2022 · 11 mos</span>
+                      <span class="role-location">Bengaluru, Karnataka, India</span>
+                    </div>
+                    <p class="role-description">Built various dashboards for publishers and internal services with Data Visualisation. Added new user facing features in a popular web game. Improved the lighthouse scores for the landing pages of few of our applications. Added various new components for our internal UI library called GG-UI and improved our frontend tooling (e.g switching to esbuild from webpack) and thus improving our build time by 70%. Mentored few interns on code quality and best practices. Built few internal services using Go.</p>
+                    <div class="role-skills">
+                      <span class="skill-badge">Git</span>
+                      <span class="skill-badge">Cascading Style Sheets (CSS)</span>
+                      <span class="skill-badge">+11 skills</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="overview-card">
-                <h3>🎯 Goal</h3>
-                <p>Creating scalable applications that solve real-world problems</p>
+              
+              <div class="experience-company">
+                <div class="company-header">
+                  <div class="company-logo">
+                    <img src="/src/assets/resume/tellephant-logo.jpeg" alt="Tellephant" class="company-logo-img" />
+                  </div>
+                  <div class="company-info">
+                    <h3 class="company-name">
+                      <a href="https://www.linkedin.com/company/tellephanthq/" target="_blank" rel="noopener noreferrer" class="company-link">
+                        Tellephant
+                        <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <span class="company-duration">Full-time</span>
+                    <div class="industry-tags">
+                      <span class="industry-tag">E-commerce</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="role-timeline">
+                  <div class="role-item">
+                    <div class="role-header">
+                      <h4>Full Stack Developer</h4>
+                      <span class="role-duration">Mar 2021 - Aug 2021 · 6 mos</span>
+                      <span class="role-location">Bengaluru, Karnataka, India</span>
+                    </div>
+                    <p class="role-description">Built the buyer facing application(FE) from scratch using Next.js, typescript etc. Improved the revenue for our customers by 3x. Built internal reusable and scalable react components. Built APIs for the buyer facing application. Mentored interns on code architecture and best practices. Tellephant acquired <a href="https://www.linkedin.com/company/apna-business/about/" target="_blank" rel="noopener noreferrer" class="inline-link">Apna Business</a> during my tenure.</p>
+                    <div class="role-skills">
+                      <span class="skill-badge">GraphQL</span>
+                      <span class="skill-badge">Git</span>
+                      <span class="skill-badge">+14 skills</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -76,15 +180,25 @@ export default class InteractiveResume {
                 <div class="skill-tags">
                   <span class="skill-tag">React</span>
                   <span class="skill-tag">Next.js</span>
+                  <span class="skill-tag">Svelte</span>
+                  <span class="skill-tag">Solid</span>
+                  <span class="skill-tag">Astro</span>
                   <span class="skill-tag">TypeScript</span>
-                  <span class="skill-tag">Tailwind CSS</span>
+                  <span class="skill-tag">JavaScript</span>
+                  <span class="skill-tag">HTML</span>
+                  <span class="skill-tag">CSS</span>
+                  <span class="skill-tag">SASS</span>
+                  <span class="skill-tag">TailwindCSS</span>
                 </div>
               </div>
               <div class="skill-category">
-                <h3>Backend</h3>
+                <h3>Backend & Database</h3>
                 <div class="skill-tags">
                   <span class="skill-tag">Node.js</span>
-                  <span class="skill-tag">Express</span>
+                  <span class="skill-tag">Express.js</span>
+                  <span class="skill-tag">GraphQL</span>
+                  <span class="skill-tag">Go</span>
+                  <span class="skill-tag">Go Fiber</span>
                   <span class="skill-tag">PostgreSQL</span>
                   <span class="skill-tag">MongoDB</span>
                 </div>
@@ -92,56 +206,81 @@ export default class InteractiveResume {
               <div class="skill-category">
                 <h3>Tools & Others</h3>
                 <div class="skill-tags">
+                  <span class="skill-tag">Vite</span>
+                  <span class="skill-tag">Webpack</span>
+                  <span class="skill-tag">REST</span>
                   <span class="skill-tag">Git</span>
-                  <span class="skill-tag">Docker</span>
-                  <span class="skill-tag">Vercel</span>
-                  <span class="skill-tag">Netlify</span>
+                  <span class="skill-tag">CI/CD</span>
+                  <span class="skill-tag">SEO</span>
+                  <span class="skill-tag">Debugging</span>
+                  <span class="skill-tag">Responsive Web Design</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="section" data-section="projects">
-            <h2>Featured Projects</h2>
-            <div class="projects-grid">
-              <div class="project-card">
-                <h3>Product Feedback App</h3>
-                <p>Full-stack application with React, TypeScript, Node.js, and PostgreSQL</p>
-                <div class="project-links">
-                  <a href="https://product-feedback-application.vercel.app/" target="_blank" class="project-link">
-                    <span>🌐 Live Demo</span>
-                  </a>
-                  <a href="https://github.com/sohhamm/product-feedback-client" target="_blank" class="project-link">
-                    <span>📱 Frontend</span>
-                  </a>
-                  <a href="https://github.com/sohhamm/product-feedback-server" target="_blank" class="project-link">
-                    <span>🔧 Backend</span>
-                  </a>
+          <div class="section" data-section="education">
+            <h2>Education</h2>
+            <div class="education-timeline">
+              <div class="education-item">
+                <div class="education-header">
+                  <h3>B. TECH</h3>
+                  <span class="institution">PES University</span>
+                  <span class="duration">08/2017 - 05/2021</span>
+                  <span class="location">Bengaluru, India</span>
+                </div>
+                <div class="education-subjects">
+                  <span class="subject-tag">Computer Networks</span>
+                  <span class="subject-tag">Computer Organization</span>
+                  <span class="subject-tag">Web Dev</span>
+                  <span class="subject-tag">Operating Systems</span>
                 </div>
               </div>
-              <div class="project-card">
-                <h3>Password Generator</h3>
-                <p>Secure password generator built with React</p>
-                <div class="project-links">
-                  <a href="https://passwordxgenerator.vercel.app/" target="_blank" class="project-link">
-                    <span>🌐 Live Demo</span>
-                  </a>
-                  <a href="https://github.com/sohhamm/password-generator" target="_blank" class="project-link">
-                    <span>📱 Code</span>
-                  </a>
+              
+              <div class="education-item">
+                <div class="education-header">
+                  <h3>PCMC CBSE 11-12</h3>
+                  <span class="institution">Ekya Schools</span>
+                  <span class="duration">05/2015 - 05/2017</span>
+                  <span class="location">Bengaluru, India</span>
                 </div>
               </div>
-              <div class="project-card">
-                <h3>Country Finder</h3>
-                <p>Interactive country explorer with React</p>
-                <div class="project-links">
-                  <a href="https://awesome-country-finder.netlify.app/" target="_blank" class="project-link">
-                    <span>🌐 Live Demo</span>
-                  </a>
-                  <a href="https://github.com/sohhamm/country-finder" target="_blank" class="project-link">
-                    <span>📱 Code</span>
-                  </a>
+            </div>
+          </div>
+
+          <div class="section" data-section="languages">
+            <h2>Languages</h2>
+            <div class="languages-grid">
+              <div class="language-item">
+                <h3>English</h3>
+                <div class="proficiency-bar">
+                  <div class="proficiency-fill" style="width: 100%"></div>
                 </div>
+                <span class="proficiency-text">Native or Bilingual Proficiency</span>
+              </div>
+              
+              <div class="language-item">
+                <h3>Hindi</h3>
+                <div class="proficiency-bar">
+                  <div class="proficiency-fill" style="width: 100%"></div>
+                </div>
+                <span class="proficiency-text">Native or Bilingual Proficiency</span>
+              </div>
+              
+              <div class="language-item">
+                <h3>Bengali</h3>
+                <div class="proficiency-bar">
+                  <div class="proficiency-fill" style="width: 100%"></div>
+                </div>
+                <span class="proficiency-text">Native or Bilingual Proficiency</span>
+              </div>
+              
+              <div class="language-item">
+                <h3>Kannada</h3>
+                <div class="proficiency-bar">
+                  <div class="proficiency-fill" style="width: 60%"></div>
+                </div>
+                <span class="proficiency-text">Limited Working Proficiency</span>
               </div>
             </div>
           </div>
@@ -158,13 +297,13 @@ export default class InteractiveResume {
           </div>
         </div>
       </div>
-    `;
+    `
 
-    this.addStyles();
+    this.addStyles()
   }
 
   addStyles() {
-    const style = document.createElement('style');
+    const style = document.createElement('style')
     style.textContent = `
       .resume-wrapper {
         max-width: 1200px;
@@ -312,13 +451,207 @@ export default class InteractiveResume {
         color: var(--blue-300);
       }
 
-      .overview-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      .experience-timeline {
+        display: flex;
+        flex-direction: column;
         gap: 2rem;
       }
 
-      .overview-card {
+      .experience-company {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .experience-company:hover {
+        transform: translateY(-5px);
+      }
+
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .company-logo {
+        width: 56px;
+        height: 56px;
+        background: var(--blue-400);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .company-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .logo-placeholder {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+      }
+
+      .company-info {
+        flex: 1;
+      }
+
+      .company-name {
+        font-size: 1.4rem;
+        color: white;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .company-link {
+        color: white;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.3s ease;
+      }
+
+      .company-link:hover {
+        color: var(--blue-300);
+      }
+
+      .link-icon {
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
+      }
+
+      .company-link:hover .link-icon {
+        opacity: 1;
+      }
+
+      .inline-link {
+        color: var(--blue-300);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.3s ease;
+      }
+
+      .inline-link:hover {
+        border-bottom-color: var(--blue-300);
+      }
+
+      .company-duration {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .industry-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .industry-tag {
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.8);
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: all 0.2s ease;
+      }
+
+      .industry-tag:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+
+      .role-timeline {
+        padding: 1.5rem;
+      }
+
+      .role-item {
+        position: relative;
+        padding-left: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-left: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .role-item:last-child {
+        border-left: none;
+        padding-bottom: 0;
+      }
+
+      .role-item::before {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: 0;
+        width: 8px;
+        height: 8px;
+        background: var(--blue-400);
+        border-radius: 50%;
+      }
+
+      .role-header {
+        margin-bottom: 0.75rem;
+      }
+
+      .role-header h4 {
+        font-size: 1.1rem;
+        color: var(--blue-300);
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .role-duration {
+        display: block;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0.25rem;
+      }
+
+      .role-location {
+        display: block;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .role-description {
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .role-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .skill-badge {
+        padding: 0.25rem 0.75rem;
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--blue-300);
+        border-radius: 15px;
+        font-size: 0.85rem;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+      }
+
+      .education-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .education-item {
         padding: 2rem;
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
         border-radius: 15px;
@@ -326,14 +659,88 @@ export default class InteractiveResume {
         transition: transform 0.3s ease;
       }
 
-      .overview-card:hover {
+      .education-item:hover {
         transform: translateY(-5px);
       }
 
-      .overview-card h3 {
-        font-size: 1.2rem;
+      .education-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .education-header h3 {
+        font-size: 1.3rem;
+        color: var(--blue-300);
+        font-weight: 600;
+      }
+
+      .institution {
+        font-size: 1.1rem;
+        color: var(--indigo-300);
+        font-weight: 500;
+      }
+
+      .education-subjects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .subject-tag {
+        padding: 0.4rem 0.8rem;
+        background: rgba(59, 130, 246, 0.3);
+        color: white;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        border: 1px solid var(--blue-400);
+      }
+
+      .languages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .language-item {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .language-item:hover {
+        transform: translateY(-5px);
+      }
+
+      .language-item h3 {
         margin-bottom: 1rem;
         color: var(--blue-300);
+        font-size: 1.1rem;
+      }
+
+      .proficiency-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+      }
+
+      .proficiency-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--blue-400), var(--indigo-300));
+        transition: width 0.8s ease;
+        border-radius: 4px;
+      }
+
+      .proficiency-text {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
       }
 
       .skills-grid {
@@ -373,58 +780,6 @@ export default class InteractiveResume {
         transform: scale(1.05);
       }
 
-      .projects-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-      }
-
-      .project-card {
-        padding: 2rem;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: transform 0.3s ease;
-      }
-
-      .project-card:hover {
-        transform: translateY(-5px);
-      }
-
-      .project-card h3 {
-        margin-bottom: 1rem;
-        color: var(--blue-300);
-      }
-
-      .project-card p {
-        margin-bottom: 1.5rem;
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      .project-links {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .project-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        text-decoration: none;
-        color: white;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
-      }
-
-      .project-link:hover {
-        background: var(--blue-400);
-        border-color: var(--blue-400);
-        transform: translateY(-2px);
-      }
 
       .download-section {
         text-align: center;
@@ -480,63 +835,71 @@ export default class InteractiveResume {
           font-size: 2rem;
         }
         
-        .overview-grid,
         .skills-grid,
-        .projects-grid {
+        .languages-grid {
           grid-template-columns: 1fr;
+        }
+        
+        .company-header {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .role-item {
+          padding-left: 1rem;
         }
         
         .contact-links {
           justify-content: center;
         }
       }
-    `;
-    
-    document.head.appendChild(style);
+    `
+
+    document.head.appendChild(style)
   }
 
   bindEvents() {
-    const navBtns = this.container.querySelectorAll('.nav-btn');
+    const navBtns = this.container.querySelectorAll('.nav-btn')
     navBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const section = e.target.dataset.section;
-        this.switchSection(section);
-      });
-    });
+      btn.addEventListener('click', e => {
+        const section = e.target.dataset.section
+        this.switchSection(section)
+      })
+    })
 
     // Add hover effects for skill tags
-    const skillTags = this.container.querySelectorAll('.skill-tag');
+    const skillTags = this.container.querySelectorAll('.skill-tag')
     skillTags.forEach(tag => {
       tag.addEventListener('mouseenter', () => {
-        tag.style.background = 'var(--indigo-300)';
-      });
+        tag.style.background = 'var(--indigo-300)'
+      })
       tag.addEventListener('mouseleave', () => {
-        tag.style.background = 'var(--blue-400)';
-      });
-    });
+        tag.style.background = 'var(--blue-400)'
+      })
+    })
   }
 
   switchSection(sectionName) {
     // Update active nav button
-    const navBtns = this.container.querySelectorAll('.nav-btn');
+    const navBtns = this.container.querySelectorAll('.nav-btn')
     navBtns.forEach(btn => {
-      btn.classList.remove('active');
-    });
-    this.container.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+      btn.classList.remove('active')
+    })
+    this.container.querySelector(`[data-section="${sectionName}"]`).classList.add('active')
 
     // Update active section
-    const sections = this.container.querySelectorAll('.section');
+    const sections = this.container.querySelectorAll('.section')
     sections.forEach(section => {
-      section.classList.remove('active');
-    });
-    this.container.querySelector(`.section[data-section="${sectionName}"]`).classList.add('active');
+      section.classList.remove('active')
+    })
+    this.container.querySelector(`.section[data-section="${sectionName}"]`).classList.add('active')
 
-    this.currentSection = sectionName;
+    this.currentSection = sectionName
   }
 
   animateIn() {
     setTimeout(() => {
-      this.container.querySelector('.resume-wrapper').classList.add('animate-in');
-    }, 100);
+      this.container.querySelector('.resume-wrapper').classList.add('animate-in')
+    }, 100)
   }
 }
