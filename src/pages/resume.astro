@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/layout.astro'
+import InteractiveResume from '../components/InteractiveResume.astro'
 ---
 
 <Layout
@@ -10,7 +11,7 @@ import Layout from '../layouts/layout.astro'
 >
   <div id='resume-container'>
     <canvas id='bg-canvas'></canvas>
-    <div id='interactive-resume'></div>
+    <InteractiveResume />
   </div>
 </Layout>
 
@@ -40,13 +41,6 @@ import Layout from '../layouts/layout.astro'
 
 <script>
   import * as THREE from 'three'
-  import InteractiveResume from '../components/InteractiveResume.js'
-
-  // Initialize interactive resume
-  const resumeContainer = document.getElementById('interactive-resume')
-  if (resumeContainer) {
-    new InteractiveResume(resumeContainer)
-  }
 
   // Simple, professional 3D background
   function init3DBackground() {
