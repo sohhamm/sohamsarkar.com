@@ -16,11 +16,11 @@ const content = {
         <span class='error-number'>404</span>
         <div class='error-glitch'></div>
       </div>
-      
+
       <div class='error-text'>
         <h1>Page not found</h1>
         <p>
-          Looks like this page took a detour into the void. 
+          Looks like this page took a detour into the void.
           <br />Let's get you back to exploring my digital garden.
         </p>
       </div>
@@ -95,24 +95,34 @@ const content = {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+      );
       animation: glitch 3s ease-in-out infinite;
       opacity: 0;
     }
 
     @keyframes glitch {
-      0%, 90%, 100% {
+      0%,
+      90%,
+      100% {
         opacity: 0;
         transform: translateX(0);
       }
-      91%, 99% {
+      91%,
+      99% {
         opacity: 1;
         transform: translateX(2px);
       }
-      92%, 98% {
+      92%,
+      98% {
         transform: translateX(-2px);
       }
-      93%, 97% {
+      93%,
+      97% {
         transform: translateX(4px);
       }
     }
@@ -189,7 +199,12 @@ const content = {
       position: absolute;
       width: 60px;
       height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+      );
       animation: float-line 8s ease-in-out infinite;
     }
 
@@ -208,7 +223,8 @@ const content = {
     }
 
     @keyframes float {
-      0%, 100% {
+      0%,
+      100% {
         transform: translateY(0) scale(1);
         opacity: 0.4;
       }
@@ -219,7 +235,8 @@ const content = {
     }
 
     @keyframes float-line {
-      0%, 100% {
+      0%,
+      100% {
         transform: translateY(0) rotate(var(--rotation, 45deg));
         opacity: 0.3;
       }

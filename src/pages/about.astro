@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/layout.astro'
 import {Image} from 'astro:assets'
-import profileImage from '../assets/pfp.png'
+import tigerPfp from '../assets/tiger-pfp.jpg'
 
-const title = 'About Soham Sarkar | Tech Enthusiast & App Developer'
+const title = 'About | Soham Sarkar'
 const description =
   "Learn about Soham Sarkar's journey, philosophy, and approach to building innovative and user-centric applications."
 ---
@@ -13,7 +13,7 @@ const description =
     <h1>About Soham Sarkar</h1>
 
     <section class='profile'>
-      <Image src={profileImage} alt='Soham Sarkar' width={300} height={300} />
+      <Image src={tigerPfp} alt='Soham Sarkar' width={300} height={300} />
       <div>
         <h2>Tech Enthusiast, Problem Solver, and App Developer</h2>
         <p>
@@ -163,6 +163,8 @@ const description =
   .profile img {
     border-radius: 50%;
     object-fit: cover;
+    width: 300px;
+    height: 300px;
   }
 
   ul {
