@@ -391,8 +391,6 @@ const {product} = Astro.props
         return
       }
 
-      console.log('Initializing', this.cards.length, 'product cards')
-
       this.cards.forEach(card => {
         this.initializeCard(card)
         this.setupCardAnimations(card)
@@ -428,13 +426,6 @@ const {product} = Astro.props
       const imageContainer = card.querySelector('[data-image-container]') as HTMLElement
 
       const elements = [title, meta, description, imageContainer].filter(Boolean)
-
-      console.log(
-        'Animating card entrance for:',
-        card.dataset.productCard,
-        'elements:',
-        elements.length,
-      )
 
       // Animate each element individually with staggered delay
       elements.forEach((el, index) => {

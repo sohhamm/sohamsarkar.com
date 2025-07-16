@@ -1,0 +1,762 @@
+---
+export const prerender = false;
+
+import Layout from "../layouts/layout.astro";
+
+const { request } = Astro;
+
+// Check for password authentication
+const isAuthenticated = () => {
+  const cookies = request.headers.get('cookie');
+  
+  // Check for auth cookie
+  if (cookies) {
+    const authCookie = cookies.split(';').find(cookie => 
+      cookie.trim().startsWith('finance-auth=')
+    );
+    if (authCookie) {
+      const token = authCookie.split('=')[1];
+      return token === 'authenticated';
+    }
+  }
+  
+  return false;
+};
+
+// Handle password form submission
+if (request.method === 'POST') {
+  const formData = await request.formData();
+  const password = formData.get('password');
+  
+  // Get password from environment variable
+  const FINANCE_PASSWORD = process.env.FINANCE_PASSWORD || 'your-secure-password-here';
+  
+  if (password === FINANCE_PASSWORD) {
+    // Set authentication cookie
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Location': '/finance',
+        'Set-Cookie': 'finance-auth=authenticated; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600'
+      }
+    });
+  }
+}
+
+const authenticated = isAuthenticated();
+---
+
+<Layout content={{ title: "Finance - Wealth Transparency", description: "Private wealth dashboard showing real-time portfolio performance and asset allocation across stocks, crypto, and bonds." }}>
+  <main class="finance-page">
+    {!authenticated ? (
+      <div class="auth-container">
+        <h1>Finance Dashboard</h1>
+        <p>This section contains sensitive financial information and requires authentication.</p>
+        
+        <form method="POST" class="auth-form">
+          <label for="password">Password:</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            placeholder="Enter password"
+          />
+          <button type="submit">Access Dashboard</button>
+        </form>
+      </div>
+    ) : (
+      <div class="dashboard">
+        <h1>Wealth Transparency Dashboard</h1>
+        
+        <div class="dashboard-grid">
+          <section class="net-worth-section">
+            <h2>Real-Time Net Worth</h2>
+            <div class="net-worth-display">
+              <div class="total-value">
+                <span class="currency">₹</span>
+                <span class="amount" id="total-net-worth">Loading...</span>
+              </div>
+              <div class="change-indicator">
+                <span id="net-worth-change">+0.00%</span>
+              </div>
+            </div>
+          </section>
+
+
+          <section class="allocations-section">
+            <h2>Asset Allocation</h2>
+            <div class="allocation-grid">
+              <div class="allocation-item">
+                <h3>Stocks</h3>
+                <div class="allocation-details">
+                  <div class="allocation-percentage">65%</div>
+                  <div class="allocation-value">₹<span id="stocks-value">Loading...</span></div>
+                  <div class="allocation-platforms">
+                    <span>Direct + Mutual Funds</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="allocation-item">
+                <h3>Mutual Funds</h3>
+                <div class="allocation-details">
+                  <div class="allocation-percentage">20%</div>
+                  <div class="allocation-value">₹<span id="mf-value">Loading...</span></div>
+                  <div class="allocation-platforms">
+                    <span>Direct + SIP</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="allocation-item">
+                <h3>Bonds</h3>
+                <div class="allocation-details">
+                  <div class="allocation-percentage">15%</div>
+                  <div class="allocation-value">₹<span id="bonds-value">Loading...</span></div>
+                  <div class="allocation-platforms">
+                    <span>Corporate Bonds</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="portfolio-performance">
+            <h2>Portfolio Performance</h2>
+            <div class="performance-comparison">
+              <div class="performance-grid">
+                <div class="performance-item">
+                  <div class="performance-header">
+                    <h4>1 Month</h4>
+                    <div class="performance-indicator">
+                      <div class="indicator-dot positive"></div>
+                      <span class="outperformance">+0.5%</span>
+                    </div>
+                  </div>
+                  <div class="performance-values">
+                    <div class="portfolio-performance-value">
+                      <span class="performance-label">Portfolio</span>
+                      <span class="performance-value positive">+2.3%</span>
+                    </div>
+                    <div class="benchmark-performance-value">
+                      <span class="performance-label">Nifty 50</span>
+                      <span class="benchmark-value">+1.8%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-item">
+                  <div class="performance-header">
+                    <h4>3 Months</h4>
+                    <div class="performance-indicator">
+                      <div class="indicator-dot positive"></div>
+                      <span class="outperformance">+1.5%</span>
+                    </div>
+                  </div>
+                  <div class="performance-values">
+                    <div class="portfolio-performance-value">
+                      <span class="performance-label">Portfolio</span>
+                      <span class="performance-value positive">+8.7%</span>
+                    </div>
+                    <div class="benchmark-performance-value">
+                      <span class="performance-label">Nifty 50</span>
+                      <span class="benchmark-value">+7.2%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-item">
+                  <div class="performance-header">
+                    <h4>YTD</h4>
+                    <div class="performance-indicator">
+                      <div class="indicator-dot positive"></div>
+                      <span class="outperformance">+1.2%</span>
+                    </div>
+                  </div>
+                  <div class="performance-values">
+                    <div class="portfolio-performance-value">
+                      <span class="performance-label">Portfolio</span>
+                      <span class="performance-value positive">+12.4%</span>
+                    </div>
+                    <div class="benchmark-performance-value">
+                      <span class="performance-label">Nifty 50</span>
+                      <span class="benchmark-value">+11.2%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-item">
+                  <div class="performance-header">
+                    <h4>1 Year</h4>
+                    <div class="performance-indicator">
+                      <div class="indicator-dot positive"></div>
+                      <span class="outperformance">+2.5%</span>
+                    </div>
+                  </div>
+                  <div class="performance-values">
+                    <div class="portfolio-performance-value">
+                      <span class="performance-label">Portfolio</span>
+                      <span class="performance-value positive">+18.9%</span>
+                    </div>
+                    <div class="benchmark-performance-value">
+                      <span class="performance-label">Nifty 50</span>
+                      <span class="benchmark-value">+16.4%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .finance-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+    min-height: 100vh;
+  }
+
+  .auth-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .auth-form label {
+    text-align: left;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  .auth-form input {
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    font-family: monospace;
+  }
+
+  .auth-form button {
+    padding: 0.75rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+  }
+
+  .auth-form button:hover {
+    background: #0056b3;
+  }
+
+  .dashboard {
+    color: #ffffff;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .dashboard h1 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+  }
+
+  .dashboard-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .net-worth-section {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .net-worth-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  }
+
+  .net-worth-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .total-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00ff88 0%, #00d4aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    margin-bottom: 0.5rem;
+  }
+
+  .currency {
+    font-size: 2rem;
+    opacity: 0.8;
+  }
+
+  .change-indicator {
+    font-size: 1.2rem;
+    color: #00ff88;
+  }
+
+
+  .allocations-section {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .allocation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .allocation-item {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .allocation-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  }
+
+  .allocation-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .allocation-item h3 {
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+
+  .allocation-percentage {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  .allocation-value {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    color: #00ff88;
+  }
+
+  .allocation-platforms {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    color: #ffffff;
+  }
+
+  .portfolio-performance {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .performance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .performance-item {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .performance-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  }
+
+  .performance-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .performance-item h4 {
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+  }
+
+  .performance-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .performance-value.positive {
+    color: #00ff88;
+  }
+
+  .performance-value.negative {
+    color: #ff4444;
+  }
+
+  .performance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .performance-header h4 {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .performance-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    animation: pulse 2s infinite;
+  }
+
+  .indicator-dot.positive {
+    background: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+
+  .indicator-dot.negative {
+    background: #ff4444;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+  }
+
+  .outperformance {
+    font-size: 0.75rem;
+    color: rgba(0, 255, 136, 0.8);
+    font-weight: 600;
+  }
+
+  .performance-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .portfolio-performance-value,
+  .benchmark-performance-value {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+  }
+
+  .performance-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+  }
+
+  .performance-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .benchmark-value {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+
+  .dashboard-grid {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .net-worth-section {
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+  }
+
+  .allocations-section {
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+  }
+
+  .portfolio-performance {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .allocation-percentage {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+  }
+
+  .allocation-value {
+    font-size: 1.6rem;
+    margin: 0.75rem 0;
+    background: linear-gradient(135deg, #00ff88 0%, #00d4aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  .change-indicator {
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 212, 170, 0.2) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .dashboard h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+  }
+
+  .dashboard h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #00ff88, #00d4aa);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .finance-page {
+      padding: 1rem;
+    }
+    
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .total-value {
+      font-size: 2.5rem;
+    }
+    
+    .performance-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .allocation-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Client-side finance data loading
+  const loadFinanceData = async () => {
+    try {
+      // Show loading state
+      document.getElementById('total-net-worth')!.textContent = 'Loading...';
+      document.getElementById('stocks-value')!.textContent = 'Loading...';
+      document.getElementById('mf-value')!.textContent = 'Loading...';
+      document.getElementById('bonds-value')!.textContent = 'Loading...';
+      
+      // Fetch portfolio data from API
+      const response = await fetch('/api/finance/portfolio');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch portfolio data');
+      }
+      
+      const data = await response.json();
+      
+      // Update the UI with API data
+      document.getElementById('total-net-worth')!.textContent = data.summary.totalValue.toLocaleString();
+      document.getElementById('net-worth-change')!.textContent = `+${data.summary.totalChange.toFixed(2)}%`;
+      document.getElementById('net-worth-change')!.className = data.summary.totalChange >= 0 ? 'positive' : 'negative';
+      
+      document.getElementById('stocks-value')!.textContent = data.allocations.stocks.value.toLocaleString();
+      document.getElementById('mf-value')!.textContent = data.allocations.mutualFunds.value.toLocaleString();
+      document.getElementById('bonds-value')!.textContent = data.allocations.bonds.value.toLocaleString();
+      
+      // Update allocation percentages
+      document.querySelector('.allocation-item:nth-child(1) .allocation-percentage')!.textContent = data.allocations.stocks.percentage + '%';
+      document.querySelector('.allocation-item:nth-child(2) .allocation-percentage')!.textContent = data.allocations.mutualFunds.percentage + '%';
+      document.querySelector('.allocation-item:nth-child(3) .allocation-percentage')!.textContent = data.allocations.bonds.percentage + '%';
+      
+      // Update performance data
+      const performanceItems = document.querySelectorAll('.performance-item');
+      if (performanceItems.length >= 4) {
+        const performances = [
+          { portfolio: data.performance.oneMonth, benchmark: data.performance.benchmark.oneMonth, outperformance: data.performance.oneMonth - data.performance.benchmark.oneMonth },
+          { portfolio: data.performance.threeMonths, benchmark: data.performance.benchmark.threeMonths, outperformance: data.performance.threeMonths - data.performance.benchmark.threeMonths },
+          { portfolio: data.performance.ytd, benchmark: data.performance.benchmark.ytd, outperformance: data.performance.ytd - data.performance.benchmark.ytd },
+          { portfolio: data.performance.oneYear, benchmark: data.performance.benchmark.oneYear, outperformance: data.performance.oneYear - data.performance.benchmark.oneYear }
+        ];
+        
+        performances.forEach((perf, index) => {
+          const item = performanceItems[index];
+          const portfolioValue = item.querySelector('.performance-value');
+          const benchmarkValue = item.querySelector('.benchmark-value');
+          const outperformanceValue = item.querySelector('.outperformance');
+          const indicatorDot = item.querySelector('.indicator-dot');
+          
+          if (portfolioValue) {
+            portfolioValue.textContent = `${perf.portfolio >= 0 ? '+' : ''}${perf.portfolio.toFixed(1)}%`;
+            portfolioValue.className = `performance-value ${perf.portfolio >= 0 ? 'positive' : 'negative'}`;
+          }
+          if (benchmarkValue) {
+            benchmarkValue.textContent = `${perf.benchmark >= 0 ? '+' : ''}${perf.benchmark.toFixed(1)}%`;
+          }
+          if (outperformanceValue) {
+            outperformanceValue.textContent = `${perf.outperformance >= 0 ? '+' : ''}${perf.outperformance.toFixed(1)}%`;
+            (outperformanceValue as HTMLElement).style.color = perf.outperformance >= 0 ? 'rgba(0, 255, 136, 0.8)' : 'rgba(255, 68, 68, 0.8)';
+          }
+          if (indicatorDot) {
+            indicatorDot.className = `indicator-dot ${perf.outperformance >= 0 ? 'positive' : 'negative'}`;
+          }
+        });
+      }
+      
+      console.log('Finance data loaded successfully from API');
+      
+    } catch (error) {
+      console.error('Error loading finance data:', error);
+      
+      // Fallback data
+      document.getElementById('total-net-worth')!.textContent = '1,759,075';
+      document.getElementById('stocks-value')!.textContent = '759,075';
+      document.getElementById('mf-value')!.textContent = '1,185,625';
+      document.getElementById('bonds-value')!.textContent = '150,000';
+    }
+  };
+  
+  // Load data when page loads
+  document.addEventListener('DOMContentLoaded', loadFinanceData);
+  
+  // Refresh data every 30 seconds
+  setInterval(loadFinanceData, 30000);
+</script>
