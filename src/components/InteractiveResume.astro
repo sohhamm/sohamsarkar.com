@@ -18,11 +18,16 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   </div>
 
   <div class="resume-nav">
-    <button class="nav-btn active" data-section="experience">Experience</button>
-    <button class="nav-btn" data-section="skills">Skills</button>
-    <button class="nav-btn" data-section="education">Education</button>
-    <button class="nav-btn" data-section="languages">Languages</button>
-    <button class="nav-btn" data-section="download">Download</button>
+    <div class="nav-buttons">
+      <button class="nav-btn active" data-section="experience">Experience</button>
+      <button class="nav-btn" data-section="skills">Skills</button>
+      <button class="nav-btn" data-section="education">Education</button>
+      <button class="nav-btn" data-section="languages">Languages</button>
+    </div>
+    <a href="https://assets.sohamsarkar.com/resume.pdf" target="_blank" class="nav-download-btn">
+      <span class="icon">📄</span>
+      <span>Download PDF</span>
+    </a>
   </div>
 
   <div class="resume-content">
@@ -76,7 +81,14 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
                 <span class="role-duration">Jul 2022 - Apr 2023 · 10 mos</span>
                 <span class="role-location">Bengaluru, Karnataka, India · Remote</span>
               </div>
-              <p class="role-description">Leading the frontend team and overseeing the frontend hiring process. Built the MVP from scratch in 2 months using React and built the landing page using NextJS. Setup modern libraries and tooling for our codebase, established best practices, made our internal UI library called Hybrid UI and setup the complete CI/CD pipeline using Github Actions, S3, CloudFront and Route 53. Built APIs for our services using Node. Helping companies manage their company in a hassle free manner through our B2B SAAS for their IT & HR needs.</p>
+              <ul class="role-description">
+                <li>Leading the frontend team and overseeing the frontend hiring process</li>
+                <li>Built the MVP from scratch in 2 months using React and built the landing page using NextJS</li>
+                <li>Setup modern libraries and tooling for our codebase, established best practices</li>
+                <li>Made our internal UI library called Hybrid UI and setup the complete CI/CD pipeline using Github Actions, S3, CloudFront and Route 53</li>
+                <li>Built APIs for our services using Node</li>
+                <li>Helping companies manage their company in a hassle free manner through our B2B SAAS for their IT & HR needs</li>
+              </ul>
               <div class="role-skills">
                 <span class="skill-badge">GraphQL</span>
                 <span class="skill-badge">Git</span>
@@ -115,7 +127,15 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
                 <span class="role-duration">Sep 2021 - Jul 2022 · 11 mos</span>
                 <span class="role-location">Bengaluru, Karnataka, India</span>
               </div>
-              <p class="role-description">Built various dashboards for publishers and internal services with Data Visualisation. Added new user facing features in a popular web game. Improved the lighthouse scores for the landing pages of few of our applications. Added various new components for our internal UI library called GG-UI and improved our frontend tooling (e.g switching to esbuild from webpack) and thus improving our build time by 70%. Mentored few interns on code quality and best practices. Built few internal services using Go.</p>
+              <ul class="role-description">
+                <li>Built various dashboards for publishers and internal services with Data Visualisation</li>
+                <li>Added new user facing features in a popular web game</li>
+                <li>Improved the lighthouse scores for the landing pages of few of our applications</li>
+                <li>Added various new components for our internal UI library called GG-UI</li>
+                <li>Improved our frontend tooling (e.g switching to esbuild from webpack) and thus improving our build time by 70%</li>
+                <li>Mentored few interns on code quality and best practices</li>
+                <li>Built few internal services using Go</li>
+              </ul>
               <div class="role-skills">
                 <span class="skill-badge">Git</span>
                 <span class="skill-badge">Cascading Style Sheets (CSS)</span>
@@ -153,7 +173,14 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
                 <span class="role-duration">Mar 2021 - Aug 2021 · 6 mos</span>
                 <span class="role-location">Bengaluru, Karnataka, India</span>
               </div>
-              <p class="role-description">Built the buyer facing application(FE) from scratch using Next.js, typescript etc. Improved the revenue for our customers by 3x. Built internal reusable and scalable react components. Built APIs for the buyer facing application. Mentored interns on code architecture and best practices. Tellephant acquired <a href="https://www.linkedin.com/company/apna-business/about/" target="_blank" rel="noopener noreferrer" class="inline-link">Apna Business</a> during my tenure.</p>
+              <ul class="role-description">
+                <li>Built the buyer facing application(FE) from scratch using Next.js, typescript etc</li>
+                <li>Improved the revenue for our customers by 3x</li>
+                <li>Built internal reusable and scalable react components</li>
+                <li>Built APIs for the buyer facing application</li>
+                <li>Mentored interns on code architecture and best practices</li>
+                <li>Tellephant acquired <a href="https://www.linkedin.com/company/apna-business/about/" target="_blank" rel="noopener noreferrer" class="inline-link">Apna Business</a> during my tenure</li>
+              </ul>
               <div class="role-skills">
                 <span class="skill-badge">GraphQL</span>
                 <span class="skill-badge">Git</span>
@@ -278,16 +305,6 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
       </div>
     </div>
 
-    <div class="section" data-section="download">
-      <h2>Download Resume</h2>
-      <div class="download-section">
-        <p>Get a PDF copy of my resume</p>
-        <a href="https://assets.sohamsarkar.com/resume.pdf" target="_blank" class="download-btn">
-          <span class="icon">📄</span>
-          <span>Download PDF</span>
-        </a>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -314,7 +331,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     gap: 2rem;
     margin-bottom: 3rem;
     padding: 2rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -324,7 +341,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     height: 120px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid var(--blue-400);
+    border: 3px solid rgba(255, 255, 255, 0.3);
     transition: transform 0.3s ease;
   }
 
@@ -346,7 +363,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    background: linear-gradient(45deg, var(--blue-400), var(--indigo-300));
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -354,18 +371,25 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .title {
     font-size: 1.2rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 1.5rem;
   }
 
   .resume-nav {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
     padding: 1rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     overflow-x: auto;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 1rem;
   }
 
   .nav-btn {
@@ -380,13 +404,13 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   }
 
   .nav-btn:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: var(--blue-400);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 
   .nav-btn.active {
-    background: var(--blue-400);
-    border-color: var(--blue-400);
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 
   .resume-content {
@@ -410,7 +434,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   .section h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   .experience-timeline {
@@ -420,7 +444,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   }
 
   .experience-company {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
@@ -442,7 +466,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   .company-logo {
     width: 56px;
     height: 56px;
-    background: var(--blue-400);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -478,7 +502,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   }
 
   .company-link:hover {
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   .link-icon {
@@ -491,14 +515,14 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   }
 
   .inline-link {
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: border-color 0.3s ease;
   }
 
   .inline-link:hover {
-    border-bottom-color: var(--blue-300);
+    border-bottom-color: rgba(255, 255, 255, 0.8);
   }
 
   .company-duration {
@@ -552,7 +576,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     top: 0;
     width: 8px;
     height: 8px;
-    background: var(--blue-400);
+    background: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
   }
 
@@ -562,7 +586,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .role-header h4 {
     font-size: 1.1rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 600;
     margin-bottom: 0.25rem;
   }
@@ -584,6 +608,22 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.6;
     margin-bottom: 1rem;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .role-description li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .role-description li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
   }
 
   .role-skills {
@@ -594,11 +634,11 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .skill-badge {
     padding: 0.25rem 0.75rem;
-    background: rgba(59, 130, 246, 0.2);
-    color: var(--blue-300);
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
     font-size: 0.85rem;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .education-timeline {
@@ -609,7 +649,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .education-item {
     padding: 2rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease;
@@ -628,13 +668,13 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .education-header h3 {
     font-size: 1.3rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 600;
   }
 
   .institution {
     font-size: 1.1rem;
-    color: var(--indigo-300);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
   }
 
@@ -647,11 +687,11 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .subject-tag {
     padding: 0.4rem 0.8rem;
-    background: rgba(59, 130, 246, 0.3);
+    background: rgba(255, 255, 255, 0.3);
     color: white;
     border-radius: 15px;
     font-size: 0.85rem;
-    border: 1px solid var(--blue-400);
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
 
   .languages-grid {
@@ -662,7 +702,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .language-item {
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease;
@@ -674,7 +714,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .language-item h3 {
     margin-bottom: 1rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.1rem;
   }
 
@@ -689,7 +729,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .proficiency-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--blue-400), var(--indigo-300));
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
     transition: width 0.8s ease;
     border-radius: 4px;
   }
@@ -714,7 +754,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .skill-category h3 {
     margin-bottom: 1rem;
-    color: var(--blue-300);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   .skill-tags {
@@ -725,7 +765,7 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
 
   .skill-tag {
     padding: 0.5rem 1rem;
-    background: var(--blue-400);
+    background: rgba(255, 255, 255, 0.3);
     color: white;
     border-radius: 20px;
     font-size: 0.9rem;
@@ -736,39 +776,29 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     transform: scale(1.05);
   }
 
-  .download-section {
-    text-align: center;
-    padding: 3rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .download-section p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .download-btn {
+  .nav-download-btn {
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background: var(--blue-400);
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.3);
     color: white;
     text-decoration: none;
-    border-radius: 30px;
-    font-size: 1.1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    border: 2px solid var(--blue-400);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
   }
 
-  .download-btn:hover {
-    background: transparent;
-    color: var(--blue-400);
-    transform: translateY(-3px);
+  .nav-download-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .nav-download-btn .icon {
+    font-size: 0.8rem;
   }
 
   @media (max-width: 768px) {
@@ -845,10 +875,10 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
     skillTags.forEach(tag => {
       const htmlTag = tag as HTMLElement;
       tag.addEventListener('mouseenter', () => {
-        htmlTag.style.background = 'var(--indigo-300)';
+        htmlTag.style.background = 'rgba(255, 255, 255, 0.4)';
       });
       tag.addEventListener('mouseleave', () => {
-        htmlTag.style.background = 'var(--blue-400)';
+        htmlTag.style.background = 'rgba(255, 255, 255, 0.3)';
       });
     });
   }

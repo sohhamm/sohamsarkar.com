@@ -1,0 +1,556 @@
+---
+import {Icon} from 'astro-icon/components'
+import {fetchYouTubePlaylist, fallbackPlaylistData} from '../utils/youtube'
+
+export interface Props {
+  isHomePage?: boolean
+}
+
+// Your YouTube Music playlist ID
+const PLAYLIST_ID = 'PLvU9iXRGj0MQiHp6XSWJ3Q9veSGGrEZyS'
+
+// Fetch playlist data from YouTube API
+let musicData = fallbackPlaylistData
+
+try {
+  const apiKey = import.meta.env.YOUTUBE_API_KEY
+  if (apiKey) {
+    musicData = await fetchYouTubePlaylist(PLAYLIST_ID, apiKey)
+    console.log('test', musicData)
+  } else {
+    console.warn('YOUTUBE_API_KEY not found in environment variables. Using fallback data.')
+  }
+} catch (error) {
+  console.error('Failed to fetch YouTube playlist:', error)
+  // musicData will use fallbackPlaylistData
+}
+---
+
+<section class='music-section'>
+  <div class='music-header'>
+    <h2>Music</h2>
+    <p>The soundtrack to my creative process</p>
+  </div>
+
+  <div class='playlist-container'>
+    <div class='playlist-header'>
+      <div class='playlist-info'>
+        <h3>{musicData.title}</h3>
+        <p>{musicData.description}</p>
+        <div class='track-count'>{musicData.tracks.length} tracks</div>
+      </div>
+      <a
+        href={musicData.playlistUrl}
+        class='listen-button'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        <Icon name='youtubemusic' />
+        Listen on YouTube Music
+      </a>
+    </div>
+
+    <div class='tracks-list'>
+      {
+        musicData.tracks.map((track, index) => (
+          <div class='track-item' data-video-id={track.videoId}>
+            <div class='track-number'>{(index + 1).toString().padStart(2, '0')}</div>
+            <div class='track-thumbnail'>
+              <img src={track.thumbnail} alt={`${track.title} thumbnail`} />
+              <button class='play-button' data-video-id={track.videoId}>
+                <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor'>
+                  <path d='M8 5v14l11-7z' />
+                </svg>
+              </button>
+            </div>
+            <div class='track-info'>
+              <div class='track-title'>{track.title}</div>
+              <div class='track-artist'>{track.artist}</div>
+            </div>
+            <div class='track-duration'>{track.duration}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Embedded YouTube Player -->
+  <div id='music-player' class='music-player hidden'>
+    <div class='player-header'>
+      <div class='now-playing'>
+        <div class='now-playing-text'>Now Playing</div>
+        <div class='current-track-info'>
+          <div class='current-track-title'></div>
+          <div class='current-track-artist'></div>
+        </div>
+      </div>
+      <button id='close-player' class='close-player'>
+        <svg
+          width='20'
+          height='20'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+        >
+          <line x1='18' y1='6' x2='6' y2='18'></line>
+          <line x1='6' y1='6' x2='18' y2='18'></line>
+        </svg>
+      </button>
+    </div>
+    <div id='youtube-player'></div>
+  </div>
+</section>
+
+<style>
+  .music-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 4rem 0;
+    color: #ffffff;
+  }
+
+  .music-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .music-header h2 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: -0.2rem;
+    color: #fff;
+    margin: 0;
+  }
+
+  .music-header p {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #71717a;
+    margin: 0;
+  }
+
+  .playlist-container {
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.1);
+  }
+
+  .playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 2rem;
+  }
+
+  .playlist-info h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .playlist-info p {
+    font-size: 1rem;
+    color: #71717a;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .track-count {
+    font-size: 0.875rem;
+    color: #a1a1aa;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  .listen-button {
+    display: inline-flex;
+    padding: 12px 20px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .listen-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 16px 0px rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .tracks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .track-item {
+    display: grid;
+    grid-template-columns: 2rem 3rem 1fr 4rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .track-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .track-number {
+    font-family: 'Victor Mono', monospace;
+    font-size: 0.875rem;
+    color: #a1a1aa;
+    text-align: center;
+  }
+
+  .track-thumbnail {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .track-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .track-thumbnail:hover .play-button {
+    opacity: 1;
+  }
+
+  .play-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    truncate: true;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-artist {
+    font-size: 0.75rem;
+    color: #71717a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-duration {
+    font-family: 'Victor Mono', monospace;
+    font-size: 0.75rem;
+    color: #a1a1aa;
+    text-align: right;
+  }
+
+  .music-player {
+    margin-top: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .music-player.hidden {
+    display: none;
+  }
+
+  .player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .now-playing-text {
+    font-size: 0.75rem;
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+
+  .current-track-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 0.125rem;
+  }
+
+  .current-track-artist {
+    font-size: 0.875rem;
+    color: #71717a;
+  }
+
+  .close-player {
+    background: none;
+    border: none;
+    color: #a1a1aa;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .close-player:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  #youtube-player {
+    width: 100%;
+    height: 315px;
+  }
+
+  @media (max-width: 768px) {
+    .music-header h2 {
+      font-size: 2rem;
+      letter-spacing: -0.16rem;
+    }
+
+    .playlist-container {
+      padding: 1.5rem;
+    }
+
+    .playlist-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .track-item {
+      grid-template-columns: 2rem 2.5rem 1fr 3rem;
+      gap: 0.75rem;
+      padding: 0.5rem;
+    }
+
+    .track-thumbnail {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .play-button {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .player-header {
+      padding: 1rem;
+    }
+
+    #youtube-player {
+      height: 250px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .music-header h2 {
+      font-size: 1.75rem;
+      letter-spacing: -0.14rem;
+    }
+
+    .playlist-container {
+      padding: 1rem;
+    }
+
+    .track-item {
+      grid-template-columns: 1.5rem 2rem 1fr 3rem;
+      gap: 0.5rem;
+    }
+
+    .track-thumbnail {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .track-number {
+      font-size: 0.75rem;
+    }
+
+    .track-title {
+      font-size: 0.8rem;
+    }
+
+    .track-artist {
+      font-size: 0.7rem;
+    }
+
+    .play-button {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    #youtube-player {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  // YouTube IFrame Player API
+  declare global {
+    interface Window {
+      YT: any
+      onYouTubeIframeAPIReady: () => void
+    }
+  }
+
+  let player: any = null
+  let isPlayerReady = false
+
+  // Load YouTube IFrame Player API
+  if (!window.YT) {
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+  }
+
+  // Initialize player when API is ready
+  window.onYouTubeIframeAPIReady = function () {
+    player = new window.YT.Player('youtube-player', {
+      height: '315',
+      width: '100%',
+      playerVars: {
+        playsinline: 1,
+        autoplay: 0,
+        controls: 1,
+        rel: 0,
+        modestbranding: 1,
+      },
+      events: {
+        onReady: () => {
+          isPlayerReady = true
+        },
+      },
+    })
+  }
+
+  // Get track data from the DOM
+  function getTrackData() {
+    const tracks: any[] = []
+    document.querySelectorAll('.track-item').forEach((item, index) => {
+      const videoId = item.getAttribute('data-video-id')
+      const title = item.querySelector('.track-title')?.textContent || ''
+      const artist = item.querySelector('.track-artist')?.textContent || ''
+      tracks.push({videoId, title, artist, index})
+    })
+    return tracks
+  }
+
+  // Play video function
+  function playVideo(videoId: string, title: string, artist: string) {
+    if (!isPlayerReady) {
+      console.warn('YouTube player not ready yet')
+      return
+    }
+
+    // Show player
+    const musicPlayer = document.getElementById('music-player')
+    if (musicPlayer) {
+      musicPlayer.classList.remove('hidden')
+    }
+
+    // Update current track info
+    const trackTitle = document.querySelector('.current-track-title')
+    const trackArtist = document.querySelector('.current-track-artist')
+    if (trackTitle) trackTitle.textContent = title
+    if (trackArtist) trackArtist.textContent = artist
+
+    // Load and play video
+    player.loadVideoById(videoId)
+
+    // Scroll to player
+    musicPlayer?.scrollIntoView({behavior: 'smooth', block: 'center'})
+  }
+
+  // Add event listeners when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Play button click handlers
+    document.querySelectorAll('.play-button').forEach(button => {
+      button.addEventListener('click', e => {
+        e.stopPropagation()
+        const videoId = button.getAttribute('data-video-id')
+        const trackItem = button.closest('.track-item')
+        const title = trackItem?.querySelector('.track-title')?.textContent || ''
+        const artist = trackItem?.querySelector('.track-artist')?.textContent || ''
+
+        if (videoId) {
+          playVideo(videoId, title, artist)
+        }
+      })
+    })
+
+    // Close player button
+    document.getElementById('close-player')?.addEventListener('click', () => {
+      const musicPlayer = document.getElementById('music-player')
+      if (musicPlayer) {
+        musicPlayer.classList.add('hidden')
+      }
+      if (player && typeof player.pauseVideo === 'function') {
+        player.pauseVideo()
+      }
+    })
+
+    // Track item click (alternative way to play)
+    document.querySelectorAll('.track-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const playButton = item.querySelector('.play-button') as HTMLElement
+        if (playButton) {
+          playButton.click()
+        }
+      })
+    })
+  })
+</script>

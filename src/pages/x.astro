@@ -278,7 +278,7 @@
 
       document.addEventListener('click', enableAudio)
       document.addEventListener('keydown', enableAudio)
-      document.addEventListener('touchstart', enableAudio)
+      document.addEventListener('touchstart', enableAudio, { passive: true })
 
       setTimeout(performRedirect, 2500)
 
