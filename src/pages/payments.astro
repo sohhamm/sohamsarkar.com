@@ -1,0 +1,716 @@
+---
+import Layout from '../layouts/layout.astro'
+import {Icon} from 'astro-icon/components'
+import credQR from '../assets/payments/cred-upi.jpeg'
+import bhimQR from '../assets/payments/bhim-upi.jpeg'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Pay Soham Sarkar',
+  description:
+    'Multiple payment options to pay Soham Sarkar - UPI, Bank Transfer, International Payments',
+  url: 'https://sohamsarkar.com/payments',
+}
+
+const content = {
+  title: 'Pay Soham - Payment Options | Soham Sarkar',
+  description:
+    'Multiple ways to pay Soham Sarkar - UPI QR codes, Bank details, International payment options (Wise, PayPal)',
+  ogImage: '/opengraph.png',
+  structuredData,
+}
+
+const bankDetails = {
+  accountName: 'Soham Sarkar',
+  accountNumber: '1234567890',
+  ifscCode: 'HDFC0001234',
+  bankName: 'HDFC Bank',
+  branch: 'Bangalore',
+}
+
+const paymentMethods = [
+  {
+    id: 'upi',
+    title: 'UPI Payment',
+    icon: 'qr-code',
+    description: 'Scan QR code for instant payment',
+  },
+  {
+    id: 'bank',
+    title: 'Bank Transfer',
+    icon: 'bank',
+    description: 'Direct bank account transfer',
+  },
+  {
+    id: 'international',
+    title: 'International',
+    icon: 'globe',
+    description: 'Wise, PayPal & more',
+  },
+]
+---
+
+<Layout content={content}>
+  <section class='payments-hero'>
+    <div class='container'>
+      <div class='hero-content'>
+        <h1 class='hero-title'>Pay Soham</h1>
+        <p class='hero-subtitle'>Choose your preferred payment method</p>
+      </div>
+
+      <div class='payment-methods'>
+        {
+          paymentMethods.map(method => (
+            <button
+              class='method-tab'
+              data-tab={method.id}
+              data-active={method.id === 'upi' ? 'true' : 'false'}
+            >
+              <Icon name={method.icon} class='method-icon' />
+              <span class='method-title'>{method.title}</span>
+              <span class='method-description'>{method.description}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class='payment-content'>
+        <!-- UPI Section -->
+        <div class='content-section' data-section='upi' data-active='true'>
+          <div class='qr-container'>
+            <div class='qr-codes-container'>
+              <div class='qr-wrapper'>
+                <img src={credQR.src} alt='CRED UPI QR Code' class='qr-code cred-qr' />
+                <div class='qr-overlay'></div>
+                <span class='qr-app-label'>CRED</span>
+              </div>
+              <div class='qr-wrapper'>
+                <img src={bhimQR.src} alt='BHIM UPI QR Code' class='qr-code bhim-qr' />
+                <div class='qr-overlay'></div>
+                <span class='qr-app-label'>BHIM</span>
+              </div>
+            </div>
+            <p class='qr-instruction'>Scan with any UPI app</p>
+            <div class='upi-id-wrapper'>
+              <span class='upi-label'>UPI ID:</span>
+              <div class='copy-field'>
+                <span class='copy-text' data-copy='soham-sarkar@axisb'>soham-sarkar@axisb</span>
+                <button class='copy-btn' data-copy-btn='soham-sarkar@axisb'>
+                  <Icon name='copy' class='copy-icon' />
+                  <Icon name='check' class='check-icon' />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank Transfer Section -->
+        <div class='content-section' data-section='bank' data-active='false'>
+          <div class='bank-details'>
+            <h3 class='section-title'>Bank Account Details</h3>
+            <div class='details-grid'>
+              <div class='detail-item'>
+                <span class='detail-label'>Account Name</span>
+                <div class='copy-field'>
+                  <span class='copy-text' data-copy={bankDetails.accountName}>
+                    {bankDetails.accountName}
+                  </span>
+                  <button class='copy-btn' data-copy-btn={bankDetails.accountName}>
+                    <Icon name='copy' class='copy-icon' />
+                    <Icon name='check' class='check-icon' />
+                  </button>
+                </div>
+              </div>
+              <div class='detail-item'>
+                <span class='detail-label'>Account Number</span>
+                <div class='copy-field'>
+                  <span class='copy-text' data-copy={bankDetails.accountNumber}>
+                    {bankDetails.accountNumber}
+                  </span>
+                  <button class='copy-btn' data-copy-btn={bankDetails.accountNumber}>
+                    <Icon name='copy' class='copy-icon' />
+                    <Icon name='check' class='check-icon' />
+                  </button>
+                </div>
+              </div>
+              <div class='detail-item'>
+                <span class='detail-label'>IFSC Code</span>
+                <div class='copy-field'>
+                  <span class='copy-text' data-copy={bankDetails.ifscCode}>
+                    {bankDetails.ifscCode}
+                  </span>
+                  <button class='copy-btn' data-copy-btn={bankDetails.ifscCode}>
+                    <Icon name='copy' class='copy-icon' />
+                    <Icon name='check' class='check-icon' />
+                  </button>
+                </div>
+              </div>
+              <div class='detail-item'>
+                <span class='detail-label'>Bank Name</span>
+                <div class='copy-field'>
+                  <span class='copy-text'>{bankDetails.bankName}</span>
+                </div>
+              </div>
+              <div class='detail-item'>
+                <span class='detail-label'>Branch</span>
+                <div class='copy-field'>
+                  <span class='copy-text'>{bankDetails.branch}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- International Section -->
+        <div class='content-section' data-section='international' data-active='false'>
+          <div class='international-options'>
+            <h3 class='section-title'>International Payment Options</h3>
+            <div class='payment-cards'>
+              <a
+                href='https://wise.com/pay/soham'
+                target='_blank'
+                rel='noopener noreferrer'
+                class='payment-card'
+              >
+                <div class='card-icon wise-icon'>
+                  <Icon name='wise' />
+                </div>
+                <span class='card-title'>Wise</span>
+                <span class='card-description'>Low fees, real exchange rates</span>
+                <Icon name='arrow-bend-up-right' class='card-arrow' />
+              </a>
+              <a
+                href='https://paypal.me/sohamsarkar'
+                target='_blank'
+                rel='noopener noreferrer'
+                class='payment-card'
+              >
+                <div class='card-icon paypal-icon'>
+                  <Icon name='paypal' />
+                </div>
+                <span class='card-title'>PayPal</span>
+                <span class='card-description'>Quick & secure payments</span>
+                <Icon name='arrow-bend-up-right' class='card-arrow' />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .payments-hero {
+    min-height: 100vh;
+    padding: 120px 0 60px;
+    position: relative;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .hero-content {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.045rem;
+    margin-bottom: 16px;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: -0.02rem;
+  }
+
+  .payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .method-tab {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .method-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .method-tab:hover::before {
+    opacity: 1;
+  }
+
+  .method-tab[data-active='true'] {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .method-icon {
+    width: 32px;
+    height: 32px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .method-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.02rem;
+  }
+
+  .method-description {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+  }
+
+  .payment-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .content-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .content-section[data-active='true'] {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* QR Code Section */
+  .qr-container {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+  }
+
+  .qr-codes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .qr-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .qr-code {
+    border-radius: 16px;
+    /* background: white; */
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .cred-qr {
+    width: 300px;
+    height: auto;
+    max-height: 340px;
+    object-fit: contain;
+  }
+
+  .bhim-qr {
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+  }
+
+  .qr-app-label {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: -0.01rem;
+  }
+
+  .qr-overlay {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(165, 180, 252, 0.2), transparent);
+    pointer-events: none;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.3;
+    }
+  }
+
+  .qr-instruction {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 24px;
+  }
+
+  .upi-id-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .upi-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Bank Details Section */
+  .bank-details {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 32px;
+    text-align: center;
+    letter-spacing: -0.03rem;
+  }
+
+  .details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .detail-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: -0.01rem;
+  }
+
+  /* Copy Field */
+  .copy-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+  }
+
+  .copy-field:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .copy-text {
+    flex: 1;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1rem;
+    letter-spacing: -0.02rem;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+
+  .copy-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .copy-btn:active {
+    transform: scale(0.95);
+  }
+
+  .copy-icon,
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .check-icon {
+    display: none;
+    color: #4ade80;
+  }
+
+  .copy-btn.copied .copy-icon {
+    display: none;
+  }
+
+  .copy-btn.copied .check-icon {
+    display: block;
+  }
+
+  /* International Section */
+  .international-options {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+  }
+
+  .payment-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .payment-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .payment-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .payment-card:hover::before {
+    transform: translateX(100%);
+  }
+
+  .payment-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .wise-icon {
+    background: rgba(55, 206, 153, 0.2);
+    color: #37ce99;
+  }
+
+  .paypal-icon {
+    background: rgba(0, 70, 153, 0.2);
+    color: #0070ba;
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.02rem;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+  }
+
+  .card-arrow {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .payment-card:hover .card-arrow {
+    color: rgba(255, 255, 255, 0.8);
+    transform: translate(2px, -2px);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .payments-hero {
+      padding: 100px 0 40px;
+    }
+
+    .payment-methods {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .method-tab {
+      flex-direction: row;
+      padding: 16px 20px;
+      gap: 16px;
+    }
+
+    .method-description {
+      display: none;
+    }
+
+    .qr-codes-container {
+      gap: 20px;
+    }
+
+    .cred-qr {
+      width: 200px;
+      height: auto;
+      max-height: 240px;
+      padding: 8px;
+    }
+
+    .bhim-qr {
+      width: 160px;
+      height: 160px;
+      padding: 8px;
+    }
+
+    .bank-details,
+    .qr-container,
+    .international-options {
+      padding: 24px;
+    }
+
+    .payment-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.method-tab')
+  const sections = document.querySelectorAll<HTMLDivElement>('.content-section')
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetSection = tab.dataset.tab
+
+      // Update active states
+      tabs.forEach(t => t.setAttribute('data-active', 'false'))
+      sections.forEach(s => s.setAttribute('data-active', 'false'))
+
+      tab.setAttribute('data-active', 'true')
+      const targetElement = document.querySelector<HTMLDivElement>(
+        `[data-section="${targetSection}"]`,
+      )
+      if (targetElement) {
+        targetElement.setAttribute('data-active', 'true')
+      }
+    })
+  })
+
+  // Copy functionality
+  const copyButtons = document.querySelectorAll<HTMLButtonElement>('[data-copy-btn]')
+
+  copyButtons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const textToCopy = btn.dataset.copyBtn
+
+      if (textToCopy) {
+        try {
+          await navigator.clipboard.writeText(textToCopy)
+          btn.classList.add('copied')
+
+          setTimeout(() => {
+            btn.classList.remove('copied')
+          }, 2000)
+        } catch (err) {
+          console.error('Failed to copy:', err)
+        }
+      }
+    })
+  })
+</script>
