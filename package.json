@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",
-    "astro": "^5.11.0",
+    "astro": "^5.12.8",
     "astro-icon": "^1.1.5",
     "motion": "^12.23.3",
     "three": "^0.178.0"
