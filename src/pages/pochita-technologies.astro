@@ -1,0 +1,507 @@
+---
+import Layout from '../layouts/layout.astro'
+import {Icon} from 'astro-icon/components'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Pochita Technologies LLP - Banking Details',
+  description: 'Banking details for Pochita Technologies LLP - HDFC Bank Account Information',
+  url: 'https://sohamsarkar.com/pochita-technologies',
+}
+
+const content = {
+  title: 'Pochita Technologies LLP - Banking Details | Soham Sarkar',
+  description: 'Official banking details for Pochita Technologies LLP - HDFC Bank Current Account',
+  ogImage: '/opengraph.png',
+  structuredData,
+}
+
+const bankDetails = {
+  accountName: 'POCHITA TECHNOLOGIES LLP',
+  accountNumber: '50200111939980',
+  accountType: 'Current Account',
+  bankName: 'HDFC Bank',
+  ifscCode: 'HDFC0001300',
+  branch: 'KARTHIK NAGAR',
+}
+---
+
+<Layout content={content}>
+  <section class='llp-hero'>
+    <div class='container'>
+      <div class='hero-content'>
+        <h1 class='hero-title'>Pochita Technologies LLP</h1>
+        <p class='hero-subtitle'>Banking Details</p>
+      </div>
+
+      <div class='bank-details-card'>
+        <div class='card-header'>
+          <Icon name='bank' class='bank-icon' />
+          <h2 class='card-title'>Bank Account Information</h2>
+        </div>
+
+        <div class='details-grid'>
+          <div class='detail-item'>
+            <span class='detail-label'>Account Holder</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.accountName}>
+                {bankDetails.accountName}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.accountName}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+
+          <div class='detail-item'>
+            <span class='detail-label'>Account Number</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.accountNumber}>
+                {bankDetails.accountNumber}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.accountNumber}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+
+          <div class='detail-item'>
+            <span class='detail-label'>Account Type</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.accountType}>
+                {bankDetails.accountType}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.accountType}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+
+          <div class='detail-item'>
+            <span class='detail-label'>Bank</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.bankName}>
+                {bankDetails.bankName}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.bankName}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+
+          <div class='detail-item'>
+            <span class='detail-label'>IFSC Code</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.ifscCode}>
+                {bankDetails.ifscCode}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.ifscCode}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+
+          <div class='detail-item'>
+            <span class='detail-label'>Branch</span>
+            <div class='copy-field'>
+              <span class='copy-text' data-copy={bankDetails.branch}>
+                {bankDetails.branch}
+              </span>
+              <button class='copy-btn' data-copy-btn={bankDetails.branch}>
+                <Icon name='copy' class='copy-icon' />
+                <Icon name='check' class='check-icon' />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class='action-buttons'>
+          <button class='copy-all-btn' id='copyAllBtn'>
+            <Icon name='copy' class='action-icon' />
+            <span>Copy All Details</span>
+          </button>
+          <button class='share-btn' id='shareBtn'>
+            <Icon name='arrow-bend-up-right' class='action-icon' />
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .llp-hero {
+    min-height: 100vh;
+    padding: 120px 0 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  .hero-content {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.045rem;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: -0.02rem;
+  }
+
+  .bank-details-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bank-details-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(165, 180, 252, 0.1) 0%,
+      transparent 50%,
+      rgba(165, 180, 252, 0.05) 100%
+    );
+    pointer-events: none;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .bank-icon {
+    width: 40px;
+    height: 40px;
+    color: rgba(165, 180, 252, 0.9);
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    margin: 0;
+  }
+
+  .details-grid {
+    display: grid;
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .detail-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .copy-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 14px 18px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .copy-field:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(2px);
+  }
+
+  .copy-text {
+    flex: 1;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1.05rem;
+    letter-spacing: -0.02rem;
+    font-weight: 500;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+  }
+
+  .copy-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+
+  .copy-btn:active {
+    transform: scale(0.95);
+  }
+
+  .copy-icon,
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .check-icon {
+    display: none;
+    color: #4ade80;
+  }
+
+  .copy-btn.copied .copy-icon {
+    display: none;
+  }
+
+  .copy-btn.copied .check-icon {
+    display: block;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .copy-all-btn,
+  .share-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: -0.01rem;
+  }
+
+  .copy-all-btn:hover,
+  .share-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .copy-all-btn:active,
+  .share-btn:active {
+    transform: translateY(0);
+  }
+
+  .action-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .copy-all-btn.copied {
+    background: rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.3);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .llp-hero {
+      padding: 100px 0 40px;
+      min-height: auto;
+    }
+
+    .bank-details-card {
+      padding: 28px 20px;
+    }
+
+    .card-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 12px;
+      padding-bottom: 20px;
+    }
+
+    .bank-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+    }
+
+    .details-grid {
+      gap: 20px;
+    }
+
+    .copy-field {
+      padding: 12px 14px;
+    }
+
+    .copy-text {
+      font-size: 0.95rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .copy-all-btn,
+    .share-btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title {
+      font-size: 1.75rem;
+    }
+
+    .copy-text {
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  // Copy functionality for individual fields
+  const copyButtons = document.querySelectorAll<HTMLButtonElement>('[data-copy-btn]')
+
+  copyButtons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const textToCopy = btn.dataset.copyBtn
+
+      if (textToCopy) {
+        try {
+          await navigator.clipboard.writeText(textToCopy)
+          btn.classList.add('copied')
+
+          setTimeout(() => {
+            btn.classList.remove('copied')
+          }, 2000)
+        } catch (err) {
+          console.error('Failed to copy:', err)
+        }
+      }
+    })
+  })
+
+  // Copy all details
+  const copyAllBtn = document.getElementById('copyAllBtn') as HTMLButtonElement
+  if (copyAllBtn) {
+    copyAllBtn.addEventListener('click', async () => {
+      const allDetails = `POCHITA TECHNOLOGIES LLP
+Account Number: 50200111939980
+Account Type: Current Account
+Bank: HDFC Bank
+IFSC: HDFC0001300
+Branch: KARTHIK NAGAR`
+
+      try {
+        await navigator.clipboard.writeText(allDetails)
+        copyAllBtn.classList.add('copied')
+        const originalText = copyAllBtn.querySelector('span')?.textContent
+        const span = copyAllBtn.querySelector('span')
+        if (span) {
+          span.textContent = 'Copied!'
+        }
+
+        setTimeout(() => {
+          copyAllBtn.classList.remove('copied')
+          if (span && originalText) {
+            span.textContent = originalText
+          }
+        }, 2000)
+      } catch (err) {
+        console.error('Failed to copy all details:', err)
+      }
+    })
+  }
+
+  // Share functionality
+  const shareBtn = document.getElementById('shareBtn') as HTMLButtonElement
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      const shareData = {
+        title: 'Pochita Technologies LLP - Banking Details',
+        text: `Banking Details for Pochita Technologies LLP:
+Account Number: 50200111939980
+IFSC: HDFC0001300
+Bank: HDFC Bank`,
+        url: window.location.href,
+      }
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData)
+        } else {
+          // Fallback - copy URL
+          await navigator.clipboard.writeText(window.location.href)
+          const span = shareBtn.querySelector('span')
+          const originalText = span?.textContent
+          if (span) {
+            span.textContent = 'Link Copied!'
+          }
+          setTimeout(() => {
+            if (span && originalText) {
+              span.textContent = originalText
+            }
+          }, 2000)
+        }
+      } catch (err) {
+        console.error('Error sharing:', err)
+      }
+    })
+  }
+</script>
