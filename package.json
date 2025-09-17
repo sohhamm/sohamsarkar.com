@@ -29,5 +29,5 @@
     "@types/three": "^0.180.0",
     "sharp": "^0.34.3"
   },
-  "packageManager": "pnpm@10.16.1"
+  "packageManager": "pnpm@10.15.1"
 }
