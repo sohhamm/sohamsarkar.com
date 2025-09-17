@@ -201,13 +201,6 @@ const {products} = Astro.props
 
       this.totalSlides = this.slides.length
 
-      console.log('Carousel setup:', {
-        container: !!this.container,
-        carousel: !!this.carousel,
-        totalSlides: this.totalSlides,
-        controls: !!this.controls,
-      })
-
       if (!this.carousel || this.totalSlides <= 1) {
         console.log('Carousel not needed or not found')
         return
@@ -225,7 +218,7 @@ const {products} = Astro.props
 
     private moveControlsToHeader() {
       const headerContainer = document.getElementById('carousel-controls-container')
-      
+
       if (!headerContainer || !this.controls) {
         console.log('Header container or controls not found, keeping controls in original position')
         return
