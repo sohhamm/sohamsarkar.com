@@ -20,7 +20,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.5.1",
     "@astrojs/vercel": "^8.2.7",
-    "astro": "^5.13.7",
+    "astro": "^5.14.3",
     "astro-icon": "^1.1.5",
     "motion": "^12.23.13",
     "three": "^0.180.0"
