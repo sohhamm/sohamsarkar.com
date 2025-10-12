@@ -18,16 +18,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.5.1",
-    "@astrojs/vercel": "^8.2.7",
-    "astro": "^5.14.3",
+    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/vercel": "^8.2.9",
+    "astro": "^5.14.4",
     "astro-icon": "^1.1.5",
-    "motion": "^12.23.13",
+    "motion": "^12.23.24",
     "three": "^0.180.0"
   },
   "devDependencies": {
     "@types/three": "^0.180.0",
-    "sharp": "^0.34.3"
+    "sharp": "^0.34.4"
   },
-  "packageManager": "pnpm@10.15.1"
+  "packageManager": "pnpm@10.18.2"
 }
