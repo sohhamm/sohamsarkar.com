@@ -3,12 +3,13 @@ import type {Product} from './ProductsSection.astro'
 
 export interface Props {
   product: Product
+  variant?: 'default' | 'compact'
 }
 
-const {product} = Astro.props
+const {product, variant = 'default'} = Astro.props
 ---
 
-<div class='product-card' data-product-card={product.id}>
+<div class={`product-card variant-${variant}`} data-product-card={product.id}>
   <div class='product-content'>
     <div class='product-text'>
       <div class='product-header'>
@@ -142,33 +143,9 @@ const {product} = Astro.props
   }
 
   .status-badge {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .status-badge.status-live {
-    background: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-    border: 1px solid rgba(34, 197, 94, 0.2);
-  }
-
-  .status-badge.status-planned {
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
-    border: 1px solid rgba(59, 130, 246, 0.2);
-  }
-
-  .status-badge.status-beta {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-  }
-
-  .status-badge.status-coming-soon {
-    background: rgba(139, 69, 19, 0.1);
-    color: #d2691e;
-    border: 1px solid rgba(139, 69, 19, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: #e5e5e5;
+    border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .category-badge {
@@ -180,7 +157,7 @@ const {product} = Astro.props
   .product-description {
     color: #7f7f7f;
     font-family: 'Victor Mono', monospace;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-weight: 400;
     line-height: 130%;
     letter-spacing: -0.1rem;
@@ -213,8 +190,13 @@ const {product} = Astro.props
     width: 100%;
     height: 100%;
     object-fit: cover;
-    will-change: transform;
-    transition: none; /* Let Motion handle transitions */
+    will-change: transform, filter;
+    transition: filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: grayscale(100%) contrast(1.1);
+  }
+
+  .product-card:hover .product-image {
+    filter: grayscale(0%) contrast(1);
   }
 
   .image-overlay {
@@ -357,6 +339,87 @@ const {product} = Astro.props
 
     .product-image-container {
       height: 150px;
+    }
+  }
+
+  /* Compact Variant (for Grid Layout) */
+  .variant-compact {
+    max-width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+
+  .variant-compact .product-content {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+
+  .variant-compact .product-visual {
+    order: -1;
+    height: 140px;
+    padding: 0;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+  }
+
+  .variant-compact .product-image-container {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .variant-compact .product-text {
+    flex: none;
+    padding: 24px;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .variant-compact .product-header {
+    text-align: left;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+
+  .variant-compact .product-title-link {
+    display: block;
+    width: 100%;
+  }
+
+  .variant-compact .product-title {
+    font-size: 1.5rem;
+    letter-spacing: -0.1rem;
+    text-align: left;
+    margin-bottom: 10px;
+    padding: 0;
+  }
+
+  .variant-compact .product-description {
+    font-size: 0.95rem;
+    line-height: 150%;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+
+  .variant-compact .product-meta {
+    margin-top: 0;
+    margin-bottom: 0;
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 768px) {
+    .variant-compact .product-visual {
+      height: 120px;
+    }
+
+    .variant-compact .product-text {
+      padding: 20px;
+    }
+
+    .variant-compact .product-title {
+      font-size: 1.35rem;
     }
   }
 </style>

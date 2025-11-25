@@ -1,5 +1,5 @@
 ---
-import ProductCarousel from './ProductCarousel.astro'
+import ProductCard from './ProductCard.astro'
 
 export interface Product {
   id: number
@@ -18,17 +18,17 @@ const products: Product[] = [
     description:
       'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
     image: '/products/superdivide.webp',
-    link: 'https://www.superdivide.com',
-    status: 'Coming Soon',
-    category: 'Finance',
+    link: 'https://www.superdivide.com?ref=sohamsarkar.com',
+    status: 'Beta',
+    category: 'Personal Finance',
   },
   {
     id: 2,
     title: 'Ritua',
     description: 'The best free habit tracker out there.',
     image: '/products/ritua.webp',
-    link: 'https://www.getritua.com',
-    status: 'Planned',
+    link: 'https://www.getritua.com?ref=sohamsarkar.com',
+    status: 'Coming Soon',
     category: 'Productivity',
   },
 ]
@@ -38,15 +38,18 @@ const products: Product[] = [
   <div class='products-header'>
     <div class='header-content'>
       <h1 class='main-title'>Products</h1>
-      <p class='subtitle' data-products-title>You can just build things.</p>
-    </div>
-    <div class='header-controls' id='carousel-controls-container'>
-      <!-- Controls will be moved here by carousel component -->
+      <p class='subtitle' data-products-title>Built to make life easier.</p>
     </div>
   </div>
 
-  <div class='carousel-wrapper' data-carousel-wrapper>
-    <ProductCarousel products={products} />
+  <div class='products-grid' data-products-grid>
+    {
+      products.map(product => (
+        <div class='grid-card'>
+          <ProductCard product={product} variant='compact' />
+        </div>
+      ))
+    }
   </div>
 </section>
 
@@ -69,16 +72,8 @@ const products: Product[] = [
   }
 
   .products-header {
-    margin-bottom: 60px;
+    margin-bottom: 48px;
     text-align: left;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 32px;
-  }
-
-  .header-content {
-    flex: 1;
   }
 
   .main-title {
@@ -102,13 +97,21 @@ const products: Product[] = [
     margin: 0;
   }
 
-  .header-controls {
-    flex-shrink: 0;
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  .grid-card {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: fit-content;
-    width: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
   }
 
   @media (max-width: 768px) {
@@ -118,16 +121,7 @@ const products: Product[] = [
     }
 
     .products-header {
-      margin-bottom: 40px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-    }
-
-    .header-controls {
-      align-self: center;
-      width: auto;
-      min-width: fit-content;
+      margin-bottom: 32px;
     }
   }
 </style>
@@ -153,10 +147,7 @@ const products: Product[] = [
 
     private setup() {
       this.section = document.querySelector('[data-products-section]')
-      if (!this.section) {
-        console.warn('Products section not found')
-        return
-      }
+      if (!this.section) return
 
       this.setupIntersectionObserver()
     }
@@ -184,23 +175,15 @@ const products: Product[] = [
 
     private animateElements() {
       const title = this.section?.querySelector('[data-products-title]') as HTMLElement
-      const carouselWrapper = this.section?.querySelector('[data-carousel-wrapper]') as HTMLElement
+      const grid = this.section?.querySelector('[data-products-grid]') as HTMLElement
 
-      const elements = [title, carouselWrapper].filter(Boolean)
+      const elements = [title, grid].filter(Boolean)
 
-      if (elements.length === 0) {
-        console.warn('No elements found to animate')
-        return
-      }
-
-      // Animate each element individually with staggered delay
       elements.forEach((el, index) => {
         if (el) {
-          // Set initial state
           el.style.opacity = '0'
           el.style.transform = 'translateY(30px)'
 
-          // Animate to final state
           animate(
             el,
             {
@@ -223,8 +206,4 @@ const products: Product[] = [
   }
 
   new ProductsSection()
-
-  document.addEventListener('astro:before-preparation', () => {
-    // Cleanup before page navigation
-  })
 </script>

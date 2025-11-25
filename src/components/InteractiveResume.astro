@@ -1,352 +1,294 @@
 ---
-import { Image } from 'astro:assets';
-import tigerPfp from '../assets/tiger-pfp.jpg';
-import zenadminLogo from '../assets/resume/zenadmin-logo.jpeg';
-import greedygameLogo from '../assets/resume/greedygame-logo.jpeg';
-import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
+import {Image} from 'astro:assets'
+import tigerPfp from '../assets/tiger-pfp.jpg'
+import zenadminLogo from '../assets/resume/zenadmin-logo.jpeg'
+import greedygameLogo from '../assets/resume/greedygame-logo.jpeg'
+import tellephantLogo from '../assets/resume/tellephant-logo.jpeg'
+
+interface Role {
+  title: string
+  period: string
+  responsibilities?: string[]
+}
+
+interface Experience {
+  company: string
+  companyUrl: string
+  logo: ImageMetadata
+  tenure: string
+  roles: Role[]
+}
+
+interface SkillGroup {
+  category: string
+  skills: string[]
+}
+
+interface Education {
+  degree: string
+  institution: string
+  period: string
+}
+
+// Resume Data
+const resumeData = {
+  profile: {
+    name: 'Soham Sarkar',
+    title: 'Software Engineer',
+    avatar: tigerPfp,
+    pdfUrl: 'https://assets.sohamsarkar.com/resume.pdf',
+  },
+
+  experiences: [
+    {
+      company: 'ZenAdmin',
+      companyUrl: 'https://zenadmin.ai/',
+      logo: zenadminLogo,
+      tenure: 'Jul 2022 - Present · 3 yrs 1 mo',
+      roles: [
+        {
+          title: 'Technical Lead',
+          period: 'Apr 2024 - Present',
+          responsibilities: [
+            'Lead a team of 5 frontend engineers, driving architecture decisions and code quality standards',
+            'Spearhead hiring initiatives, conducting technical interviews and growing the frontend team',
+            'Architect scalable frontend solutions serving enterprise clients with complex workflow requirements',
+          ],
+        },
+        {
+          title: 'Senior Software Engineer',
+          period: 'Apr 2023 - Apr 2024',
+          responsibilities: [
+            'Owned end-to-end feature development for core product modules, improving user engagement',
+            'Optimized application performance, achieving 40% faster load times through code splitting and lazy loading',
+            'Mentored junior developers through code reviews and pair programming sessions',
+            'Scaled our internal UI library to support new design patterns and components for different products',
+          ],
+        },
+        {
+          title: 'Founding Engineer',
+          period: 'Jul 2022 - Apr 2023',
+          responsibilities: [
+            'Shipped production-ready MVP in 2 months using React, enabling first customer onboarding',
+            'Architected and built internal UI library to standardize component design and improve development velocity',
+            'Designed CI/CD pipeline with GitHub Actions, S3, CloudFront, and Route 53, reducing deployment time by 80%',
+            'Developed backend APIs with Node.js to support core product functionality',
+            'Established coding standards, testing practices, and tooling that became team-wide conventions',
+          ],
+        },
+      ],
+    },
+    {
+      company: 'GreedyGame',
+      companyUrl: 'https://greedygame.com/',
+      logo: greedygameLogo,
+      tenure: 'Sep 2021 - Jul 2022 · 11 mos',
+      roles: [
+        {
+          title: 'Frontend Developer',
+          period: 'Sep 2021 - Jul 2022',
+          responsibilities: [
+            'Developed analytics dashboards for publishers with interactive data visualizations using D3.js and Chart.js',
+            'Boosted Lighthouse performance scores from 60 to 90+ across landing pages, improving SEO rankings',
+            'Migrated build tooling from Webpack to esbuild, reducing build times by 70% (from 3min to 45s)',
+            'Contributed reusable components to internal UI library (GG-UI), accelerating team velocity',
+            'Built internal microservices using Go for data processing workflows',
+            'Mentored 3 interns on React best practices, code review processes, and clean architecture',
+          ],
+        },
+      ],
+    },
+    {
+      company: 'Tellephant',
+      companyUrl: 'https://www.linkedin.com/company/tellephanthq/',
+      logo: tellephantLogo,
+      tenure: 'Mar 2021 - Aug 2021 · 6 mos',
+      roles: [
+        {
+          title: 'Full Stack Developer',
+          period: 'Mar 2021 - Aug 2021',
+          responsibilities: [
+            'Architected and launched buyer-facing e-commerce platform from scratch using Next.js and TypeScript',
+            'Drove 3x revenue growth through UX improvements and checkout flow optimization',
+            'Built reusable React component library, reducing feature development time by 40%',
+            'Developed RESTful APIs with Node.js and integrated third-party payment gateways',
+            'Mentored 2 interns on frontend architecture patterns and development best practices',
+          ],
+        },
+      ],
+    },
+  ] as Experience[],
+
+  skills: [
+    {
+      category: 'Frontend',
+      skills: [
+        'React',
+        'Next.js',
+        'TypeScript',
+        'JavaScript',
+        'Svelte',
+        'Solid',
+        'Astro',
+        'HTML',
+        'CSS',
+        'SASS',
+        'TailwindCSS',
+      ],
+    },
+    {
+      category: 'Backend & Database',
+      skills: ['Node.js', 'Express.js', 'GraphQL', 'Go', 'Go Echo', 'PostgreSQL', 'MongoDB'],
+    },
+    {
+      category: 'Tools & Infrastructure',
+      skills: ['AWS', 'Git', 'Github Actions', 'Vite', 'Webpack', 'CI/CD', 'Docker'],
+    },
+  ] as SkillGroup[],
+
+  education: [
+    {
+      degree: 'B. Tech',
+      institution: 'PES University, Bengaluru',
+      period: '2017 - 2021',
+    },
+    {
+      degree: 'CBSE PCMC (12th)',
+      institution: 'Ekya Schools, Bengaluru',
+      period: '2015 - 2017',
+    },
+    {
+      degree: 'CBSE PCMC (10th)',
+      institution: 'Vagdevi Vilas Schools, Bengaluru',
+      period: '2004 - 2015',
+    },
+  ] as Education[],
+}
 ---
 
-<div class="resume-wrapper">
-  <div class="resume-header">
-    <div class="avatar">
-      <Image src={tigerPfp} alt="Soham Sarkar" width={120} height={120} />
+<div class='resume-wrapper'>
+  <div class='resume-header'>
+    <div class='avatar'>
+      <Image src={resumeData.profile.avatar} alt={resumeData.profile.name} width={80} height={80} />
     </div>
-    <div class="header-content">
-      <h1 class="name">Soham Sarkar</h1>
-      <p class="title">Software Engineer</p>
+    <div class='header-content'>
+      <h1 class='name'>{resumeData.profile.name}</h1>
+      <p class='title'>{resumeData.profile.title}</p>
     </div>
+    <a href={resumeData.profile.pdfUrl} target='_blank' class='download-btn'> Download PDF </a>
   </div>
 
-  <div class="resume-nav">
-    <div class="nav-buttons">
-      <button class="nav-btn active" data-section="experience">Experience</button>
-      <button class="nav-btn" data-section="skills">Skills</button>
-      <button class="nav-btn" data-section="education">Education</button>
-      <button class="nav-btn" data-section="languages">Languages</button>
-    </div>
-    <a href="https://assets.sohamsarkar.com/resume.pdf" target="_blank" class="nav-download-btn">
-      <span class="icon">📄</span>
-      <span>Download PDF</span>
-    </a>
+  <div class='resume-nav'>
+    <button class='nav-btn active' data-section='experience'>Experience</button>
+    <button class='nav-btn' data-section='skills'>Skills</button>
+    <button class='nav-btn' data-section='education'>Education</button>
   </div>
 
-  <div class="resume-content">
-    <div class="section active" data-section="experience">
-      <h2>Work Experience</h2>
-      <div class="experience-timeline">
-        <div class="experience-company">
-          <div class="company-header">
-            <div class="company-logo">
-              <Image src={zenadminLogo} alt="ZenAdmin" width={56} height={56} class="company-logo-img" />
-            </div>
-            <div class="company-info">
-              <h3 class="company-name">
-                <a href="https://zenadmin.ai/" target="_blank" rel="noopener noreferrer" class="company-link">
-                  ZenAdmin
-                  <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                  </svg>
-                </a>
-              </h3>
-              <span class="company-duration">Full-time · 3 yrs 1 mo</span>
-              <div class="industry-tags">
-                <span class="industry-tag">B2B SaaS</span>
-                <span class="industry-tag">IT</span>
-                <span class="industry-tag">ITSM</span>
-                <span class="industry-tag">HRIS</span>
-                <span class="industry-tag">Integrations</span>
+  <div class='resume-content'>
+    <!-- Experience Section -->
+    <div class='section active' data-section='experience'>
+      <div class='experience-list'>
+        {
+          resumeData.experiences.map(exp => (
+            <article class='company-block'>
+              <div class='company-header'>
+                <div class='company-logo'>
+                  <Image src={exp.logo} alt={exp.company} width={48} height={48} />
+                </div>
+                <div class='company-meta'>
+                  <h2>
+                    <a href={exp.companyUrl} target='_blank' rel='noopener noreferrer'>
+                      {exp.company}
+                    </a>
+                  </h2>
+                  <span class='tenure'>{exp.tenure}</span>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          <div class="role-timeline">
-            <div class="role-item">
-              <div class="role-header">
-                <h4>Technical Lead</h4>
-                <span class="role-duration">Apr 2024 - Present · 1 yr 4 mos</span>
-                <span class="role-location">Bengaluru, Karnataka, India · Remote</span>
+
+              <div class='roles'>
+                {exp.roles.map(role => (
+                  <div class='role'>
+                    <div class='role-title'>
+                      <h3>{role.title}</h3>
+                      <span class='role-period'>{role.period}</span>
+                    </div>
+                    {role.responsibilities && (
+                      <ul class='responsibilities'>
+                        {role.responsibilities.map(resp => (
+                          <li>{resp}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
-            
-            <div class="role-item">
-              <div class="role-header">
-                <h4>Senior Software Engineer</h4>
-                <span class="role-duration">Apr 2023 - Apr 2024 · 1 yr 1 mo</span>
-              </div>
-            </div>
-            
-            <div class="role-item">
-              <div class="role-header">
-                <h4>Founding Engineer</h4>
-                <span class="role-duration">Jul 2022 - Apr 2023 · 10 mos</span>
-                <span class="role-location">Bengaluru, Karnataka, India · Remote</span>
-              </div>
-              <ul class="role-description">
-                <li>Leading the frontend team and overseeing the frontend hiring process</li>
-                <li>Built the MVP from scratch in 2 months using React and built the landing page using NextJS</li>
-                <li>Setup modern libraries and tooling for our codebase, established best practices</li>
-                <li>Made our internal UI library called Hybrid UI and setup the complete CI/CD pipeline using Github Actions, S3, CloudFront and Route 53</li>
-                <li>Built APIs for our services using Node</li>
-                <li>Helping companies manage their company in a hassle free manner through our B2B SAAS for their IT & HR needs</li>
-              </ul>
-              <div class="role-skills">
-                <span class="skill-badge">GraphQL</span>
-                <span class="skill-badge">Git</span>
-                <span class="skill-badge">+14 skills</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="experience-company">
-          <div class="company-header">
-            <div class="company-logo">
-              <Image src={greedygameLogo} alt="GreedyGame" width={56} height={56} class="company-logo-img" />
-            </div>
-            <div class="company-info">
-              <h3 class="company-name">
-                <a href="https://greedygame.com/" target="_blank" rel="noopener noreferrer" class="company-link">
-                  GreedyGame
-                  <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                  </svg>
-                </a>
-              </h3>
-              <span class="company-duration">Full-time</span>
-              <div class="industry-tags">
-                <span class="industry-tag">AdTech</span>
-                <span class="industry-tag">Programmatic</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="role-timeline">
-            <div class="role-item">
-              <div class="role-header">
-                <h4>Frontend Developer</h4>
-                <span class="role-duration">Sep 2021 - Jul 2022 · 11 mos</span>
-                <span class="role-location">Bengaluru, Karnataka, India</span>
-              </div>
-              <ul class="role-description">
-                <li>Built various dashboards for publishers and internal services with Data Visualisation</li>
-                <li>Added new user facing features in a popular web game</li>
-                <li>Improved the lighthouse scores for the landing pages of few of our applications</li>
-                <li>Added various new components for our internal UI library called GG-UI</li>
-                <li>Improved our frontend tooling (e.g switching to esbuild from webpack) and thus improving our build time by 70%</li>
-                <li>Mentored few interns on code quality and best practices</li>
-                <li>Built few internal services using Go</li>
-              </ul>
-              <div class="role-skills">
-                <span class="skill-badge">Git</span>
-                <span class="skill-badge">Cascading Style Sheets (CSS)</span>
-                <span class="skill-badge">+11 skills</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="experience-company">
-          <div class="company-header">
-            <div class="company-logo">
-              <Image src={tellephantLogo} alt="Tellephant" width={56} height={56} class="company-logo-img" />
-            </div>
-            <div class="company-info">
-              <h3 class="company-name">
-                <a href="https://www.linkedin.com/company/tellephanthq/" target="_blank" rel="noopener noreferrer" class="company-link">
-                  Tellephant
-                  <svg class="link-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                  </svg>
-                </a>
-              </h3>
-              <span class="company-duration">Full-time</span>
-              <div class="industry-tags">
-                <span class="industry-tag">E-commerce</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="role-timeline">
-            <div class="role-item">
-              <div class="role-header">
-                <h4>Full Stack Developer</h4>
-                <span class="role-duration">Mar 2021 - Aug 2021 · 6 mos</span>
-                <span class="role-location">Bengaluru, Karnataka, India</span>
-              </div>
-              <ul class="role-description">
-                <li>Built the buyer facing application(FE) from scratch using Next.js, typescript etc</li>
-                <li>Improved the revenue for our customers by 3x</li>
-                <li>Built internal reusable and scalable react components</li>
-                <li>Built APIs for the buyer facing application</li>
-                <li>Mentored interns on code architecture and best practices</li>
-                <li>Tellephant acquired <a href="https://www.linkedin.com/company/apna-business/about/" target="_blank" rel="noopener noreferrer" class="inline-link">Apna Business</a> during my tenure</li>
-              </ul>
-              <div class="role-skills">
-                <span class="skill-badge">GraphQL</span>
-                <span class="skill-badge">Git</span>
-                <span class="skill-badge">+14 skills</span>
-              </div>
-            </div>
-          </div>
-        </div>
+            </article>
+          ))
+        }
       </div>
     </div>
 
-    <div class="section" data-section="skills">
-      <h2>Technical Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3>Frontend</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">React</span>
-            <span class="skill-tag">Next.js</span>
-            <span class="skill-tag">Svelte</span>
-            <span class="skill-tag">Solid</span>
-            <span class="skill-tag">Astro</span>
-            <span class="skill-tag">TypeScript</span>
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">HTML</span>
-            <span class="skill-tag">CSS</span>
-            <span class="skill-tag">SASS</span>
-            <span class="skill-tag">TailwindCSS</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h3>Backend & Database</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">Node.js</span>
-            <span class="skill-tag">Express.js</span>
-            <span class="skill-tag">GraphQL</span>
-            <span class="skill-tag">Go</span>
-            <span class="skill-tag">Go Fiber</span>
-            <span class="skill-tag">PostgreSQL</span>
-            <span class="skill-tag">MongoDB</span>
-          </div>
-        </div>
-        <div class="skill-category">
-          <h3>Tools & Others</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">Vite</span>
-            <span class="skill-tag">Webpack</span>
-            <span class="skill-tag">REST</span>
-            <span class="skill-tag">Git</span>
-            <span class="skill-tag">CI/CD</span>
-            <span class="skill-tag">SEO</span>
-            <span class="skill-tag">Debugging</span>
-            <span class="skill-tag">Responsive Web Design</span>
-          </div>
-        </div>
+    <!-- Skills Section -->
+    <div class='section' data-section='skills'>
+      <div class='skills-grid'>
+        {
+          resumeData.skills.map(group => (
+            <div class='skill-group'>
+              <h3>{group.category}</h3>
+              <div class='skill-list'>
+                {group.skills.map(skill => (
+                  <span>{skill}</span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
 
-    <div class="section" data-section="education">
-      <h2>Education</h2>
-      <div class="education-timeline">
-        <div class="education-item">
-          <div class="education-header">
-            <h3>B. TECH</h3>
-            <span class="institution">PES University</span>
-            <span class="duration">08/2017 - 05/2021</span>
-            <span class="location">Bengaluru, India</span>
-          </div>
-          <div class="education-subjects">
-            <span class="subject-tag">Computer Networks</span>
-            <span class="subject-tag">Computer Organization</span>
-            <span class="subject-tag">Web Dev</span>
-            <span class="subject-tag">Operating Systems</span>
-          </div>
-        </div>
-        
-        <div class="education-item">
-          <div class="education-header">
-            <h3>PCMC CBSE 11-12</h3>
-            <span class="institution">Ekya Schools</span>
-            <span class="duration">05/2015 - 05/2017</span>
-            <span class="location">Bengaluru, India</span>
-          </div>
-        </div>
+    <!-- Education Section -->
+    <div class='section' data-section='education'>
+      <div class='education-list'>
+        {
+          resumeData.education.map(edu => (
+            <article class='education-item'>
+              <h3>{edu.degree}</h3>
+              <p class='institution'>{edu.institution}</p>
+              <span class='period'>{edu.period}</span>
+            </article>
+          ))
+        }
       </div>
     </div>
-
-    <div class="section" data-section="languages">
-      <h2>Languages</h2>
-      <div class="languages-grid">
-        <div class="language-item">
-          <h3>English</h3>
-          <div class="proficiency-bar">
-            <div class="proficiency-fill" style="width: 100%"></div>
-          </div>
-          <span class="proficiency-text">Native or Bilingual Proficiency</span>
-        </div>
-        
-        <div class="language-item">
-          <h3>Hindi</h3>
-          <div class="proficiency-bar">
-            <div class="proficiency-fill" style="width: 100%"></div>
-          </div>
-          <span class="proficiency-text">Native or Bilingual Proficiency</span>
-        </div>
-        
-        <div class="language-item">
-          <h3>Bengali</h3>
-          <div class="proficiency-bar">
-            <div class="proficiency-fill" style="width: 100%"></div>
-          </div>
-          <span class="proficiency-text">Native or Bilingual Proficiency</span>
-        </div>
-        
-        <div class="language-item">
-          <h3>Kannada</h3>
-          <div class="proficiency-bar">
-            <div class="proficiency-fill" style="width: 60%"></div>
-          </div>
-          <span class="proficiency-text">Limited Working Proficiency</span>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 <style>
   .resume-wrapper {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
-    color: white;
+    padding: 40px 20px 80px;
+    color: #fff;
     font-family: 'Victor Mono', monospace;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
   }
 
-  .resume-wrapper.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
+  /* Header */
   .resume-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .avatar {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    transition: transform 0.3s ease;
-  }
-
-  .avatar:hover {
-    transform: scale(1.05);
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .avatar img {
@@ -360,529 +302,321 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg';
   }
 
   .name {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1.2;
+    margin-bottom: 4px;
   }
 
   .title {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 1.5rem;
+    color: #7f7f7f;
+    font-size: 1rem;
+    font-weight: 400;
   }
 
+  .download-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .download-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Navigation */
   .resume-nav {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    overflow-x: auto;
-  }
-
-  .nav-buttons {
-    display: flex;
-    gap: 1rem;
+    gap: 8px;
+    margin-bottom: 40px;
   }
 
   .nav-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 8px 16px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 25px;
+    border: 1px solid transparent;
+    color: #7f7f7f;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
   }
 
   .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+    color: #a1a1aa;
   }
 
   .nav-btn.active {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
   }
 
-  .resume-content {
-    position: relative;
-  }
-
+  /* Sections */
   .section {
     display: none;
-    animation: fadeIn 0.5s ease;
   }
 
   .section.active {
     display: block;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .section h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .experience-timeline {
+  /* Experience */
+  .experience-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 48px;
   }
 
-  .experience-company {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-  }
-
-  .experience-company:hover {
-    transform: translateY(-5px);
+  .company-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
   .company-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 16px;
   }
 
   .company-logo {
-    width: 56px;
-    height: 56px;
-    background: rgba(255, 255, 255, 0.3);
+    width: 48px;
+    height: 48px;
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
     overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.05);
   }
 
-  .company-logo-img {
+  .company-logo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .company-info {
-    flex: 1;
-  }
-
-  .company-name {
-    font-size: 1.4rem;
-    color: white;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .company-link {
-    color: white;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: color 0.3s ease;
-  }
-
-  .company-link:hover {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .link-icon {
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
-  }
-
-  .company-link:hover .link-icon {
-    opacity: 1;
-  }
-
-  .inline-link {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s ease;
-  }
-
-  .inline-link:hover {
-    border-bottom-color: rgba(255, 255, 255, 0.8);
-  }
-
-  .company-duration {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .industry-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .industry-tag {
-    padding: 4px 10px;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    font-size: 0.75rem;
+  .company-meta h2 {
+    font-size: 1.25rem;
     font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.2s ease;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
   }
 
-  .industry-tag:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
+  .company-meta h2 a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
-  .role-timeline {
-    padding: 1.5rem;
+  .company-meta h2 a:hover {
+    color: #a1a1aa;
   }
 
-  .role-item {
+  .tenure {
+    color: #7f7f7f;
+    font-size: 0.875rem;
+  }
+
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-left: 64px;
     position: relative;
-    padding-left: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.2);
   }
 
-  .role-item:last-child {
-    border-left: none;
-    padding-bottom: 0;
-  }
-
-  .role-item::before {
+  .roles::before {
     content: '';
     position: absolute;
-    left: -5px;
-    top: 0;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
+    left: 24px;
+    top: 11px;
+    bottom: 11px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.15);
   }
 
-  .role-header {
-    margin-bottom: 0.75rem;
-  }
-
-  .role-header h4 {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .role-duration {
-    display: block;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 0.25rem;
-  }
-
-  .role-location {
-    display: block;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .role-description {
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    padding-left: 0;
-    list-style: none;
-  }
-
-  .role-description li {
+  .role {
     position: relative;
-    padding-left: 1.5rem;
-    margin-bottom: 0.5rem;
   }
 
-  .role-description li::before {
-    content: '•';
+  .role::before {
+    content: '';
+    position: absolute;
+    left: -43px;
+    top: 8px;
+    width: 7px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  .role-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .role-title h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .role-period {
+    color: #7f7f7f;
+    font-size: 0.8125rem;
+  }
+
+  .responsibilities {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .responsibilities li {
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .responsibilities li::before {
+    content: '·';
     position: absolute;
     left: 0;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: bold;
+    color: #7f7f7f;
   }
 
-  .role-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .skill-badge {
-    padding: 0.25rem 0.75rem;
-    background: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.8);
-    border-radius: 15px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .education-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .education-item {
-    padding: 2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease;
-  }
-
-  .education-item:hover {
-    transform: translateY(-5px);
-  }
-
-  .education-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .education-header h3 {
-    font-size: 1.3rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-  }
-
-  .institution {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
-  }
-
-  .education-subjects {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .subject-tag {
-    padding: 0.4rem 0.8rem;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-  }
-
-  .languages-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-  }
-
-  .language-item {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease;
-  }
-
-  .language-item:hover {
-    transform: translateY(-5px);
-  }
-
-  .language-item h3 {
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
-  }
-
-  .proficiency-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-  }
-
-  .proficiency-fill {
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
-    transition: width 0.8s ease;
-    border-radius: 4px;
-  }
-
-  .proficiency-text {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-
+  /* Skills */
   .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
   }
 
-  .skill-category {
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .skill-group h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #7f7f7f;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  .skill-category h3 {
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .skill-tags {
+  .skill-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
-  .skill-tag {
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    transition: transform 0.2s ease;
+  .skill-list span {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    color: #e5e5e5;
   }
 
-  .skill-tag:hover {
-    transform: scale(1.05);
+  /* Education */
+  .education-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
-  .nav-download-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-size: 0.9rem;
+  .education-item h3 {
+    font-size: 1.125rem;
     font-weight: 500;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    white-space: nowrap;
+    margin-bottom: 4px;
   }
 
-  .nav-download-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
+  .education-item .institution {
+    color: #a1a1aa;
+    font-size: 0.9375rem;
+    margin-bottom: 4px;
   }
 
-  .nav-download-btn .icon {
-    font-size: 0.8rem;
+  .education-item .period {
+    color: #7f7f7f;
+    font-size: 0.8125rem;
   }
 
-  @media (max-width: 768px) {
+  /* Responsive */
+  @media (max-width: 640px) {
     .resume-wrapper {
-      padding: 1rem;
+      padding: 24px 16px 60px;
     }
-    
+
     .resume-header {
-      flex-direction: column;
-      text-align: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
-    
+
     .avatar {
-      width: 100px;
-      height: 100px;
+      width: 64px;
+      height: 64px;
     }
-    
+
     .name {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
-    
-    .skills-grid,
-    .languages-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .company-header {
-      flex-direction: column;
+
+    .download-btn {
+      width: 100%;
       text-align: center;
+      order: 3;
     }
-    
-    .role-item {
-      padding-left: 1rem;
+
+    .roles {
+      padding-left: 32px;
+    }
+
+    .roles::before {
+      left: 12px;
+    }
+
+    .role::before {
+      left: -23px;
     }
   }
 </style>
 
 <script>
   function initializeResume() {
-    const navBtns = document.querySelectorAll('.nav-btn');
-    const sections = document.querySelectorAll('.section');
-    const wrapper = document.querySelector('.resume-wrapper');
-    
-    // Tab switching functionality
+    const navBtns = document.querySelectorAll('.nav-btn')
+    const sections = document.querySelectorAll('.section')
+
     navBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        const targetSection = target.dataset.section;
-        
-        if (!targetSection) return;
-        
-        // Update active button
-        navBtns.forEach(navBtn => navBtn.classList.remove('active'));
-        target.classList.add('active');
-        
-        // Update active section
-        sections.forEach(section => section.classList.remove('active'));
-        const targetSectionElement = document.querySelector(`.section[data-section="${targetSection}"]`);
-        if (targetSectionElement) {
-          targetSectionElement.classList.add('active');
-        }
-      });
-    });
-    
-    // Animate in
-    setTimeout(() => {
-      if (wrapper) {
-        wrapper.classList.add('animate-in');
-      }
-    }, 100);
-    
-    // Skill tag hover effects
-    const skillTags = document.querySelectorAll('.skill-tag');
-    skillTags.forEach(tag => {
-      const htmlTag = tag as HTMLElement;
-      tag.addEventListener('mouseenter', () => {
-        htmlTag.style.background = 'rgba(255, 255, 255, 0.4)';
-      });
-      tag.addEventListener('mouseleave', () => {
-        htmlTag.style.background = 'rgba(255, 255, 255, 0.3)';
-      });
-    });
+      btn.addEventListener('click', e => {
+        const target = e.currentTarget as HTMLElement
+        const targetSection = target.dataset.section
+        if (!targetSection) return
+
+        navBtns.forEach(navBtn => navBtn.classList.remove('active'))
+        target.classList.add('active')
+
+        sections.forEach(section => section.classList.remove('active'))
+        const sectionEl = document.querySelector(`.section[data-section="${targetSection}"]`)
+        if (sectionEl) sectionEl.classList.add('active')
+      })
+    })
   }
-  
-  // Initialize when DOM is ready
-  document.addEventListener('DOMContentLoaded', initializeResume);
+
+  document.addEventListener('DOMContentLoaded', initializeResume)
 </script>
