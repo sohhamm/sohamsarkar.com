@@ -1,0 +1,526 @@
+---
+import {getLogoUrl, categoryColors, getDefaultShareText, type Recommendation} from '../../data/recommendations'
+
+interface Props {
+  recommendation: Recommendation
+  index?: number
+  showShare?: boolean
+}
+
+const {recommendation, index = 0, showShare = true} = Astro.props
+const colors = categoryColors[recommendation.category]
+const logoUrl = getLogoUrl(recommendation.domain)
+const shareText = recommendation.shareText || getDefaultShareText(recommendation)
+---
+
+<div class="recommend-card-wrapper" data-index={index}>
+  <a
+    href={recommendation.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="recommend-card"
+    data-recommend-card
+    style={`--category-bg: ${colors.bg}; --category-border: ${colors.border}; --category-text: ${colors.text};`}
+  >
+    <div class="card-logo-container" data-logo-container>
+      <img
+        src={logoUrl}
+        alt={`${recommendation.title} logo`}
+        class="card-logo"
+        loading="lazy"
+        data-logo
+      />
+    </div>
+
+    <div class="card-content">
+      <div class="card-header">
+        <h3 class="card-title" data-title>{recommendation.title}</h3>
+        <svg
+          class="external-icon"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          <polyline points="15 3 21 3 21 9" />
+          <line x1="10" y1="14" x2="21" y2="3" />
+        </svg>
+      </div>
+
+      <p class="card-description">{recommendation.description}</p>
+
+      <div class="card-footer">
+        <span class="category-badge">{recommendation.category}</span>
+        {recommendation.badge && <span class="special-badge">{recommendation.badge}</span>}
+      </div>
+    </div>
+
+    <div class="card-glow" aria-hidden="true" />
+  </a>
+
+  {showShare && (
+    <button
+      class="share-button"
+      data-share-button
+      data-share-text={shareText}
+      data-share-title={recommendation.title}
+      data-share-url={recommendation.link}
+      type="button"
+      aria-label={`Share ${recommendation.title}`}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="share-icon"
+      >
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+      </svg>
+      <span class="share-tooltip">Copied!</span>
+    </button>
+  )}
+</div>
+
+<style>
+  .recommend-card-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .recommend-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    backdrop-filter: blur(16px);
+    transition:
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease;
+    flex: 1;
+  }
+
+  .recommend-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .recommend-card:active {
+    transform: translateY(-2px);
+  }
+
+  .card-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      transparent,
+      rgba(255, 255, 255, 0.08)
+    );
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .recommend-card:hover .card-glow {
+    opacity: 1;
+  }
+
+  .card-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 120px;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+    overflow: hidden;
+  }
+
+  .card-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 12px;
+    filter: grayscale(50%) brightness(0.95);
+    transition:
+      filter 0.4s ease,
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .recommend-card:hover .card-logo {
+    filter: grayscale(0%) brightness(1);
+    transform: scale(1.1);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .card-title {
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  .recommend-card:hover .card-title {
+    color: var(--category-text);
+  }
+
+  .external-icon {
+    flex-shrink: 0;
+    color: #52525b;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .recommend-card:hover .external-icon {
+    opacity: 1;
+    transform: translate(0, 0);
+    color: var(--category-text);
+  }
+
+  .card-description {
+    color: #71717a;
+    font-family: 'Victor Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.3s ease;
+  }
+
+  .recommend-card:hover .card-description {
+    color: #a1a1aa;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+
+  .category-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    font-family: 'Victor Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--category-bg);
+    color: var(--category-text);
+    border: 1px solid var(--category-border);
+    transition: transform 0.3s ease;
+  }
+
+  .recommend-card:hover .category-badge {
+    transform: translateY(-1px);
+  }
+
+  .special-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    font-family: 'Victor Mono', monospace;
+    background: rgba(255, 255, 255, 0.06);
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Share Button */
+  .share-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: #71717a;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.9);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+    z-index: 10;
+  }
+
+  .recommend-card-wrapper:hover .share-button {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .share-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  .share-button:active {
+    transform: scale(0.95);
+  }
+
+  .share-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .share-button:hover .share-icon {
+    transform: scale(1.1);
+  }
+
+  .share-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(34, 197, 94, 0.9);
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .share-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(34, 197, 94, 0.9);
+  }
+
+  .share-button.copied .share-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .card-logo-container {
+      height: 100px;
+      padding: 20px;
+    }
+
+    .card-logo {
+      width: 56px;
+      height: 56px;
+    }
+
+    .card-content {
+      padding: 16px;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+    }
+
+    .card-description {
+      font-size: 0.8rem;
+    }
+
+    .share-button {
+      opacity: 1;
+      transform: scale(1);
+      width: 40px;
+      height: 40px;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #a1a1aa;
+    }
+
+    .share-button svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .card-logo-container {
+      height: 90px;
+      padding: 16px;
+    }
+
+    .card-logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    .card-content {
+      padding: 14px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+    }
+
+    .category-badge,
+    .special-badge {
+      font-size: 0.65rem;
+      padding: 4px 8px;
+    }
+
+    .share-button {
+      width: 42px;
+      height: 42px;
+      top: 8px;
+      right: 8px;
+      border-radius: 12px;
+    }
+
+    .share-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .recommend-card,
+    .card-logo,
+    .card-glow,
+    .external-icon,
+    .card-title,
+    .card-description,
+    .category-badge,
+    .share-button,
+    .share-tooltip,
+    .share-icon {
+      transition: none;
+    }
+
+    .recommend-card:hover {
+      transform: none;
+    }
+
+    .recommend-card:hover .card-logo {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function initShareButtons() {
+    const shareButtons = document.querySelectorAll<HTMLButtonElement>('[data-share-button]')
+
+    shareButtons.forEach(button => {
+      button.addEventListener('click', async e => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const shareText = button.dataset.shareText || ''
+        const shareTitle = button.dataset.shareTitle || ''
+        const shareUrl = button.dataset.shareUrl || ''
+
+        // Try native share first (mobile)
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: shareTitle,
+              text: shareText,
+              url: shareUrl,
+            })
+            return
+          } catch (err) {
+            // User cancelled or share failed, fall back to clipboard
+            if ((err as Error).name === 'AbortError') return
+          }
+        }
+
+        // Fall back to clipboard
+        try {
+          await navigator.clipboard.writeText(shareText)
+          button.classList.add('copied')
+          setTimeout(() => {
+            button.classList.remove('copied')
+          }, 2000)
+        } catch (err) {
+          console.error('Failed to copy:', err)
+        }
+      })
+    })
+  }
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShareButtons)
+  } else {
+    initShareButtons()
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initShareButtons)
+</script>
