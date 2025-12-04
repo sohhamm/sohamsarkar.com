@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
-import BlogsSection from '../components/BlogsSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import ProductsSection from '../components/home/ProductsSection.astro'
+import RecommendationsSection from '../components/home/RecommendationsSection.astro'
 import {Icon} from 'astro-icon/components'
 
 const structuredData = {
@@ -65,7 +65,7 @@ const content = {
 
   <ProductsSection />
   <ProjectsSection isHomePage />
-  <BlogsSection />
+  <RecommendationsSection />
 
   <style>
     .hero-section {

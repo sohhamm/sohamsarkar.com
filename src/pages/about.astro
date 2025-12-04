@@ -5,198 +5,485 @@ import tigerPfp from '../assets/tiger-pfp.jpg'
 
 const title = 'About | Soham Sarkar'
 const description =
-  "Learn about Soham Sarkar's journey, philosophy, and approach to building innovative and user-centric applications."
+  'Software engineer based in Bangalore, India. I build products that solve real problems and ship them.'
 ---
 
 <Layout content={{title, description}}>
   <main class='about-page'>
-    <h1>About Soham Sarkar</h1>
+    <!-- Hero Section -->
+    <section class='hero'>
+      <div class='hero-content'>
+        <div class='image-container'>
+          <Image src={tigerPfp} alt='Soham Sarkar' width={280} height={280} />
+          <div class='image-glow'></div>
+        </div>
+        <div class='hero-text'>
+          <span class='label'>About</span>
+          <h1>Soham Sarkar</h1>
+          <p class='tagline'>
+            Software engineer based in Bangalore.<br />
+            I work at the intersection of <span class='emphasis'>tech</span>, <span class='emphasis'>product</span>, and <span class='emphasis'>design</span>.
+          </p>
+        </div>
+      </div>
+    </section>
 
-    <section class='profile'>
-      <Image src={tigerPfp} alt='Soham Sarkar' width={300} height={300} />
-      <div>
-        <h2>Tech Enthusiast, Problem Solver, and App Developer</h2>
+    <!-- Story Section -->
+    <section class='story-section'>
+      <div class='section-header'>
+        <span class='section-number'>01</span>
+        <h2>The Short Version</h2>
+      </div>
+      <div class='story-content'>
         <p>
-          Hello! I'm Soham Sarkar, a passionate app developer based in Bangalore, India. With a
-          diverse background spanning technology, product development, sales, marketing, and
-          problem-solving, I bring a unique perspective to every project I undertake.
+          Started coding because I wanted to build things. Still here because I can't stop.
+        </p>
+        <p>
+          I've worn a lot of hats—engineering, product, even sales. Turns out that mix is useful
+          when you're building products end-to-end. I understand both the technical constraints
+          and what actually matters to users.
+        </p>
+        <p class='highlight'>
+          Most of my projects start the same way: I run into a problem, get annoyed, and build something to fix it.
         </p>
       </div>
     </section>
 
-    <section>
-      <h2>My Journey</h2>
-      <p>
-        My journey in the tech world began with a simple realization: technology has the power to
-        solve real-world problems. This insight has guided my career and shaped my approach to app
-        development. From my early days of coding to my current role as a full-stack developer, I've
-        always been driven by the desire to create solutions that make a tangible difference in
-        people's lives.
-      </p>
+    <!-- Philosophy Section -->
+    <section class='philosophy-section'>
+      <div class='section-header'>
+        <span class='section-number'>02</span>
+        <h2>How I Work</h2>
+      </div>
+      <div class='philosophy-grid'>
+        <div class='philosophy-card'>
+          <span class='card-icon'>//</span>
+          <h3>Ship First</h3>
+          <p>Perfect is the enemy of done. I'd rather ship something useful today than something
+          perfect never.</p>
+        </div>
+        <div class='philosophy-card'>
+          <span class='card-icon'>_</span>
+          <h3>Solve Real Problems</h3>
+          <p>I build things I'd actually use. If I don't feel the pain myself, I probably won't
+          build a good solution.</p>
+        </div>
+        <div class='philosophy-card'>
+          <span class='card-icon'>{ }</span>
+          <h3>Details Matter</h3>
+          <p>Fast load times. Clean interfaces. Smooth interactions. The small stuff is what
+          separates good from great.</p>
+        </div>
+        <div class='philosophy-card'>
+          <span class='card-icon'>*</span>
+          <h3>Keep Learning</h3>
+          <p>Tech moves fast. I stay curious, try new things, and bring what works into my
+          toolkit.</p>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>My Philosophy on Building Apps</h2>
-
-      <h3>Solving Real Problems Through Personal Experience</h3>
-      <p>
-        At the heart of my development process is a simple yet powerful philosophy: <strong
-          >I build apps to solve problems I've personally encountered</strong
-        >. This approach ensures that every application I create is:
-      </p>
-      <ul>
-        <li>Rooted in real-world needs</li>
-        <li>Designed with genuine user empathy</li>
-        <li>Practical and immediately useful</li>
-      </ul>
-      <p>
-        By addressing challenges I've faced firsthand, I can anticipate user needs more effectively
-        and create solutions that resonate on a personal level.
-      </p>
-
-      <h3>Leveraging Diverse Expertise</h3>
-      <p>My multifaceted background allows me to approach app development from various angles:</p>
-      <ul>
-        <li>
-          <strong>Technology:</strong> Staying at the forefront of coding languages and development frameworks
-        </li>
-        <li>
-          <strong>Product Development:</strong> Crafting user-centric products that meet market needs
-        </li>
-        <li>
-          <strong>Sales and Marketing:</strong> Understanding how to position and promote apps effectively
-        </li>
-        <li>
-          <strong>Problem-Solving:</strong> Approaching challenges with creativity and analytical thinking
-        </li>
-      </ul>
-
-      <h3>A Deep Commitment to Design Excellence</h3>
-      <p>
-        I believe that <strong
-          >great design is the cornerstone of every successful application</strong
-        >. My commitment to design excellence encompasses:
-      </p>
-      <ul>
-        <li>
-          <strong>Efficiency:</strong> Creating apps that perform seamlessly with quick load times
-        </li>
-        <li>
-          <strong>Intuitive User Experience:</strong> Designing interfaces that are easy to navigate
-          and enjoyable to use
-        </li>
-        <li>
-          <strong>Attention to Detail:</strong> Meticulously refining every element for a polished result
-        </li>
-        <li>
-          <strong>Performance Optimization:</strong> Leveraging cutting-edge technologies for speed and
-          responsiveness
-        </li>
-        <li>
-          <strong>Accessibility:</strong> Ensuring apps are usable for people with varying abilities
-        </li>
-      </ul>
+    <!-- Stack Section -->
+    <section class='stack-section'>
+      <div class='section-header'>
+        <span class='section-number'>03</span>
+        <h2>Current Stack</h2>
+      </div>
+      <div class='stack-content'>
+        <div class='stack-row'>
+          <span class='stack-label'>Frontend</span>
+          <span class='stack-items'>
+            <a href='https://react.dev' target='_blank' rel='noopener'>React</a>,
+            <a href='https://reactnative.dev' target='_blank' rel='noopener'>React Native</a>,
+            <a href='https://www.typescriptlang.org' target='_blank' rel='noopener'>TypeScript</a>,
+            <a href='https://nextjs.org' target='_blank' rel='noopener'>Next.js</a>,
+            <a href='https://astro.build' target='_blank' rel='noopener'>Astro</a>
+          </span>
+        </div>
+        <div class='stack-row'>
+          <span class='stack-label'>Backend</span>
+          <span class='stack-items'>
+            <a href='https://go.dev' target='_blank' rel='noopener'>Go</a>,
+            <a href='https://echo.labstack.com' target='_blank' rel='noopener'>Echo</a>,
+            <a href='https://hono.dev' target='_blank' rel='noopener'>Hono</a>,
+            <a href='https://bun.sh' target='_blank' rel='noopener'>Bun</a>,
+            <a href='https://nodejs.org' target='_blank' rel='noopener'>Node.js</a>,
+            <a href='https://www.postgresql.org' target='_blank' rel='noopener'>PostgreSQL</a>,
+            <a href='https://www.mongodb.com' target='_blank' rel='noopener'>MongoDB</a>,
+            <a href='https://www.sqlite.org' target='_blank' rel='noopener'>SQLite</a>
+          </span>
+        </div>
+        <div class='stack-row'>
+          <span class='stack-label'>Tools</span>
+          <span class='stack-items'>
+            <a href='https://git-scm.com' target='_blank' rel='noopener'>Git</a>,
+            <a href='https://www.docker.com' target='_blank' rel='noopener'>Docker</a>,
+            <a href='https://vercel.com' target='_blank' rel='noopener'>Vercel</a>,
+            <a href='https://aws.amazon.com' target='_blank' rel='noopener'>AWS</a>,
+            <a href='https://cloud.google.com' target='_blank' rel='noopener'>GCP</a>
+          </span>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Let's Connect</h2>
-      <p>
-        I'm always excited to take on new challenges and collaborate on innovative projects. Whether
-        you have a specific app idea in mind or just want to discuss the latest in tech, I'd love to
-        hear from you.
-      </p>
-      <p>
-        Feel free to explore my projects and learn more about my work right here on my website. If
-        you'd like to connect, don't hesitate to reach out through any of the social links below or
-        drop me an email.
-      </p>
-      <p>Thank you for visiting my digital space. Let's build something amazing together!</p>
+    <!-- CTA Section -->
+    <section class='cta-section'>
+      <div class='cta-content'>
+        <p>Got a project in mind? Want to collaborate?</p>
+        <a href='https://cal.com/soham-sarkar-work' class='cta-link'>
+          Let's talk
+          <span class='arrow'>→</span>
+        </a>
+      </div>
     </section>
   </main>
 </Layout>
 
 <style>
   .about-page {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 1.5rem 4rem;
     color: #fff;
-    font-family: 'Victor Mono', monospace;
   }
 
-  h1,
-  h2,
-  h3 {
-    font-weight: 400;
+  /* Hero Section */
+  .hero {
+    margin-bottom: 6rem;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .image-container {
+    position: relative;
+    flex-shrink: 0;
+    width: 180px;
+    height: 180px;
+  }
+
+  .image-container :global(img) {
+    width: 180px !important;
+    height: 180px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .image-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      transparent 70%
+    );
+    filter: blur(25px);
+    z-index: 1;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #52525b;
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+    color: #71717a;
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  .tagline .emphasis {
+    color: #e4e4e7;
+  }
+
+  /* Section Styles */
+  section {
+    margin-bottom: 5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
     margin-bottom: 2rem;
-    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .section-number {
+    font-size: 0.75rem;
+    color: #3f3f46;
+    font-variant-numeric: tabular-nums;
   }
 
   h2 {
-    font-size: 2rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  h3 {
     font-size: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0;
   }
 
-  p {
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-
-  .profile {
+  /* Story Section */
+  .story-content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: fadeIn 0.8s ease-out 0.1s both;
+  }
+
+  .story-content p {
+    font-size: 1rem;
+    color: #a1a1aa;
+    line-height: 1.7;
+  }
+
+  .story-content .highlight {
+    color: #e4e4e7;
+    padding-left: 1.25rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Philosophy Section */
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    animation: fadeIn 0.8s ease-out 0.2s both;
+  }
+
+  .philosophy-card {
+    padding: 1.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .philosophy-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    display: block;
+    font-size: 1rem;
+    color: #52525b;
+    margin-bottom: 1rem;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  .philosophy-card h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+    color: #fafafa;
+  }
+
+  .philosophy-card p {
+    font-size: 0.875rem;
+    color: #71717a;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Stack Section */
+  .stack-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: fadeIn 0.8s ease-out 0.3s both;
+  }
+
+  .stack-row {
+    display: flex;
     gap: 2rem;
-    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
-  .profile img {
-    border-radius: 50%;
-    object-fit: cover;
-    width: 300px;
-    height: 300px;
+  .stack-row:last-child {
+    border-bottom: none;
   }
 
-  ul {
-    list-style-type: none;
-    padding-left: 1rem;
+  .stack-label {
+    width: 100px;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: #52525b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  ul li::before {
-    content: '•';
-    color: #4a90e2;
-    font-weight: bold;
-    display: inline-block;
-    width: 1em;
-    margin-left: -1em;
+  .stack-items {
+    font-size: 0.9375rem;
+    color: #a1a1aa;
   }
 
+  .stack-items a {
+    color: #a1a1aa;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .stack-items a:hover {
+    color: #fff;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    margin-top: 6rem;
+    margin-bottom: 0;
+    animation: fadeIn 0.8s ease-out 0.4s both;
+  }
+
+  .cta-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+  }
+
+  .cta-content p {
+    font-size: 1rem;
+    color: #71717a;
+    margin: 0;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .cta-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .cta-link .arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .cta-link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
   @media (max-width: 768px) {
-    .profile {
+    .hero-content {
       flex-direction: column;
       text-align: center;
+    }
+
+    .hero-text {
+      align-items: center;
+    }
+
+    .tagline {
+      max-width: none;
     }
 
     h1 {
       font-size: 2.5rem;
     }
 
-    h2 {
-      font-size: 1.75rem;
+    .philosophy-grid {
+      grid-template-columns: 1fr;
     }
 
-    h3 {
-      font-size: 1.25rem;
+    .stack-row {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .stack-label {
+      width: auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .image-container {
+      width: 140px;
+      height: 140px;
+    }
+
+    .image-container :global(img) {
+      width: 140px !important;
+      height: 140px !important;
+    }
+
+    .image-glow {
+      width: 160px;
+      height: 160px;
+    }
+
+    .philosophy-card {
+      padding: 1.25rem;
+    }
+
+    .cta-content {
+      padding: 2rem 1.5rem;
     }
   }
 </style>

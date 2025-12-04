@@ -1,0 +1,472 @@
+---
+import Layout from '../layouts/layout.astro'
+import RecommendCard from '../components/home/RecommendCard.astro'
+import {
+  recommendations,
+  categories,
+  groupByCategory,
+  type Category,
+} from '../data/recommendations'
+
+const title = 'Recommendations | Soham Sarkar'
+const description =
+  'Curated tools, products, and resources I personally use and recommend. From tools to productivity apps, finance, and more.'
+
+const groupedRecommendations = groupByCategory()
+const totalCount = recommendations.length
+---
+
+<Layout content={{title, description}}>
+  <main class="recommendations-page">
+    <header class="page-header">
+      <span class="page-label">Curated Collection</span>
+      <h1 class="page-title">Tools & Products I Recommend</h1>
+      <p class="page-description">
+        A hand-picked collection of tools, apps, and products that I personally use and love. These
+        are things that genuinely make my life and work better.
+      </p>
+    </header>
+
+    <nav class="category-nav" aria-label="Filter by category">
+      <button class="category-chip active" data-category="all" type="button">
+        All
+        <span class="chip-count">{totalCount}</span>
+      </button>
+      {
+        categories.map(cat => {
+          const count = groupedRecommendations[cat.name]?.length || 0
+          if (count === 0) return null
+          return (
+            <button class="category-chip" data-category={cat.name} type="button">
+              <span class="chip-icon" aria-hidden="true">
+                {cat.icon}
+              </span>
+              {cat.name}
+              <span class="chip-count">{count}</span>
+            </button>
+          )
+        })
+      }
+    </nav>
+
+    <div class="recommendations-content">
+      {
+        categories.map(cat => {
+          const items = groupedRecommendations[cat.name]
+          if (!items || items.length === 0) return null
+
+          return (
+            <section class="category-section" data-category-section={cat.name}>
+              <div class="category-header">
+                <div class="category-title-group">
+                  <span class="category-icon" aria-hidden="true">
+                    {cat.icon}
+                  </span>
+                  <h2 class="category-title">{cat.name}</h2>
+                </div>
+                <p class="category-description">{cat.description}</p>
+              </div>
+
+              <div class="category-grid">
+                {items.map((rec, index) => (
+                  <RecommendCard recommendation={rec} index={index} />
+                ))}
+              </div>
+            </section>
+          )
+        })
+      }
+    </div>
+
+    <footer class="page-footer">
+      <p class="disclaimer">
+        Some links may be affiliate links. I only recommend products I genuinely use and believe in.
+      </p>
+      <p class="logo-credit">
+        Logos powered by <a href="https://logo.dev" target="_blank" rel="noopener noreferrer">Logo.dev</a>
+      </p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .recommendations-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    color: #fff;
+    font-family: 'Victor Mono', monospace;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 40px 0 60px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .page-label {
+    display: inline-block;
+    color: #52525b;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+    margin: 0 0 20px 0;
+  }
+
+  .page-description {
+    color: #71717a;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Category Navigation */
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 16px 20px;
+    margin: 0 auto 48px;
+    max-width: fit-content;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 80px;
+    z-index: 10;
+  }
+
+  .category-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #71717a;
+    font-family: 'Victor Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  .category-chip:hover {
+    color: #e5e5e5;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .category-chip.active {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .category-chip:active {
+    transform: scale(0.97);
+  }
+
+  .chip-icon {
+    font-size: 0.95rem;
+  }
+
+  .chip-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #a1a1aa;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .category-chip.active .chip-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  /* Content Sections */
+  .recommendations-content {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+
+  .category-section {
+    transition: opacity 0.3s ease;
+  }
+
+  .category-section.hidden {
+    display: none;
+  }
+
+  .category-header {
+    margin-bottom: 32px;
+  }
+
+  .category-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .category-icon {
+    font-size: 1.5rem;
+  }
+
+  .category-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+
+  .category-description {
+    color: #71717a;
+    font-size: 0.95rem;
+    margin: 0;
+    padding-left: 42px;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  /* Footer */
+  .page-footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center;
+  }
+
+  .disclaimer {
+    color: #52525b;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin: 0 0 8px 0;
+  }
+
+  .logo-credit {
+    color: #3f3f46;
+    font-size: 0.75rem;
+    margin: 0;
+  }
+
+  .logo-credit a {
+    color: #52525b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .logo-credit a:hover {
+    color: #71717a;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .category-nav {
+      max-width: 100%;
+      border-radius: 16px;
+      padding: 12px 16px;
+      gap: 6px;
+    }
+
+    .category-chip {
+      padding: 8px 12px;
+      font-size: 0.75rem;
+    }
+
+    .chip-icon {
+      font-size: 0.85rem;
+    }
+
+    .chip-count {
+      padding: 2px 6px;
+      font-size: 0.65rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 24px 0 40px;
+    }
+
+    .category-nav {
+      top: 65px;
+      margin-bottom: 32px;
+    }
+
+    .recommendations-content {
+      gap: 60px;
+    }
+
+    .category-description {
+      padding-left: 0;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .category-nav {
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      margin: 0 -20px 32px;
+      padding: 12px 16px;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      max-width: none;
+      width: calc(100% + 40px);
+    }
+
+    .category-nav::before,
+    .category-nav::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .category-nav::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(10, 10, 10, 0.95), transparent);
+    }
+
+    .category-nav::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(10, 10, 10, 0.95), transparent);
+    }
+
+    .category-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-chip {
+      flex-shrink: 0;
+      padding: 10px 14px;
+    }
+
+    .category-chip:first-child {
+      margin-left: 8px;
+    }
+
+    .category-chip:last-child {
+      margin-right: 8px;
+    }
+
+    .chip-icon {
+      display: none;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category-chip,
+    .category-section {
+      transition: none;
+    }
+
+    .category-chip:active {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function initCategoryFilter() {
+    const chips = document.querySelectorAll<HTMLButtonElement>('.category-chip')
+    const sections = document.querySelectorAll<HTMLElement>('[data-category-section]')
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const category = chip.dataset.category
+
+        // Update active state
+        chips.forEach(c => c.classList.remove('active'))
+        chip.classList.add('active')
+
+        // Filter sections
+        sections.forEach(section => {
+          const sectionCategory = section.dataset.categorySection
+          const shouldShow = category === 'all' || sectionCategory === category
+
+          if (shouldShow) {
+            section.classList.remove('hidden')
+          } else {
+            section.classList.add('hidden')
+          }
+        })
+
+        // Scroll to category if filtering
+        if (category !== 'all') {
+          const targetSection = document.querySelector<HTMLElement>(
+            `[data-category-section="${category}"]`,
+          )
+          if (targetSection) {
+            const navHeight = 150
+            const targetTop = targetSection.getBoundingClientRect().top + window.scrollY - navHeight
+            window.scrollTo({top: targetTop, behavior: 'smooth'})
+          }
+        }
+      })
+    })
+  }
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCategoryFilter)
+  } else {
+    initCategoryFilter()
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initCategoryFilter)
+</script>
