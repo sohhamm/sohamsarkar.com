@@ -40,7 +40,7 @@ const structuredData = {
 const content = {
   title: 'Soham Sarkar - Builder | Tech | Product | Software Engineer',
   description:
-    'Engineer by day, maker by night. I build products that solve real problems and ship them. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies.',
+    'Software engineer who cares about well-crafted products and solving problems that matter. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies.',
   ogImage: '/opengraph.png',
   structuredData,
 }
@@ -49,13 +49,12 @@ const content = {
 <Layout content={content}>
   <section class='hero-section'>
     <div class='hero-text'>
+      <span class='hero-name'>Soham Sarkar</span>
       <h1>
-        I'm a <span>builder</span> who
-        <span class='italic-text'>ships</span>.
+        Software engineer. I <span class='italic-text'>build things</span>.
       </h1>
       <p>
-        Engineer by day, maker by night. I build products that solve real problems—and ship them.<br />
-        Looking for something useful? Check out what I've made.
+        I care about well-crafted products and solving problems that matter.
       </p>
       <Button href='https://cal.com/soham-sarkar-work'
         >Let's build something <Icon name='arrow-right' /></Button
@@ -87,6 +86,14 @@ const content = {
       align-items: flex-start;
       gap: 24px;
       width: 100%;
+    }
+
+    .hero-name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #a1a1aa;
+      letter-spacing: 0.1rem;
+      text-transform: uppercase;
     }
 
     h1 {
