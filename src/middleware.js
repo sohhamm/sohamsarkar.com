@@ -39,23 +39,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     // Redirect to the 500 error page with error context
     try {
-      // Create a new request for the 500 page with error context
-      const errorPageUrl = new URL('/500', context.url.origin)
-      
-      // Create a new request to the 500 page
-      const errorRequest = new Request(errorPageUrl, {
-        method: 'GET',
-        headers: context.request.headers
-      })
-      
-      // Create a new context for the 500 page
-      const errorContext = {
-        ...context,
-        request: errorRequest,
-        url: errorPageUrl,
-        props: { error }
-      }
-      
       // Try to render the 500 page
       const errorResponse = await context.rewrite('/500')
       return new Response(errorResponse.body, {

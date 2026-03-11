@@ -32,15 +32,4 @@ export default defineConfig({
     }),
     icon(),
   ],
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['motion'],
-          },
-        },
-      },
-    },
-  },
 })
