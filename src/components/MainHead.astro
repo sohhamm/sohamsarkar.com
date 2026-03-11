@@ -73,7 +73,7 @@ const absoluteOgImage = new URL(ogImage, Astro.site).href
 <link rel='manifest' href='/favicon/site.webmanifest' />
 
 <!-- Structured Data -->
-{structuredData && <script type='application/ld+json' set:html={JSON.stringify(structuredData)} />}
+{structuredData && <script is:inline type='application/ld+json' set:html={JSON.stringify(structuredData)} />}
 
 <!-- Preconnect to External Domains -->
 <link rel='preconnect' href='https://www.googletagmanager.com' />

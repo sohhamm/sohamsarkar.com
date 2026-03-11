@@ -7,7 +7,8 @@ import tellephantLogo from '../assets/resume/tellephant-logo.jpeg'
 
 interface Role {
   title: string
-  period: string
+  start: ResumeDate
+  end?: ResumeDate
   responsibilities?: string[]
 }
 
@@ -15,8 +16,14 @@ interface Experience {
   company: string
   companyUrl: string
   logo: ImageMetadata
-  tenure: string
+  start: ResumeDate
+  end?: ResumeDate
   roles: Role[]
+}
+
+interface ResumeDate {
+  year: number
+  month: number
 }
 
 interface SkillGroup {
@@ -28,6 +35,48 @@ interface Education {
   degree: string
   institution: string
   period: string
+}
+
+function toUtcDate({year, month}: ResumeDate): Date {
+  return new Date(Date.UTC(year, month - 1, 1))
+}
+
+function formatMonthYear(date: ResumeDate): string {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(toUtcDate(date))
+}
+
+function formatDateRange(start: ResumeDate, end?: ResumeDate): string {
+  return `${formatMonthYear(start)} - ${end ? formatMonthYear(end) : 'Present'}`
+}
+
+function getMonthDiff(start: ResumeDate, end: ResumeDate): number {
+  return (end.year - start.year) * 12 + (end.month - start.month)
+}
+
+function formatDuration(start: ResumeDate, end?: ResumeDate): string {
+  const effectiveEnd = end ?? {
+    year: new Date().getUTCFullYear(),
+    month: new Date().getUTCMonth() + 1,
+  }
+
+  const totalMonths = Math.max(0, getMonthDiff(start, effectiveEnd))
+  const years = Math.floor(totalMonths / 12)
+  const months = totalMonths % 12
+  const parts: string[] = []
+
+  if (years > 0) {
+    parts.push(`${years} yr${years === 1 ? '' : 's'}`)
+  }
+
+  if (months > 0 || parts.length === 0) {
+    parts.push(`${months} mo${months === 1 ? '' : 's'}`)
+  }
+
+  return parts.join(' ')
 }
 
 // Resume Data
@@ -44,20 +93,21 @@ const resumeData = {
       company: 'ZenAdmin',
       companyUrl: 'https://zenadmin.ai/',
       logo: zenadminLogo,
-      tenure: 'Jul 2022 - Present · 3 yrs 1 mo',
+      start: {month: 7, year: 2022},
       roles: [
         {
           title: 'Technical Lead',
-          period: 'Apr 2024 - Present',
+          start: {month: 4, year: 2024},
           responsibilities: [
-            'Lead a team of 5 frontend engineers, driving architecture decisions and code quality standards',
+            'Led a team of five engineers, driving architecture decisions and code quality standards',
             'Spearhead hiring initiatives, conducting technical interviews and growing the frontend team',
             'Architect scalable frontend solutions serving enterprise clients with complex workflow requirements',
           ],
         },
         {
           title: 'Senior Software Engineer',
-          period: 'Apr 2023 - Apr 2024',
+          start: {month: 4, year: 2023},
+          end: {month: 4, year: 2024},
           responsibilities: [
             'Owned end-to-end feature development for core product modules, improving user engagement',
             'Optimized application performance, achieving 40% faster load times through code splitting and lazy loading',
@@ -67,7 +117,8 @@ const resumeData = {
         },
         {
           title: 'Founding Engineer',
-          period: 'Jul 2022 - Apr 2023',
+          start: {month: 7, year: 2022},
+          end: {month: 4, year: 2023},
           responsibilities: [
             'Shipped production-ready MVP in 2 months using React, enabling first customer onboarding',
             'Architected and built internal UI library to standardize component design and improve development velocity',
@@ -82,11 +133,13 @@ const resumeData = {
       company: 'GreedyGame',
       companyUrl: 'https://greedygame.com/',
       logo: greedygameLogo,
-      tenure: 'Sep 2021 - Jul 2022 · 11 mos',
+      start: {month: 9, year: 2021},
+      end: {month: 7, year: 2022},
       roles: [
         {
           title: 'Frontend Developer',
-          period: 'Sep 2021 - Jul 2022',
+          start: {month: 9, year: 2021},
+          end: {month: 7, year: 2022},
           responsibilities: [
             'Developed analytics dashboards for publishers with interactive data visualizations using D3.js and Chart.js',
             'Boosted Lighthouse performance scores from 60 to 90+ across landing pages, improving SEO rankings',
@@ -102,11 +155,13 @@ const resumeData = {
       company: 'Tellephant',
       companyUrl: 'https://www.linkedin.com/company/tellephanthq/',
       logo: tellephantLogo,
-      tenure: 'Mar 2021 - Aug 2021 · 6 mos',
+      start: {month: 3, year: 2021},
+      end: {month: 8, year: 2021},
       roles: [
         {
           title: 'Full Stack Developer',
-          period: 'Mar 2021 - Aug 2021',
+          start: {month: 3, year: 2021},
+          end: {month: 8, year: 2021},
           responsibilities: [
             'Architected and launched buyer-facing e-commerce platform from scratch using Next.js and TypeScript',
             'Drove 3x revenue growth through UX improvements and checkout flow optimization',
@@ -164,56 +219,65 @@ const resumeData = {
     },
   ] as Education[],
 }
+
+const experiences = resumeData.experiences.map(exp => ({
+  ...exp,
+  tenure: `${formatDateRange(exp.start, exp.end)} · ${formatDuration(exp.start, exp.end)}`,
+  roles: exp.roles.map(role => ({
+    ...role,
+    period: formatDateRange(role.start, role.end),
+  })),
+}))
 ---
 
-<div class='resume-wrapper'>
-  <div class='resume-header'>
-    <div class='avatar'>
+<div class="resume-wrapper">
+  <div class="resume-header">
+    <div class="avatar">
       <Image src={resumeData.profile.avatar} alt={resumeData.profile.name} width={80} height={80} />
     </div>
-    <div class='header-content'>
-      <h1 class='name'>{resumeData.profile.name}</h1>
-      <p class='title'>{resumeData.profile.title}</p>
+    <div class="header-content">
+      <h1 class="name">{resumeData.profile.name}</h1>
+      <p class="title">{resumeData.profile.title}</p>
     </div>
-    <a href={resumeData.profile.pdfUrl} target='_blank' class='download-btn'> Download PDF </a>
+    <a href={resumeData.profile.pdfUrl} target="_blank" class="download-btn"> Download PDF </a>
   </div>
 
-  <div class='resume-nav'>
-    <button class='nav-btn active' data-section='experience'>Experience</button>
-    <button class='nav-btn' data-section='skills'>Skills</button>
-    <button class='nav-btn' data-section='education'>Education</button>
+  <div class="resume-nav">
+    <button class="nav-btn active" data-section="experience">Experience</button>
+    <button class="nav-btn" data-section="skills">Skills</button>
+    <button class="nav-btn" data-section="education">Education</button>
   </div>
 
-  <div class='resume-content'>
+  <div class="resume-content">
     <!-- Experience Section -->
-    <div class='section active' data-section='experience'>
-      <div class='experience-list'>
+    <div class="section active" data-section="experience">
+      <div class="experience-list">
         {
-          resumeData.experiences.map(exp => (
-            <article class='company-block'>
-              <div class='company-header'>
-                <div class='company-logo'>
+          experiences.map(exp => (
+            <article class="company-block">
+              <div class="company-header">
+                <div class="company-logo">
                   <Image src={exp.logo} alt={exp.company} width={48} height={48} />
                 </div>
-                <div class='company-meta'>
+                <div class="company-meta">
                   <h2>
-                    <a href={exp.companyUrl} target='_blank' rel='noopener noreferrer'>
+                    <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer">
                       {exp.company}
                     </a>
                   </h2>
-                  <span class='tenure'>{exp.tenure}</span>
+                  <span class="tenure">{exp.tenure}</span>
                 </div>
               </div>
 
-              <div class='roles'>
+              <div class="roles">
                 {exp.roles.map(role => (
-                  <div class='role'>
-                    <div class='role-title'>
+                  <div class="role">
+                    <div class="role-title">
                       <h3>{role.title}</h3>
-                      <span class='role-period'>{role.period}</span>
+                      <span class="role-period">{role.period}</span>
                     </div>
                     {role.responsibilities && (
-                      <ul class='responsibilities'>
+                      <ul class="responsibilities">
                         {role.responsibilities.map(resp => (
                           <li>{resp}</li>
                         ))}
@@ -229,13 +293,13 @@ const resumeData = {
     </div>
 
     <!-- Skills Section -->
-    <div class='section' data-section='skills'>
-      <div class='skills-grid'>
+    <div class="section" data-section="skills">
+      <div class="skills-grid">
         {
           resumeData.skills.map(group => (
-            <div class='skill-group'>
+            <div class="skill-group">
               <h3>{group.category}</h3>
-              <div class='skill-list'>
+              <div class="skill-list">
                 {group.skills.map(skill => (
                   <span>{skill}</span>
                 ))}
@@ -247,14 +311,14 @@ const resumeData = {
     </div>
 
     <!-- Education Section -->
-    <div class='section' data-section='education'>
-      <div class='education-list'>
+    <div class="section" data-section="education">
+      <div class="education-list">
         {
           resumeData.education.map(edu => (
-            <article class='education-item'>
+            <article class="education-item">
               <h3>{edu.degree}</h3>
-              <p class='institution'>{edu.institution}</p>
-              <span class='period'>{edu.period}</span>
+              <p class="institution">{edu.institution}</p>
+              <span class="period">{edu.period}</span>
             </article>
           ))
         }
