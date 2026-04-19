@@ -14,13 +14,13 @@ const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order)
 const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
 ---
 
-<section class='projects-section'>
-  <div class='projects-header'>
+<section class="projects-section">
+  <div class="projects-header">
     <h2>{isHomePage ? 'Digital Backyard' : 'Projects'}</h2>
-    {isHomePage && <Button href='/projects'>View all projects →</Button>}
+    {isHomePage && <Button href="/projects">View all projects →</Button>}
   </div>
 
-  <div class='projects-container'>
+  <div class="projects-container">
     {
       projects.map(project => (
         <Project
@@ -51,8 +51,7 @@ const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
   }
 
   .projects-header h2 {
-    color: #fff;
-    font-family: 'Victor Mono', monospace;
+    color: var(--text-primary);
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-style: italic;
     font-weight: 400;

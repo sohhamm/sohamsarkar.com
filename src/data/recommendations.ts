@@ -37,8 +37,12 @@ export const categories: CategoryInfo[] = [
 ]
 
 export const categoryColors: Record<Category, {bg: string; border: string; text: string}> = {
-  'Tools': {bg: 'rgba(59, 130, 246, 0.12)', border: 'rgba(59, 130, 246, 0.3)', text: '#60a5fa'},
-  Infrastructure: {bg: 'rgba(6, 182, 212, 0.12)', border: 'rgba(6, 182, 212, 0.3)', text: '#22d3ee'},
+  Tools: {bg: 'rgba(59, 130, 246, 0.12)', border: 'rgba(59, 130, 246, 0.3)', text: '#60a5fa'},
+  Infrastructure: {
+    bg: 'rgba(6, 182, 212, 0.12)',
+    border: 'rgba(6, 182, 212, 0.3)',
+    text: '#22d3ee',
+  },
   Productivity: {bg: 'rgba(34, 197, 94, 0.12)', border: 'rgba(34, 197, 94, 0.3)', text: '#4ade80'},
   Design: {bg: 'rgba(168, 85, 247, 0.12)', border: 'rgba(168, 85, 247, 0.3)', text: '#c084fc'},
   Finance: {bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.3)', text: '#fbbf24'},
@@ -49,7 +53,8 @@ export const recommendations: Recommendation[] = [
   {
     id: 'claude-code',
     title: 'Claude Code',
-    description: 'AI-powered agentic coding tool by Anthropic that helps you write, edit, and understand code faster.',
+    description:
+      'AI-powered agentic coding tool by Anthropic that helps you write, edit, and understand code faster.',
     domain: 'anthropic.com',
     link: 'https://docs.anthropic.com/en/docs/claude-code',
     category: 'Tools',
@@ -74,7 +79,8 @@ export const recommendations: Recommendation[] = [
   {
     id: 'vscode',
     title: 'VSCode',
-    description: 'Free, powerful code editor with extensions, debugging, and Git integration built-in.',
+    description:
+      'Free, powerful code editor with extensions, debugging, and Git integration built-in.',
     domain: 'vscode.dev',
     link: 'https://code.visualstudio.com',
     category: 'Tools',

@@ -52,53 +52,53 @@ const paymentMethods = [
 ---
 
 <Layout content={content}>
-  <section class='payments-hero'>
-    <div class='container'>
-      <div class='hero-content'>
-        <h1 class='hero-title'>Pay Soham</h1>
-        <p class='hero-subtitle'>Choose your preferred payment method</p>
+  <section class="payments-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Pay Soham</h1>
+        <p class="hero-subtitle">Choose your preferred payment method</p>
       </div>
 
-      <div class='payment-methods'>
+      <div class="payment-methods">
         {
           paymentMethods.map(method => (
             <button
-              class='method-tab'
+              class="method-tab"
               data-tab={method.id}
               data-active={method.id === 'upi' ? 'true' : 'false'}
             >
-              <Icon name={method.icon} class='method-icon' />
-              <span class='method-title'>{method.title}</span>
-              <span class='method-description'>{method.description}</span>
+              <Icon name={method.icon} class="method-icon" />
+              <span class="method-title">{method.title}</span>
+              <span class="method-description">{method.description}</span>
             </button>
           ))
         }
       </div>
 
-      <div class='payment-content'>
+      <div class="payment-content">
         <!-- UPI Section -->
-        <div class='content-section' data-section='upi' data-active='true'>
-          <div class='qr-container'>
-            <div class='qr-codes-container'>
-              <div class='qr-wrapper'>
-                <img src={credQR.src} alt='CRED UPI QR Code' class='qr-code cred-qr' />
-                <div class='qr-overlay'></div>
-                <span class='qr-app-label'>CRED</span>
+        <div class="content-section" data-section="upi" data-active="true">
+          <div class="qr-container">
+            <div class="qr-codes-container">
+              <div class="qr-wrapper">
+                <img src={credQR.src} alt="CRED UPI QR Code" class="qr-code cred-qr" />
+                <div class="qr-overlay"></div>
+                <span class="qr-app-label">CRED</span>
               </div>
-              <div class='qr-wrapper'>
-                <img src={bhimQR.src} alt='BHIM UPI QR Code' class='qr-code bhim-qr' />
-                <div class='qr-overlay'></div>
-                <span class='qr-app-label'>BHIM</span>
+              <div class="qr-wrapper">
+                <img src={bhimQR.src} alt="BHIM UPI QR Code" class="qr-code bhim-qr" />
+                <div class="qr-overlay"></div>
+                <span class="qr-app-label">BHIM</span>
               </div>
             </div>
-            <p class='qr-instruction'>Scan with any UPI app</p>
-            <div class='upi-id-wrapper'>
-              <span class='upi-label'>UPI ID:</span>
-              <div class='copy-field'>
-                <span class='copy-text' data-copy='soham-sarkar@axisb'>soham-sarkar@axisb</span>
-                <button class='copy-btn' data-copy-btn='soham-sarkar@axisb'>
-                  <Icon name='copy' class='copy-icon' />
-                  <Icon name='check' class='check-icon' />
+            <p class="qr-instruction">Scan with any UPI app</p>
+            <div class="upi-id-wrapper">
+              <span class="upi-label">UPI ID:</span>
+              <div class="copy-field">
+                <span class="copy-text" data-copy="soham-sarkar@axisb">soham-sarkar@axisb</span>
+                <button class="copy-btn" data-copy-btn="soham-sarkar@axisb">
+                  <Icon name="copy" class="copy-icon" />
+                  <Icon name="check" class="check-icon" />
                 </button>
               </div>
             </div>
@@ -106,56 +106,56 @@ const paymentMethods = [
         </div>
 
         <!-- Bank Transfer Section -->
-        <div class='content-section' data-section='bank' data-active='false'>
-          <div class='bank-details'>
-            <h3 class='section-title'>Bank Account Details</h3>
-            <div class='details-grid'>
-              <div class='detail-item'>
-                <span class='detail-label'>Account Name</span>
-                <div class='copy-field'>
-                  <span class='copy-text' data-copy={bankDetails.accountName}>
+        <div class="content-section" data-section="bank" data-active="false">
+          <div class="bank-details">
+            <h3 class="subsection-title">Bank Account Details</h3>
+            <div class="details-grid">
+              <div class="detail-item">
+                <span class="detail-label">Account Name</span>
+                <div class="copy-field">
+                  <span class="copy-text" data-copy={bankDetails.accountName}>
                     {bankDetails.accountName}
                   </span>
-                  <button class='copy-btn' data-copy-btn={bankDetails.accountName}>
-                    <Icon name='copy' class='copy-icon' />
-                    <Icon name='check' class='check-icon' />
+                  <button class="copy-btn" data-copy-btn={bankDetails.accountName}>
+                    <Icon name="copy" class="copy-icon" />
+                    <Icon name="check" class="check-icon" />
                   </button>
                 </div>
               </div>
-              <div class='detail-item'>
-                <span class='detail-label'>Account Number</span>
-                <div class='copy-field'>
-                  <span class='copy-text' data-copy={bankDetails.accountNumber}>
+              <div class="detail-item">
+                <span class="detail-label">Account Number</span>
+                <div class="copy-field">
+                  <span class="copy-text" data-copy={bankDetails.accountNumber}>
                     {bankDetails.accountNumber}
                   </span>
-                  <button class='copy-btn' data-copy-btn={bankDetails.accountNumber}>
-                    <Icon name='copy' class='copy-icon' />
-                    <Icon name='check' class='check-icon' />
+                  <button class="copy-btn" data-copy-btn={bankDetails.accountNumber}>
+                    <Icon name="copy" class="copy-icon" />
+                    <Icon name="check" class="check-icon" />
                   </button>
                 </div>
               </div>
-              <div class='detail-item'>
-                <span class='detail-label'>IFSC Code</span>
-                <div class='copy-field'>
-                  <span class='copy-text' data-copy={bankDetails.ifscCode}>
+              <div class="detail-item">
+                <span class="detail-label">IFSC Code</span>
+                <div class="copy-field">
+                  <span class="copy-text" data-copy={bankDetails.ifscCode}>
                     {bankDetails.ifscCode}
                   </span>
-                  <button class='copy-btn' data-copy-btn={bankDetails.ifscCode}>
-                    <Icon name='copy' class='copy-icon' />
-                    <Icon name='check' class='check-icon' />
+                  <button class="copy-btn" data-copy-btn={bankDetails.ifscCode}>
+                    <Icon name="copy" class="copy-icon" />
+                    <Icon name="check" class="check-icon" />
                   </button>
                 </div>
               </div>
-              <div class='detail-item'>
-                <span class='detail-label'>Bank Name</span>
-                <div class='copy-field'>
-                  <span class='copy-text'>{bankDetails.bankName}</span>
+              <div class="detail-item">
+                <span class="detail-label">Bank Name</span>
+                <div class="copy-field">
+                  <span class="copy-text">{bankDetails.bankName}</span>
                 </div>
               </div>
-              <div class='detail-item'>
-                <span class='detail-label'>Branch</span>
-                <div class='copy-field'>
-                  <span class='copy-text'>{bankDetails.branch}</span>
+              <div class="detail-item">
+                <span class="detail-label">Branch</span>
+                <div class="copy-field">
+                  <span class="copy-text">{bankDetails.branch}</span>
                 </div>
               </div>
             </div>
@@ -163,35 +163,35 @@ const paymentMethods = [
         </div>
 
         <!-- International Section -->
-        <div class='content-section' data-section='international' data-active='false'>
-          <div class='international-options'>
-            <h3 class='section-title'>International Payment Options</h3>
-            <div class='payment-cards'>
+        <div class="content-section" data-section="international" data-active="false">
+          <div class="international-options">
+            <h3 class="subsection-title">International Payment Options</h3>
+            <div class="payment-cards">
               <a
-                href='https://wise.com/pay/soham'
-                target='_blank'
-                rel='noopener noreferrer'
-                class='payment-card'
+                href="https://wise.com/pay/soham"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="payment-card"
               >
-                <div class='card-icon wise-icon'>
-                  <Icon name='wise' />
+                <div class="card-icon wise-icon">
+                  <Icon name="wise" />
                 </div>
-                <span class='card-title'>Wise</span>
-                <span class='card-description'>Low fees, real exchange rates</span>
-                <Icon name='arrow-bend-up-right' class='card-arrow' />
+                <span class="card-title">Wise</span>
+                <span class="card-description">Low fees, real exchange rates</span>
+                <Icon name="arrow-bend-up-right" class="card-arrow" />
               </a>
               <a
-                href='https://paypal.me/sohamsarkar'
-                target='_blank'
-                rel='noopener noreferrer'
-                class='payment-card'
+                href="https://paypal.me/sohamsarkar"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="payment-card"
               >
-                <div class='card-icon paypal-icon'>
-                  <Icon name='paypal' />
+                <div class="card-icon paypal-icon">
+                  <Icon name="paypal" />
                 </div>
-                <span class='card-title'>PayPal</span>
-                <span class='card-description'>Quick & secure payments</span>
-                <Icon name='arrow-bend-up-right' class='card-arrow' />
+                <span class="card-title">PayPal</span>
+                <span class="card-description">Quick & secure payments</span>
+                <Icon name="arrow-bend-up-right" class="card-arrow" />
               </a>
             </div>
           </div>
@@ -428,7 +428,7 @@ const paymentMethods = [
     border-radius: 24px;
   }
 
-  .section-title {
+  .subsection-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 32px;
@@ -473,7 +473,6 @@ const paymentMethods = [
 
   .copy-text {
     flex: 1;
-    font-family: 'Victor Mono', monospace;
     font-size: 1rem;
     letter-spacing: -0.02rem;
   }
@@ -670,47 +669,49 @@ const paymentMethods = [
 </style>
 
 <script>
-  // Tab switching
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.method-tab')
-  const sections = document.querySelectorAll<HTMLDivElement>('.content-section')
+  function initPayments() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.method-tab')
+    const sections = document.querySelectorAll<HTMLDivElement>('.content-section')
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const targetSection = tab.dataset.tab
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetSection = tab.dataset.tab
 
-      // Update active states
-      tabs.forEach(t => t.setAttribute('data-active', 'false'))
-      sections.forEach(s => s.setAttribute('data-active', 'false'))
+        tabs.forEach(t => t.setAttribute('data-active', 'false'))
+        sections.forEach(s => s.setAttribute('data-active', 'false'))
 
-      tab.setAttribute('data-active', 'true')
-      const targetElement = document.querySelector<HTMLDivElement>(
-        `[data-section="${targetSection}"]`,
-      )
-      if (targetElement) {
-        targetElement.setAttribute('data-active', 'true')
-      }
-    })
-  })
-
-  // Copy functionality
-  const copyButtons = document.querySelectorAll<HTMLButtonElement>('[data-copy-btn]')
-
-  copyButtons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const textToCopy = btn.dataset.copyBtn
-
-      if (textToCopy) {
-        try {
-          await navigator.clipboard.writeText(textToCopy)
-          btn.classList.add('copied')
-
-          setTimeout(() => {
-            btn.classList.remove('copied')
-          }, 2000)
-        } catch (err) {
-          console.error('Failed to copy:', err)
+        tab.setAttribute('data-active', 'true')
+        const targetElement = document.querySelector<HTMLDivElement>(
+          `[data-section="${targetSection}"]`,
+        )
+        if (targetElement) {
+          targetElement.setAttribute('data-active', 'true')
         }
-      }
+      })
     })
-  })
+
+    const copyButtons = document.querySelectorAll<HTMLButtonElement>('[data-copy-btn]')
+
+    copyButtons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const textToCopy = btn.dataset.copyBtn
+
+        if (textToCopy) {
+          try {
+            await navigator.clipboard.writeText(textToCopy)
+            btn.classList.add('copied')
+
+            setTimeout(() => {
+              btn.classList.remove('copied')
+            }, 2000)
+          } catch (err) {
+            console.error('Failed to copy:', err)
+          }
+        }
+      })
+    })
+  }
+
+  initPayments()
+  document.addEventListener('astro:page-load', initPayments)
 </script>

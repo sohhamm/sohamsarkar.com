@@ -26,14 +26,18 @@ const totalCount = recommendations.length
         stroke-linejoin="round"
         aria-hidden="true"
       >
-        <line x1="5" y1="12" x2="19" y2="12" />
-        <polyline points="12 5 19 12 12 19" />
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
       </svg>
     </a>
   </div>
 
   <div class="recommendations-grid">
-    {featuredRecommendations.map((rec, index) => <RecommendCard recommendation={rec} index={index} />)}
+    {
+      featuredRecommendations.map((rec, index) => (
+        <RecommendCard recommendation={rec} index={index} />
+      ))
+    }
   </div>
 </section>
 
@@ -68,40 +72,11 @@ const totalCount = recommendations.length
     gap: 8px;
   }
 
-  .section-label {
-    color: #52525b;
-    font-family: 'Victor Mono', monospace;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
-  .section-title {
-    color: #fff;
-    font-family: 'Victor Mono', monospace;
-    font-size: clamp(1.75rem, 5vw, 2.5rem);
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.04em;
-    margin: 0;
-  }
-
-  .section-subtitle {
-    color: #71717a;
-    font-family: 'Victor Mono', monospace;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.4;
-    margin: 4px 0 0 0;
-  }
-
   .view-all-link {
     display: flex;
     align-items: center;
     gap: 8px;
     color: #71717a;
-    font-family: 'Victor Mono', monospace;
     font-size: 0.9rem;
     font-weight: 400;
     text-decoration: none;

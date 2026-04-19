@@ -10,17 +10,24 @@ export interface Props {
 const {title, description, link, image, tags} = Astro.props
 ---
 
-<div class='project-item'>
-  <div class='project-image'>
-    <img src={image} alt={`${title} Screenshot`} />
+<div class="project-item">
+  <div class="project-image">
+    <img
+      src={image}
+      alt={`${title} Screenshot`}
+      width="600"
+      height="400"
+      loading="lazy"
+      decoding="async"
+    />
   </div>
-  <div class='project-content'>
+  <div class="project-content">
     <h3>{title}</h3>
     <p>{description}</p>
-    <div class='project-tags'>
-      {tags.map(tag => <span class='tag'>{tag}</span>)}
+    <div class="project-tags">
+      {tags.map(tag => <span class="tag">{tag}</span>)}
     </div>
-    <a href={link} target='_blank' rel='noopener noreferrer'>View Project →</a>
+    <a href={link} target="_blank" rel="noopener noreferrer">View Project →</a>
   </div>
 </div>
 
@@ -62,7 +69,6 @@ const {title, description, link, image, tags} = Astro.props
 
   h3 {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: 2rem;
     font-weight: 400;
     line-height: 100%;
@@ -71,7 +77,6 @@ const {title, description, link, image, tags} = Astro.props
 
   p {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: 1rem;
     font-weight: 400;
     line-height: 150%;
@@ -90,13 +95,11 @@ const {title, description, link, image, tags} = Astro.props
     border-radius: 12px;
     color: #fff;
     font-size: 0.8rem;
-    font-family: 'Victor Mono', monospace;
   }
 
   a {
     color: #fff;
     text-decoration: none;
-    font-family: 'Victor Mono', monospace;
     font-size: 1rem;
     font-weight: 400;
     transition: opacity 0.3s ease;

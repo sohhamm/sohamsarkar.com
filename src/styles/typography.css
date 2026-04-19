@@ -21,3 +21,30 @@
   line-height: 100%; /* 1.125rem */
   letter-spacing: -0.045rem;
 }
+
+/* Section header utilities — shared across home/recommendations sections. */
+
+.section-label {
+  color: var(--text-faint);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.section-title {
+  color: var(--text-primary);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.section-subtitle {
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 4px 0 0 0;
+}

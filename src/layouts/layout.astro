@@ -1,4 +1,5 @@
 ---
+import {ClientRouter} from 'astro:transitions'
 import MainHead from '../components/MainHead.astro'
 import Nav from '../components/Nav.astro'
 import Footer from '../components/Footer.astro'
@@ -16,42 +17,43 @@ const {content} = Astro.props as Props
 <html lang={'en'}>
   <head>
     <MainHead title={content.title} description={content.description} />
+    <ClientRouter />
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
-        src='https://www.googletagmanager.com/ns.html?id=GTM-WCR6CCD9'
-        height='0'
-        width='0'
-        style='display:none;visibility:hidden'></iframe></noscript
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WCR6CCD9"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe></noscript
     >
     <!-- End Google Tag Manager (noscript) -->
 
     <!-- Spotlight Effects -->
-    <div class='spotlight-container'>
+    <div class="spotlight-container">
       <!-- Left spotlight group -->
-      <div class='spotlight-group spotlight-left'>
-        <div class='spotlight-beam spotlight-beam-1'></div>
-        <div class='spotlight-beam spotlight-beam-2'></div>
-        <div class='spotlight-beam spotlight-beam-3'></div>
+      <div class="spotlight-group spotlight-left">
+        <div class="spotlight-beam spotlight-beam-1"></div>
+        <div class="spotlight-beam spotlight-beam-2"></div>
+        <div class="spotlight-beam spotlight-beam-3"></div>
       </div>
 
       <!-- Right spotlight group -->
-      <div class='spotlight-group spotlight-right'>
-        <div class='spotlight-beam spotlight-beam-1'></div>
-        <div class='spotlight-beam spotlight-beam-2'></div>
-        <div class='spotlight-beam spotlight-beam-3'></div>
+      <div class="spotlight-group spotlight-right">
+        <div class="spotlight-beam spotlight-beam-1"></div>
+        <div class="spotlight-beam spotlight-beam-2"></div>
+        <div class="spotlight-beam spotlight-beam-3"></div>
       </div>
     </div>
 
-    <Nav />
-    <main class='main-content'>
-      <div class='container'>
+    <Nav transition:persist />
+    <main class="main-content">
+      <div class="container">
         <slot />
-        <Footer />
+        <Footer transition:persist />
       </div>
-      <div class='footer-image'></div>
+      <div class="footer-image"></div>
     </main>
 
     <style>
@@ -94,9 +96,10 @@ const {content} = Astro.props as Props
       /* Left spotlight beams */
       .spotlight-left .spotlight-beam-1 {
         left: 0;
-        width: 560px;
-        height: 1380px;
-        transform: translateY(-350px) rotate(-45deg);
+        width: var(--spotlight-beam-primary-w);
+        height: var(--spotlight-beam-h);
+        transform: translateY(var(--spotlight-beam-y-offset))
+          rotate(calc(-1 * var(--spotlight-rotation)));
         background: radial-gradient(
           68.54% 68.72% at 55.02% 31.46%,
           hsla(0, 0%, 100%, 0.08) 0%,
@@ -107,9 +110,9 @@ const {content} = Astro.props as Props
 
       .spotlight-left .spotlight-beam-2 {
         left: 0;
-        width: 240px;
-        height: 1380px;
-        transform: rotate(-45deg) translate(5%, -50%);
+        width: var(--spotlight-beam-secondary-w);
+        height: var(--spotlight-beam-h);
+        transform: rotate(calc(-1 * var(--spotlight-rotation))) translate(5%, -50%);
         transform-origin: top left;
         background: radial-gradient(
           50% 50% at 50% 50%,
@@ -121,9 +124,9 @@ const {content} = Astro.props as Props
 
       .spotlight-left .spotlight-beam-3 {
         left: 0;
-        width: 240px;
-        height: 1380px;
-        transform: rotate(-45deg) translate(-180%, -70%);
+        width: var(--spotlight-beam-secondary-w);
+        height: var(--spotlight-beam-h);
+        transform: rotate(calc(-1 * var(--spotlight-rotation))) translate(-180%, -70%);
         transform-origin: top left;
         background: radial-gradient(
           50% 50% at 50% 50%,
@@ -136,9 +139,9 @@ const {content} = Astro.props as Props
       /* Right spotlight beams */
       .spotlight-right .spotlight-beam-1 {
         right: 0;
-        width: 560px;
-        height: 1380px;
-        transform: translateY(-350px) rotate(45deg);
+        width: var(--spotlight-beam-primary-w);
+        height: var(--spotlight-beam-h);
+        transform: translateY(var(--spotlight-beam-y-offset)) rotate(var(--spotlight-rotation));
         background: radial-gradient(
           68.54% 68.72% at 55.02% 31.46%,
           hsla(0, 0%, 100%, 0.08) 0%,
@@ -149,9 +152,9 @@ const {content} = Astro.props as Props
 
       .spotlight-right .spotlight-beam-2 {
         right: 0;
-        width: 240px;
-        height: 1380px;
-        transform: rotate(45deg) translate(-5%, -50%);
+        width: var(--spotlight-beam-secondary-w);
+        height: var(--spotlight-beam-h);
+        transform: rotate(var(--spotlight-rotation)) translate(-5%, -50%);
         transform-origin: top right;
         background: radial-gradient(
           50% 50% at 50% 50%,
@@ -163,9 +166,9 @@ const {content} = Astro.props as Props
 
       .spotlight-right .spotlight-beam-3 {
         right: 0;
-        width: 240px;
-        height: 1380px;
-        transform: rotate(45deg) translate(180%, -70%);
+        width: var(--spotlight-beam-secondary-w);
+        height: var(--spotlight-beam-h);
+        transform: rotate(var(--spotlight-rotation)) translate(180%, -70%);
         transform-origin: top right;
         background: radial-gradient(
           50% 50% at 50% 50%,
@@ -181,7 +184,7 @@ const {content} = Astro.props as Props
           transform: translateX(0);
         }
         50% {
-          transform: translateX(100px);
+          transform: translateX(var(--spotlight-sway));
         }
       }
 
@@ -191,7 +194,7 @@ const {content} = Astro.props as Props
           transform: translateX(0);
         }
         50% {
-          transform: translateX(-100px);
+          transform: translateX(calc(-1 * var(--spotlight-sway)));
         }
       }
 
@@ -237,16 +240,16 @@ const {content} = Astro.props as Props
         /* Scale down spotlights on mobile */
         .spotlight-left .spotlight-beam-1,
         .spotlight-right .spotlight-beam-1 {
-          width: 400px;
-          height: 1000px;
+          width: var(--spotlight-mobile-primary-w);
+          height: var(--spotlight-mobile-h);
         }
 
         .spotlight-left .spotlight-beam-2,
         .spotlight-left .spotlight-beam-3,
         .spotlight-right .spotlight-beam-2,
         .spotlight-right .spotlight-beam-3 {
-          width: 180px;
-          height: 1000px;
+          width: var(--spotlight-mobile-secondary-w);
+          height: var(--spotlight-mobile-h);
         }
       }
     </style>

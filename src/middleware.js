@@ -1,4 +1,4 @@
-import { defineMiddleware } from 'astro:middleware'
+import {defineMiddleware} from 'astro:middleware'
 
 export const onRequest = defineMiddleware(async (context, next) => {
   try {
@@ -8,7 +8,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   } catch (error) {
     // Log the error for debugging
     console.error('Server Error:', error)
-    
+
     // Check if this is already the 500 page to prevent infinite loops
     if (context.url.pathname === '/500') {
       // If the 500 page itself has an error, return a basic error response
@@ -30,10 +30,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
           </body>
         </html>
         `,
-        { 
-          status: 500, 
-          headers: { 'Content-Type': 'text/html' } 
-        }
+        {
+          status: 500,
+          headers: {'Content-Type': 'text/html'},
+        },
       )
     }
 
@@ -43,7 +43,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
       const errorResponse = await context.rewrite('/500')
       return new Response(errorResponse.body, {
         status: 500,
-        headers: errorResponse.headers
+        headers: errorResponse.headers,
       })
     } catch (redirectError) {
       // If rendering the 500 page fails, return a simple error page
@@ -66,10 +66,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
           </body>
         </html>
         `,
-        { 
-          status: 500, 
-          headers: { 'Content-Type': 'text/html' } 
-        }
+        {
+          status: 500,
+          headers: {'Content-Type': 'text/html'},
+        },
       )
     }
   }

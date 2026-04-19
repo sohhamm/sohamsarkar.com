@@ -9,11 +9,11 @@ export interface Props {
 const {products} = Astro.props
 ---
 
-<div class='product-carousel-container' data-carousel-container>
-  <div class='product-carousel' data-carousel>
+<div class="product-carousel-container" data-carousel-container>
+  <div class="product-carousel" data-carousel>
     {
       products.map((product, index) => (
-        <div class='carousel-slide' data-slide={index}>
+        <div class="carousel-slide" data-slide={index}>
           <ProductCard product={product} />
         </div>
       ))
@@ -22,21 +22,21 @@ const {products} = Astro.props
 
   {
     products.length > 1 && (
-      <div class='carousel-controls' data-controls>
-        <button class='carousel-btn prev-btn' data-prev-btn aria-label='Previous product'>
+      <div class="carousel-controls" data-controls>
+        <button class="carousel-btn prev-btn" data-prev-btn aria-label="Previous product">
           <svg
-            width='20'
-            height='20'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            stroke-width='2'
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            <path d='M15 18l-6-6 6-6' />
+            <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
 
-        <div class='carousel-indicators'>
+        <div class="carousel-indicators">
           {products.map((_, index) => (
             <button
               class={`indicator ${index === 0 ? 'active' : ''}`}
@@ -46,16 +46,16 @@ const {products} = Astro.props
           ))}
         </div>
 
-        <button class='carousel-btn next-btn' data-next-btn aria-label='Next product'>
+        <button class="carousel-btn next-btn" data-next-btn aria-label="Next product">
           <svg
-            width='20'
-            height='20'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            stroke-width='2'
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            <path d='M9 18l6-6-6-6' />
+            <path d="M9 18l6-6-6-6" />
           </svg>
         </button>
       </div>
@@ -492,9 +492,13 @@ const {products} = Astro.props
     }
   }
 
-  new ProductCarousel()
+  let carouselInstance: ProductCarousel | null = null
 
-  document.addEventListener('astro:before-preparation', () => {
-    // Cleanup before page navigation
-  })
+  function initCarousel() {
+    carouselInstance?.destroy()
+    carouselInstance = new ProductCarousel()
+  }
+
+  initCarousel()
+  document.addEventListener('astro:page-load', initCarousel)
 </script>

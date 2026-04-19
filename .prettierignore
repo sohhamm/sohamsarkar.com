@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+.vercel
+.vite-hooks
+bun.lock
+public
+*.md

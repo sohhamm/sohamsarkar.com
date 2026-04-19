@@ -13,7 +13,8 @@
     }
     .aurora {
       @apply absolute w-full h-full top-0 left-0;
-      background: radial-gradient(circle at 10% 20%, rgba(0, 175, 255, 0.4), transparent 25%),
+      background:
+        radial-gradient(circle at 10% 20%, rgba(0, 175, 255, 0.4), transparent 25%),
         radial-gradient(circle at 80% 0%, rgba(0, 255, 200, 0.3), transparent 25%),
         radial-gradient(circle at 50% 50%, rgba(255, 0, 200, 0.2), transparent 25%);
       animation: moveAurora 15s linear infinite;
@@ -34,9 +35,9 @@
   }
 </style>
 
-<div class='aurora-background'>
-  <div class='aurora'></div>
-  <div class='relative'>
+<div class="aurora-background">
+  <div class="aurora"></div>
+  <div class="relative">
     <slot />
   </div>
 </div>
