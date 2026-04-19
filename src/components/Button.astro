@@ -11,7 +11,7 @@ const props = Astro.props
 <a
   href={props.href ?? '#'}
   class={`button ${props.variant === 'secondary' ? 'button-secondary' : 'button-primary'} ${props.disabled ? 'button-disabled' : ''}`}
-  role='button'
+  role="button"
   tabindex={props.disabled ? -1 : 0}
   aria-disabled={props.disabled ? 'true' : 'false'}
 >
@@ -38,51 +38,31 @@ const props = Astro.props
   }
 
   .button-primary {
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    background: radial-gradient(
-      91.79% 82.82% at 49.42% 50%,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(0, 0, 0, 0.3) 100%
-    );
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.34);
-    color: #fff;
-
     border: 1px solid rgba(255, 255, 255, 0.4);
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.3) -67.31%,
-      rgba(0, 0, 0, 0.3) -46.54%
-    );
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.34);
+    background: var(--button-bg-gradient);
+    box-shadow: var(--button-glow);
+    color: var(--text-primary);
   }
 
   .button-primary:hover {
-    background: #fff;
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.54);
-    color: #000;
+    background: var(--white);
+    box-shadow: var(--button-glow-strong);
+    color: var(--black);
   }
 
   .button-secondary {
     border-radius: 40px;
     border: 1px solid rgba(255, 255, 255, 0.6);
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.3) -67.31%,
-      rgba(0, 0, 0, 0.3) 146.15%
-    );
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.34);
-    color: #fff;
+    background: var(--button-bg-secondary);
+    box-shadow: var(--button-glow);
+    color: var(--text-primary);
   }
 
   .button-secondary:hover {
     border-radius: 40px;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.3) -67.31%,
-      rgba(0, 0, 0, 0.3) -46.54%
-    );
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.34);
+    background: var(--button-bg-gradient);
+    box-shadow: var(--button-glow);
   }
 
   .button-disabled {

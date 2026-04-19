@@ -1,11 +1,7 @@
 ---
 import Layout from '../layouts/layout.astro'
 import RecommendCard from '../components/home/RecommendCard.astro'
-import {
-  recommendations,
-  categories,
-  groupByCategory,
-} from '../data/recommendations'
+import {recommendations, categories, groupByCategory} from '../data/recommendations'
 
 const title = 'Recommendations | Soham Sarkar'
 const description =
@@ -82,7 +78,9 @@ const totalCount = recommendations.length
         Some links may be affiliate links. I only recommend products I genuinely use and believe in.
       </p>
       <p class="logo-credit">
-        Logos powered by <a href="https://logo.dev" target="_blank" rel="noopener noreferrer">Logo.dev</a>
+        Logos powered by <a href="https://logo.dev" target="_blank" rel="noopener noreferrer"
+          >Logo.dev</a
+        >
       </p>
     </footer>
   </main>
@@ -94,7 +92,6 @@ const totalCount = recommendations.length
     margin: 0 auto;
     padding: 0 20px 80px;
     color: #fff;
-    font-family: 'Victor Mono', monospace;
   }
 
   .page-header {
@@ -159,7 +156,6 @@ const totalCount = recommendations.length
     border: 1px solid transparent;
     background: transparent;
     color: #71717a;
-    font-family: 'Victor Mono', monospace;
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;

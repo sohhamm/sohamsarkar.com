@@ -333,7 +333,6 @@ const experiences = resumeData.experiences.map(exp => ({
     margin: 0 auto;
     padding: 40px 20px 80px;
     color: #fff;
-    font-family: 'Victor Mono', monospace;
   }
 
   /* Header */
@@ -683,4 +682,5 @@ const experiences = resumeData.experiences.map(exp => ({
   }
 
   document.addEventListener('DOMContentLoaded', initializeResume)
+  document.addEventListener('astro:page-load', initializeResume)
 </script>

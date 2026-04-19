@@ -1,4 +1,5 @@
 ---
+import {Image} from 'astro:assets'
 import type {Product} from './ProductsSection.astro'
 
 export interface Props {
@@ -10,47 +11,50 @@ const {product, variant = 'default'} = Astro.props
 ---
 
 <div class={`product-card variant-${variant}`} data-product-card={product.id}>
-  <div class='product-content'>
-    <div class='product-text'>
-      <div class='product-header'>
+  <div class="product-content">
+    <div class="product-text">
+      <div class="product-header">
         <a
           href={product.link}
-          target='_blank'
-          rel='noopener noreferrer'
-          class='product-title-link'
+          target="_blank"
+          rel="noopener noreferrer"
+          class="product-title-link"
           data-title-link
         >
-          <h3 class='product-title' data-title>{product.title}</h3>
+          <h3 class="product-title" data-title>{product.title}</h3>
         </a>
-        <div class='product-meta' data-meta>
+        <div class="product-meta" data-meta>
           <span
             class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}
             data-status
           >
             {product.status}
           </span>
-          <span class='category-badge' data-category>{product.category}</span>
+          <span class="category-badge" data-category>{product.category}</span>
         </div>
       </div>
 
-      <p class='product-description' data-description>{product.description}</p>
+      <p class="product-description" data-description>{product.description}</p>
     </div>
 
-    <div class='product-visual'>
-      <div class='product-image-container' data-image-container>
-        <img
+    <div class="product-visual">
+      <div class="product-image-container" data-image-container>
+        <Image
           src={product.image}
           alt={`${product.title} interface`}
-          class='product-image'
-          loading='lazy'
+          class="product-image"
+          loading="lazy"
+          decoding="async"
+          widths={[400, 600, 900]}
+          sizes="(max-width: 768px) 100vw, 600px"
           data-image
         />
-        <div class='image-overlay' data-overlay></div>
+        <div class="image-overlay" data-overlay></div>
       </div>
     </div>
   </div>
 
-  <div class='card-border' data-border></div>
+  <div class="card-border" data-border></div>
 </div>
 
 <style>
@@ -110,7 +114,6 @@ const {product, variant = 'default'} = Astro.props
 
   .product-title {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: 2.5rem;
     font-weight: 400;
     line-height: 100%;
@@ -137,7 +140,6 @@ const {product, variant = 'default'} = Astro.props
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    font-family: 'Victor Mono', monospace;
     will-change: transform;
     transition: none; /* Let Motion handle transitions */
   }
@@ -156,7 +158,6 @@ const {product, variant = 'default'} = Astro.props
 
   .product-description {
     color: #7f7f7f;
-    font-family: 'Victor Mono', monospace;
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 130%;
@@ -671,9 +672,13 @@ const {product, variant = 'default'} = Astro.props
     }
   }
 
-  new ProductCard()
+  let instance: ProductCard | null = null
 
-  document.addEventListener('astro:before-preparation', () => {
-    // Cleanup before page navigation
-  })
+  function initProductCards() {
+    instance?.destroy()
+    instance = new ProductCard()
+  }
+
+  initProductCards()
+  document.addEventListener('astro:page-load', initProductCards)
 </script>

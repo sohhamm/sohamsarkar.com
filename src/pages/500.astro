@@ -16,15 +16,15 @@ const content = {
 ---
 
 <Layout content={content}>
-  <section class='error-section'>
-    <div class='error-content'>
-      <div class='error-code'>
-        <span class='error-number'>500</span>
-        <div class='error-spark'></div>
-        <div class='error-spark-2'></div>
+  <section class="error-section">
+    <div class="error-content">
+      <div class="error-code">
+        <span class="error-number">500</span>
+        <div class="error-spark"></div>
+        <div class="error-spark-2"></div>
       </div>
 
-      <div class='error-text'>
+      <div class="error-text">
         <h1>Server Error</h1>
         <p>
           Oops! Our digital garden hit a technical snag.
@@ -32,7 +32,7 @@ const content = {
         </p>
         {
           error instanceof Error && (
-            <details class='error-details'>
+            <details class="error-details">
               <summary>Technical Details</summary>
               <code>{error.message}</code>
             </details>
@@ -40,23 +40,23 @@ const content = {
         }
       </div>
 
-      <div class='error-actions'>
-        <Button href='/'>
-          <Icon name='home' />
+      <div class="error-actions">
+        <Button href="/">
+          <Icon name="home" />
           Back to Home
         </Button>
-        <Button href='javascript:window.location.reload()' variant='secondary'>
+        <Button href="javascript:window.location.reload()" variant="secondary">
           Try Again
-          <Icon name='arrow-right' />
+          <Icon name="arrow-right" />
         </Button>
       </div>
     </div>
 
-    <div class='floating-elements'>
-      <div class='floating-circuit floating-circuit-1'></div>
-      <div class='floating-circuit floating-circuit-2'></div>
-      <div class='floating-circuit floating-circuit-3'></div>
-      <div class='error-wave'></div>
+    <div class="floating-elements">
+      <div class="floating-circuit floating-circuit-1"></div>
+      <div class="floating-circuit floating-circuit-2"></div>
+      <div class="floating-circuit floating-circuit-3"></div>
+      <div class="error-wave"></div>
     </div>
   </section>
 
@@ -189,7 +189,6 @@ const content = {
     }
 
     .error-details code {
-      font-family: 'Victor Mono', monospace;
       font-size: 0.85rem;
       color: #ff6b6b;
       background: rgba(255, 107, 107, 0.1);

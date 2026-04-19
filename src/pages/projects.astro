@@ -14,19 +14,23 @@ const content = {
   </main>
 
   <script>
-    // Client-side filtering logic
-    const tags = document.querySelectorAll('.tag')
-    const projects = document.querySelectorAll('.project-item') as NodeListOf<HTMLElement>
+    function initProjectsTagFilter() {
+      const tags = document.querySelectorAll('.tag')
+      const projects = document.querySelectorAll('.project-item') as NodeListOf<HTMLElement>
 
-    tags.forEach(tag => {
-      tag.addEventListener('click', () => {
-        const selectedTag = tag.textContent
-        projects.forEach(project => {
-          const projectTags = project.querySelectorAll('.tag')
-          const hasTag = Array.from(projectTags).some(t => t.textContent === selectedTag)
-          project.style.display = hasTag ? 'flex' : 'none'
+      tags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          const selectedTag = tag.textContent
+          projects.forEach(project => {
+            const projectTags = project.querySelectorAll('.tag')
+            const hasTag = Array.from(projectTags).some(t => t.textContent === selectedTag)
+            project.style.display = hasTag ? 'flex' : 'none'
+          })
         })
       })
-    })
+    }
+
+    initProjectsTagFilter()
+    document.addEventListener('astro:page-load', initProjectsTagFilter)
   </script>
 </Layout>

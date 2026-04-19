@@ -1,11 +1,14 @@
 ---
+import type {ImageMetadata} from 'astro'
 import ProductCard from './ProductCard.astro'
+import superdivideImage from '../../assets/products/superdivide.webp'
+import rituaImage from '../../assets/products/ritua.webp'
 
 export interface Product {
   id: number
   title: string
   description: string
-  image: string
+  image: ImageMetadata
   link: string
   status: string
   category: string
@@ -17,7 +20,7 @@ const products: Product[] = [
     title: 'SuperDivide',
     description:
       'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
-    image: '/products/superdivide.webp',
+    image: superdivideImage,
     link: 'https://www.superdivide.com?ref=sohamsarkar.com',
     status: 'Beta',
     category: 'Personal Finance',
@@ -26,7 +29,7 @@ const products: Product[] = [
     id: 2,
     title: 'Ritua',
     description: 'The best free habit tracker out there.',
-    image: '/products/ritua.webp',
+    image: rituaImage,
     link: 'https://www.getritua.com?ref=sohamsarkar.com',
     status: 'Coming Soon',
     category: 'Productivity',
@@ -34,19 +37,19 @@ const products: Product[] = [
 ]
 ---
 
-<section class='products-section' data-products-section>
-  <div class='products-header'>
-    <div class='header-content'>
-      <h1 class='main-title'>Products</h1>
-      <p class='subtitle' data-products-title>Built to make life easier.</p>
+<section class="products-section" data-products-section>
+  <div class="products-header">
+    <div class="header-content">
+      <h1 class="main-title">Products</h1>
+      <p class="subtitle" data-products-title>Built to make life easier.</p>
     </div>
   </div>
 
-  <div class='products-grid' data-products-grid>
+  <div class="products-grid" data-products-grid>
     {
       products.map(product => (
-        <div class='grid-card'>
-          <ProductCard product={product} variant='compact' />
+        <div class="grid-card">
+          <ProductCard product={product} variant="compact" />
         </div>
       ))
     }
@@ -78,7 +81,6 @@ const products: Product[] = [
 
   .main-title {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: clamp(2rem, 6vw, 3.5rem);
     font-weight: 500;
     line-height: 1;
@@ -88,7 +90,6 @@ const products: Product[] = [
 
   .subtitle {
     color: #fff;
-    font-family: 'Victor Mono', monospace;
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-style: italic;
     font-weight: 400;
@@ -205,5 +206,13 @@ const products: Product[] = [
     }
   }
 
-  new ProductsSection()
+  let productsSectionInstance: ProductsSection | null = null
+
+  function initProductsSection() {
+    productsSectionInstance?.destroy()
+    productsSectionInstance = new ProductsSection()
+  }
+
+  initProductsSection()
+  document.addEventListener('astro:page-load', initProductsSection)
 </script>

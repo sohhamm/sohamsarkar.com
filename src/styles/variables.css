@@ -1,6 +1,6 @@
 :root {
+  /* Base */
   --bg-color: #000;
-
   --transparent: rgba(0, 0, 0, 0);
   --white: #ffffff;
   --black: #000000;
@@ -11,4 +11,42 @@
   --blue-300: #93c5fd;
   --violet-200: #c4b5fd;
   --blue-400: #60a5fa;
+
+  /* Text colors (Tailwind zinc-aligned) */
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  --text-faint: #7f7f7f;
+
+  /* Surfaces & borders */
+  --surface-overlay-soft: rgba(255, 255, 255, 0.05);
+  --surface-overlay-hover: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.2);
+
+  /* Button gradients & glows */
+  --button-bg-gradient: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) -67.31%,
+    rgba(0, 0, 0, 0.3) -46.54%
+  );
+  --button-bg-secondary: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) -67.31%,
+    rgba(0, 0, 0, 0.3) 146.15%
+  );
+  --button-glow: 0px 0px 24px 0px rgba(255, 255, 255, 0.34);
+  --button-glow-strong: 0px 0px 24px 0px rgba(255, 255, 255, 0.54);
+
+  /* Spotlight beams (layout.astro) */
+  --spotlight-beam-primary-w: 560px;
+  --spotlight-beam-secondary-w: 240px;
+  --spotlight-beam-h: 1380px;
+  --spotlight-beam-y-offset: -350px;
+  --spotlight-rotation: 45deg;
+  --spotlight-sway: 100px;
+  --spotlight-mobile-primary-w: 400px;
+  --spotlight-mobile-secondary-w: 180px;
+  --spotlight-mobile-h: 1000px;
 }
