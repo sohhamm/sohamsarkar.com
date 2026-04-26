@@ -4,7 +4,7 @@ description: 'Classic Tic Tac Toe game implementation'
 status: 'Started'
 priority: 'P3'
 tags: ['Vanilla JS', 'SCSS']
-image: '/projects/tic-tac-toe.jpg'
+image: './images/tic-tac-toe.jpg'
 sourceCode: 'https://github.com/sohhamm/tic-tac-toe'
 link: 'https://test.com'
 order: 7

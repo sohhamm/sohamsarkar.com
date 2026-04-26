@@ -4,7 +4,7 @@ description: 'All-in-one entertainment content aggregator'
 status: 'Started'
 priority: 'P2'
 tags: ['SolidJS', 'Go Fiber', 'PostgreSQL']
-image: '/projects/entertainment-app.jpg'
+image: './images/entertainment-app.jpg'
 sourceCode: 'https://github.com/sohhamm/entertainment-app/'
 link: 'https://entertainment-app.soham.app/'
 order: 4

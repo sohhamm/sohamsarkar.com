@@ -4,7 +4,7 @@ description: 'A comprehensive Pokémon information database'
 status: 'Not Started'
 priority: 'P4'
 tags: []
-image: '/projects/pokedex.jpg'
+image: './images/pokedex.jpg'
 sourceCode: 'https://github.com/sohhamm/pokemon-react'
 link: 'https://pokedex.soham.app/'
 order: 11

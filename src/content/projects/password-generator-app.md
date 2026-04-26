@@ -4,7 +4,7 @@ description: 'Secure password generation tool'
 status: 'Completed'
 priority: 'Done'
 tags: ['Svelte']
-image: '/projects/password-generator-app.jpg'
+image: './images/password-generator-app.jpg'
 sourceCode: 'https://github.com/sohhamm/password-generator'
 link: 'https://passwordxgenerator.vercel.app/'
 order: 2

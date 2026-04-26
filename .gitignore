@@ -25,3 +25,6 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# lighthouse reports (generated locally for audits)
+.lighthouse/

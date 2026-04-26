@@ -4,7 +4,7 @@ description: 'Smart shopping list and inventory management app'
 status: 'Ongoing'
 priority: 'P1'
 tags: ['Elysia', 'Bun', 'SQLite', 'Turso', 'SolidJS']
-image: '/projects/shoppingify.jpg'
+image: './images/shoppingify.jpg'
 sourceCode: 'https://github.com/sohhamm/shoppingify'
 link: 'https://test.com'
 order: 6

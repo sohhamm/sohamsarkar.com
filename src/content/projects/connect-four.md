@@ -4,7 +4,7 @@ description: 'Classic Connect Four game implementation'
 status: 'Ongoing'
 priority: 'P1'
 tags: ['SolidJS']
-image: '/projects/connect-four.jpg'
+image: './images/connect-four.jpg'
 sourceCode: 'https://github.com/sohhamm/connect-four'
 link: 'https://connect-four.sohamprojects.xyz'
 order: 9
