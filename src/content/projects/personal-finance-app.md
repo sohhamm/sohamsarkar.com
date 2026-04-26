@@ -4,7 +4,7 @@ description: 'A comprehensive tool for managing personal finances'
 status: 'Ongoing'
 priority: 'P1'
 tags: ['React', 'Rust', 'PostgreSQL']
-image: '/projects/personal-finance-app.jpg'
+image: './images/personal-finance-app.jpg'
 sourceCode: 'https://github.com/sohhamm/personal-finance-app'
 link: 'https://personal-finance.soham.app/'
 order: 8

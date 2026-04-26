@@ -4,7 +4,7 @@ description: 'Application for searching and exploring GitHub repositories'
 status: 'Completed'
 priority: ''
 tags: []
-image: '/projects/github-search-app.jpg'
+image: './images/github-search-app.jpg'
 sourceCode: 'https://github.com/sohhamm/github-user-search-app'
 link: 'https://sohhamm.github.io/github-user-search-app/'
 order: 12

@@ -4,7 +4,7 @@ description: 'Streamlined invoicing solution for freelancers and small businesse
 status: 'Ongoing'
 priority: 'P1'
 tags: ['Fastify', 'PostgreSQL', 'React', 'TurboRepo']
-image: '/projects/invoice-app.jpg'
+image: './images/invoice-app.jpg'
 sourceCode: 'https://github.com/sohhamm/invoice-app'
 link: 'https://invoice-app.sohamsarkar.com/'
 order: 1
