@@ -1,4 +1,10 @@
 :root {
+  /* Dark canvas from the very first paint — without this the browser
+     assumes a light page and flashes its default white canvas while the
+     hero image decodes. */
+  color-scheme: dark;
+  background-color: #000;
+
   /* Base */
   --bg-color: #000;
   --transparent: rgba(0, 0, 0, 0);
@@ -16,7 +22,11 @@
   --text-primary: #ffffff;
   --text-secondary: #e5e5e5;
   --text-muted: #a1a1aa;
-  --text-dim: #71717a;
+  /* Was #71717a (zinc-500). On black that is 4.35:1, and the hero subline is
+     20px body copy, which WCAG AA wants at 4.5:1 — the one contrast failure on
+     the site. Two steps lighter clears it at 4.80:1 with a little margin.
+     Revert to #71717a here if the difference reads wrong. */
+  --text-dim: #787881;
   --text-faint: #7f7f7f;
 
   /* Surfaces & borders */

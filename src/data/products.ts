@@ -60,7 +60,7 @@ export const products: Product[] = [
   },
   {
     id: 3,
-    title: 'Superslate',
+    title: 'superslate',
     tagline: 'The SaaS boilerplate built for the agent era.',
     description:
       'A source-owned TypeScript SaaS foundation — Bun + Hono API, React 19 SPA, end-to-end typed contracts, auth, billing and guided cloud deploys.',

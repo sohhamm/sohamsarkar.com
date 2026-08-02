@@ -25,8 +25,10 @@ const aspect = product.image.width / product.image.height
 // Never ask for a variant wider than the source: Ritua's export is 1024px, and
 // a 1200px variant of it is an upscale — more bytes, no more detail. 1200 is
 // the ceiling worth generating (620px column at 2x).
+// 700 is the rung a 412px phone at 1.75x actually wants (it needs ~651). Left
+// out, the next one up is 840 and it overshoots by a third.
 const widest = Math.min(1200, product.image.width)
-const widths = [560, 840, 1200].filter(width => width < widest).concat(widest)
+const widths = [560, 700, 840, 1200].filter(width => width < widest).concat(widest)
 ---
 
 <article class="product reveal" data-pointer-card style={`--reveal-delay: ${index * 90}ms`}>
@@ -45,7 +47,10 @@ const widths = [560, 840, 1200].filter(width => width < widest).concat(widest)
           SuperDivide's is 3684px and 219 KB, generated and deployed for a
           browser that will never ask for it. */}
       width={widest}
-      sizes="(max-width: 900px) 100vw, 620px"
+      {/* Not 100vw: the row sits inside .container's 20px gutters, so 100vw
+          overstates the slot by ~11% — enough on a 412px phone to push the
+          browser off the 700w rung and onto the 840w one. */}
+      sizes="(max-width: 900px) calc(100vw - 40px), 620px"
     />
   </div>
 
@@ -75,8 +80,14 @@ const widths = [560, 840, 1200].filter(width => width < widest).concat(widest)
     <div class="product-footer">
       <ul class="product-stack" aria-label="Built with">
         {
+          /* role="img" belongs on the mark, not on the <li>. Put it on the
+             list item and the item stops being a listitem, which both makes
+             the role invalid for the element and leaves the <ul> holding
+             children a list is not allowed to have. */
           stack.map(({tech, icon}) => (
-            <li class="stack-chip" title={tech} role="img" aria-label={tech} set:html={icon} />
+            <li class="stack-chip">
+              <span role="img" title={tech} aria-label={tech} set:html={icon} />
+            </li>
           ))
         }
       </ul>
@@ -309,7 +320,8 @@ const widths = [560, 840, 1200].filter(width => width < widest).concat(widest)
     margin: 0;
   }
 
-  .stack-chip {
+  .stack-chip,
+  .stack-chip span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
