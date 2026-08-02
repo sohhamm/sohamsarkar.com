@@ -58,6 +58,10 @@ const {gridSrc} = Astro.props
     width: 100%;
     height: 100%;
     max-width: none;
+    /* The one thing the script does not measure. It registers the canvas to
+       the image's untilted layout box, and this leans the two by the same
+       inherited angle — so image uv and canvas uv stay one space. */
+    rotate: var(--hero-tilt, 0deg);
     opacity: 0;
     pointer-events: none;
     transition: opacity 1.2s var(--ease-out-soft);

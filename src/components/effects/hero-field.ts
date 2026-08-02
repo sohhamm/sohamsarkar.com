@@ -328,27 +328,48 @@ export async function mountHeroField(canvas: HTMLCanvasElement): Promise<void> {
   const flowAttribute = gl.getAttribLocation(dustProgram, 'a_flow')
   const quadAttribute = gl.getAttribLocation(glowProgram, 'a_position')
 
-  // The <img> is positioned differently at every breakpoint. Rather than
-  // mirror that table in here, measure it — the canvas then lands on the
-  // artwork exactly, and future layout edits need no change to this file.
+  // The <img> is sized, placed and tilted differently at every breakpoint.
+  // Rather than mirror that table in here, measure it — the canvas then lands
+  // on the artwork exactly, and future layout edits need no change to this
+  // file.
   //
-  // Rects, not offsetLeft: the image is centred with `translate: -50% -50%`,
-  // and offset* reports the pre-transform layout box. The plate's own
-  // transform is a pure translation, so the difference of the two rects is
-  // the image's position inside it.
+  // The image is tilted, so its rect is an axis-aligned bounding box: bigger
+  // than the art in both axes and no use as the canvas box. Its *centre* is
+  // still exact, because rotation happens about that centre and leaves it
+  // where it was — so centre from the rect, size from offsetWidth/Height
+  // (the layout box, which transforms do not touch), and the canvas carries
+  // the same tilt in CSS. Sub-pixel rounding on offset* is a fraction of a
+  // percent across ~2000px of soft glow.
+  //
+  // Rects, not offsetLeft, for that centre: offsetLeft is measured before the
+  // `translate: -50% -50%` that centres the image. The plate's own transform
+  // is a pure translation, so the difference of the two rects is the image's
+  // position inside it.
   //
   // The box it lands on is kept here too, so the frame never has to ask the
-  // DOM how big the canvas is.
-  const box = {width: 0, height: 0}
+  // DOM how big the canvas is — and neither does the pointer, which has to
+  // undo the tilt to get back into image uv.
+  const box = {width: 0, height: 0, sin: 0, cos: 1}
   const register = () => {
     const plateRect = plate.getBoundingClientRect()
     const imageRect = image.getBoundingClientRect()
-    canvas.style.left = `${imageRect.left - plateRect.left}px`
-    canvas.style.top = `${imageRect.top - plateRect.top}px`
-    canvas.style.width = `${imageRect.width}px`
-    canvas.style.height = `${imageRect.height}px`
-    box.width = imageRect.width
-    box.height = imageRect.height
+    const width = image.offsetWidth
+    const height = image.offsetHeight
+    const centerX = imageRect.left + imageRect.width / 2 - plateRect.left
+    const centerY = imageRect.top + imageRect.height / 2 - plateRect.top
+    canvas.style.left = `${centerX - width / 2}px`
+    canvas.style.top = `${centerY - height / 2}px`
+    canvas.style.width = `${width}px`
+    canvas.style.height = `${height}px`
+    // Read off the image, not off the custom property both of them use: a
+    // browser that ignores `rotate` then leaves the art and the field
+    // unrotated together, rather than tilting one of them on its own.
+    const degrees = parseFloat(getComputedStyle(image).rotate)
+    const angle = Number.isFinite(degrees) ? (degrees * Math.PI) / 180 : 0
+    box.width = width
+    box.height = height
+    box.sin = Math.sin(angle)
+    box.cos = Math.cos(angle)
   }
   register()
   const resizeObserver = new ResizeObserver(register)
@@ -369,9 +390,14 @@ export async function mountHeroField(canvas: HTMLCanvasElement): Promise<void> {
 
     if (pending) {
       const rect = canvas.getBoundingClientRect()
-      if (rect.width && rect.height) {
-        target.x = (pending.x - rect.left) / rect.width
-        target.y = (pending.y - rect.top) / rect.height
+      if (box.width && box.height) {
+        // Same bounding-box caveat as register(): the rect's centre is the
+        // canvas centre, but its axes are not the canvas axes. Measure from
+        // that centre and rotate back by the tilt to land in image uv.
+        const dx = pending.x - (rect.left + rect.width / 2)
+        const dy = pending.y - (rect.top + rect.height / 2)
+        target.x = 0.5 + (dx * box.cos + dy * box.sin) / box.width
+        target.y = 0.5 + (dy * box.cos - dx * box.sin) / box.height
         target.presence = 1
       }
       pending = null

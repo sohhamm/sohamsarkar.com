@@ -149,13 +149,14 @@ const content = {
         the copy and the art share a top datum instead of floating apart.
 
         Derived, not eyeballed. The plate is 100dvh tall and the art is sized
-        by width, so with art height = 0.92 * 100vw / 1.81 (the asset's aspect)
-        and the arc cresting at 0.23 of the art's own height (measured off the
-        asset), the crest lands at 50dvh - 13.72vw, less the 100px the plate
-        extends above this section. Each breakpoint below re-derives it from
-        that breakpoint's art width.
+        by width, so with art height = 1.17 * 100vw / 1.81 (the asset's aspect)
+        and the arc cresting at 0.234 of the art's own height (0.232 measured
+        off the asset's luminance grid, plus the 0.002 the tilt below drops it),
+        the crest lands at 50dvh - 17.19vw, less the 100px the plate extends
+        above this section. Each breakpoint below re-derives it from that
+        breakpoint's art width.
       */
-      padding-top: max(1.5rem, calc(50dvh - 13.72vw - 100px));
+      padding-top: max(1.5rem, calc(50dvh - 17.19vw - 100px));
       padding-bottom: 24px;
       color: #ffffff;
     }
@@ -165,6 +166,15 @@ const content = {
     }
 
     .hero-plate {
+      /*
+        The art is off-axis by design. Declared here rather than on the <img>
+        because the WebGL field is a sibling of it and has to carry the exact
+        same angle — inheriting one variable is what keeps the two from ever
+        drifting apart. Negative is counter-clockwise: it lifts the disk's
+        bright right lobe and drops the faint left tail away from the copy,
+        which is the direction the artwork already leans.
+      */
+      --hero-tilt: -5deg;
       position: absolute;
       /* Up past .main-content's 100px top padding so the plate starts at the
          very top of the viewport, and down to the section's own edge. */
@@ -193,13 +203,22 @@ const content = {
        cover, so the disk's scale is set explicitly instead of falling out of
        the viewport's aspect ratio. The asset is cropped to its content and its
        edges are pure #000, same as the page, so where it ends is invisible —
-       overflowing the right edge just reads as full-bleed. */
+       overflowing the right edge just reads as full-bleed, and the tilt's
+       corners are clipped by the plate against the same black.
+
+       `left` is where the hole itself lands, not where the file starts: the
+       shadow sits at u 0.508 of the asset, so widening the art grows the disk
+       around a fixed point instead of sliding it across the page. */
     .hero-plate :global(img) {
       position: absolute;
       top: 50%;
       left: 68%;
+      /* As individual properties these compose as translate ∘ rotate, so the
+         art spins about its own center and is only then centered on `left` —
+         the anchor above survives the tilt. */
       translate: -50% -50%;
-      width: 92%;
+      rotate: var(--hero-tilt);
+      width: 117%;
       height: auto;
       max-width: none;
     }
@@ -295,12 +314,12 @@ const content = {
 
       .hero-plate :global(img) {
         left: 72%;
-        width: 100%;
+        width: 127%;
       }
 
-      /* Art is 100% wide here, so the crest sits at 50dvh - 14.91vw. */
+      /* Art is 127% wide here, so the crest sits at 50dvh - 18.66vw. */
       .hero-section {
-        padding-top: max(1.5rem, calc(50dvh - 14.91vw - 100px));
+        padding-top: max(1.5rem, calc(50dvh - 18.66vw - 100px));
       }
     }
 
@@ -311,12 +330,12 @@ const content = {
 
       .hero-plate :global(img) {
         left: 78%;
-        width: 118%;
+        width: 150%;
       }
 
-      /* Art is 118% wide here, so the crest sits at 50dvh - 17.61vw. */
+      /* Art is 150% wide here, so the crest sits at 50dvh - 22.04vw. */
       .hero-section {
-        padding-top: max(1.5rem, calc(50dvh - 17.61vw - 100px));
+        padding-top: max(1.5rem, calc(50dvh - 22.04vw - 100px));
       }
     }
 
@@ -342,6 +361,12 @@ const content = {
       lands below the CTAs instead of behind them. Applies to portrait tablets
       too, where the side-by-side layout just crops the disk off the right
       edge. --art-w is the only thing that differs between the two.
+
+      --art-w deliberately did not follow the landscape widths up. Here the art
+      is not sized to fill a column beside the copy, it is sized by how much
+      vertical room is left under the CTAs — already past 100% of the viewport
+      for that reason, and growing it further only pushes the core back up
+      behind the type. The tilt does carry over.
     */
     @media (max-width: 900px) and (orientation: portrait), (max-width: 768px) {
       .hero-section {
