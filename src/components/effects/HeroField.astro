@@ -1,0 +1,75 @@
+---
+// Enhancement only. The plate this sits over is the LCP image and the whole
+// experience without JS, without WebGL, or with reduced motion asked for —
+// nothing below is required for the hero to be complete.
+//
+// `gridSrc` is the build-time luminance grid for the plate
+// (bun scripts/luma-grid.mjs src/assets/<plate>.png).
+interface Props {
+  gridSrc: string
+}
+
+const {gridSrc} = Astro.props
+---
+
+<canvas class="hero-field" data-hero-field data-grid-src={gridSrc} aria-hidden="true"></canvas>
+
+<script>
+  // The chunk is only fetched once the hero is actually approaching — it is
+  // never on the critical path for the image underneath.
+  function initHeroField() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const canvases = document.querySelectorAll<HTMLCanvasElement>(
+      '[data-hero-field]:not([data-mounted])',
+    )
+    if (!canvases.length) return
+
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          observer.unobserve(entry.target)
+          import('./hero-field').then(({mountHeroField}) =>
+            mountHeroField(entry.target as HTMLCanvasElement),
+          )
+        }
+      },
+      {rootMargin: '200px'},
+    )
+
+    canvases.forEach(canvas => observer.observe(canvas))
+  }
+
+  initHeroField()
+  document.addEventListener('astro:page-load', initHeroField)
+</script>
+
+<style>
+  /*
+    Position and size are written by the script, which measures the plate's
+    <img> so the canvas lands on the artwork exactly. Mirroring the image's
+    breakpoint table here instead would be one more thing to keep in sync.
+  */
+  .hero-field {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.2s var(--ease-out-soft);
+  }
+
+  .hero-field.is-ready {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-field {
+      display: none;
+    }
+  }
+</style>

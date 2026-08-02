@@ -21,10 +21,11 @@ const content = {
 
       tags.forEach(tag => {
         tag.addEventListener('click', () => {
-          const selectedTag = tag.textContent
+          // data-tag, not textContent — the chip now contains a logo <img>.
+          const selectedTag = (tag as HTMLElement).dataset.tag
           projects.forEach(project => {
-            const projectTags = project.querySelectorAll('.tag')
-            const hasTag = Array.from(projectTags).some(t => t.textContent === selectedTag)
+            const projectTags = project.querySelectorAll<HTMLElement>('.tag')
+            const hasTag = Array.from(projectTags).some(t => t.dataset.tag === selectedTag)
             project.style.display = hasTag ? 'flex' : 'none'
           })
         })

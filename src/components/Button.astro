@@ -1,73 +1,278 @@
 ---
 export interface Props {
   variant?: 'primary' | 'secondary'
+  size?: 'sm' | 'md' | 'lg'
   href?: string
   disabled?: boolean
+  target?: string
+  rel?: string
+  class?: string
 }
 
-const props = Astro.props
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  disabled = false,
+  target,
+  rel,
+  class: className = '',
+} = Astro.props
 ---
 
 <a
-  href={props.href ?? '#'}
-  class={`button ${props.variant === 'secondary' ? 'button-secondary' : 'button-primary'} ${props.disabled ? 'button-disabled' : ''}`}
+  href={disabled ? undefined : (href ?? '#')}
+  class={`button button-${variant} button-${size} ${disabled ? 'button-disabled' : ''} ${className}`}
   role="button"
-  tabindex={props.disabled ? -1 : 0}
-  aria-disabled={props.disabled ? 'true' : 'false'}
+  target={target}
+  rel={rel}
+  tabindex={disabled ? -1 : 0}
+  aria-disabled={disabled ? 'true' : 'false'}
 >
-  <slot />
+  <!-- Follows the cursor — the only light left on the page. -->
+  <span class="button-glare" aria-hidden="true"></span>
+  <span class="button-sheen" aria-hidden="true"></span>
+  <span class="button-label"><slot /></span>
 </a>
+
+<script>
+  // Feeds each button the pointer position so its glare can track the cursor.
+  // Delegated at the document level: one listener total, and it keeps working
+  // for buttons added by a <ClientRouter /> navigation.
+  function trackPointer(event: PointerEvent) {
+    const target = event.target as Element | null
+    const button = target?.closest?.('.button') as HTMLElement | null
+    if (!button) return
+
+    const rect = button.getBoundingClientRect()
+    button.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`)
+    button.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`)
+  }
+
+  document.addEventListener('pointermove', trackPointer, {passive: true})
+</script>
 
 <style>
   .button {
+    position: relative;
     display: inline-flex;
-    padding: 16px 24px;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    border-radius: 40px;
-    font-family: 'Victor Mono';
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 100%; /* 1.25rem */
-    letter-spacing: -0.1rem;
+    gap: 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-family: 'Victor Mono', monospace;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
     text-decoration: none;
-    transition: all 0.3s ease;
+    white-space: nowrap;
     cursor: pointer;
+    isolation: isolate;
+    overflow: hidden;
+    /* Default the glare to dead centre so it looks right before first hover. */
+    --pointer-x: 50%;
+    --pointer-y: 50%;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    transition:
+      transform 0.4s var(--ease),
+      box-shadow 0.4s var(--ease),
+      background 0.4s var(--ease),
+      border-color 0.4s var(--ease),
+      color 0.4s var(--ease);
   }
 
+  .button-sm {
+    padding: 10px 18px;
+    font-size: 0.875rem;
+    gap: 8px;
+  }
+
+  .button-md {
+    padding: 15px 26px;
+    font-size: 1rem;
+  }
+
+  .button-lg {
+    padding: 18px 32px;
+    font-size: 1.125rem;
+  }
+
+  .button-label {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Cursor-tracked pool of light. */
+  .button-glare {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120px circle at var(--pointer-x) var(--pointer-y),
+      var(--glare-color, rgba(255, 255, 255, 0.25)),
+      transparent 65%
+    );
+    transition: opacity 0.4s var(--ease);
+  }
+
+  /* One-shot diagonal sweep on hover — the "spark". */
+  .button-sheen {
+    position: absolute;
+    inset: -1px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 35%,
+      var(--sheen-color, rgba(255, 255, 255, 0.5)) 50%,
+      transparent 65%
+    );
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  .button:hover .button-glare,
+  .button:focus-visible .button-glare {
+    opacity: 1;
+  }
+
+  .button:hover .button-sheen,
+  .button:focus-visible .button-sheen {
+    animation: sheen 0.9s var(--ease) forwards;
+  }
+
+  @keyframes sheen {
+    0% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+  }
+
+  /*
+    Primary — the secondary's glass, inverted. Same border weight, same
+    contained shadow: it earns emphasis from contrast, not from bloom.
+  */
   .button-primary {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: var(--button-bg-gradient);
-    box-shadow: var(--button-glow);
-    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(180deg, #fafafb 0%, #e8e8ec 100%);
+    color: var(--black);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.9) inset,
+      0 2px 10px -4px rgba(0, 0, 0, 0.7);
+    /* The base sits a shade under pure white so the glare still has somewhere
+       to brighten to — otherwise it would be invisible on a white surface. */
+    --glare-color: rgba(255, 255, 255, 0.9);
+  }
+
+  /*
+    Same left-to-right sweep as the dark button, inverted: a white band would
+    be invisible here, so the glint is a soft shadow led and trailed by white —
+    light travelling over a bright surface rather than across a dark one.
+  */
+  .button-primary .button-sheen {
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.9) 42%,
+      rgba(0, 0, 0, 0.14) 50%,
+      rgba(255, 255, 255, 0.9) 58%,
+      transparent 70%
+    );
   }
 
   .button-primary:hover {
-    background: var(--white);
-    box-shadow: var(--button-glow-strong);
-    color: var(--black);
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #ffffff 0%, #eeeef2 100%);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.9) inset,
+      0 14px 34px -18px rgba(255, 255, 255, 0.5),
+      0 4px 12px -4px rgba(0, 0, 0, 0.7);
   }
 
+  /* Secondary — glass. Reads as a surface the light passes over. */
   .button-secondary {
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    background: var(--button-bg-secondary);
-    box-shadow: var(--button-glow);
-    color: var(--text-primary);
+    border-color: var(--border-soft);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    backdrop-filter: blur(8px);
+    --glare-color: rgba(255, 255, 255, 0.16);
+    --sheen-color: rgba(255, 255, 255, 0.16);
   }
 
   .button-secondary:hover {
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: var(--button-bg-gradient);
-    box-shadow: var(--button-glow);
+    transform: translateY(-2px);
+    border-color: var(--border-medium);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+      0 14px 34px -18px rgba(255, 255, 255, 0.35);
+  }
+
+  .button:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  .button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 3px;
   }
 
   .button-disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.5;
     pointer-events: none;
+  }
+
+  /*
+    Slotted icons keep the parent's style scope, so they need :global() to be
+    reachable from here.
+  */
+  .button :global(svg) {
+    position: relative;
+    z-index: 2;
+    width: 1em;
+    height: 1em;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .button:hover :global(svg:last-child) {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button,
+    .button :global(svg) {
+      transition: none;
+    }
+
+    .button:hover,
+    .button:active,
+    .button:hover :global(svg:last-child) {
+      transform: none;
+    }
+
+    .button-sheen {
+      display: none;
+    }
+
+    .button:hover .button-sheen,
+    .button:focus-visible .button-sheen {
+      animation: none;
+    }
   }
 </style>

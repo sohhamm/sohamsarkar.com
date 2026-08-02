@@ -17,7 +17,13 @@ const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
 <section class="projects-section">
   <div class="projects-header">
     <h2>{isHomePage ? 'Digital Backyard' : 'Projects'}</h2>
-    {isHomePage && <Button href="/projects">View all projects →</Button>}
+    {
+      isHomePage && (
+        <Button href="/projects" variant="secondary" size="sm">
+          View all projects →
+        </Button>
+      )
+    }
   </div>
 
   <div class="projects-container">

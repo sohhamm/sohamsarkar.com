@@ -1,218 +1,85 @@
 ---
-import type {ImageMetadata} from 'astro'
 import ProductCard from './ProductCard.astro'
-import superdivideImage from '../../assets/products/superdivide.webp'
-import rituaImage from '../../assets/products/ritua.webp'
-
-export interface Product {
-  id: number
-  title: string
-  description: string
-  image: ImageMetadata
-  link: string
-  status: string
-  category: string
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    title: 'SuperDivide',
-    description:
-      'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
-    image: superdivideImage,
-    link: 'https://www.superdivide.com?ref=sohamsarkar.com',
-    status: 'Beta',
-    category: 'Personal Finance',
-  },
-  {
-    id: 2,
-    title: 'Ritua',
-    description: 'The best free habit tracker out there.',
-    image: rituaImage,
-    link: 'https://www.getritua.com?ref=sohamsarkar.com',
-    status: 'Coming Soon',
-    category: 'Productivity',
-  },
-]
+import SpacetimeGrid from '../effects/SpacetimeGrid.astro'
+import {products} from '../../data/products'
 ---
 
-<section class="products-section" data-products-section>
-  <div class="products-header">
-    <div class="header-content">
-      <h2 class="main-title">Products</h2>
-      <p class="subtitle" data-products-title>Built to make life easier.</p>
-    </div>
+<section class="products-section" id="products">
+  {/* Behind everything — reads the rows below to find its masses. */}
+  <SpacetimeGrid />
+
+  <div class="section-header reveal">
+    <span class="section-label">Building</span>
+    <h2 class="section-title">Products</h2>
+    <p class="section-lede">
+      Built, shipped, and still maintained. Each one started as a problem I hit often enough to go
+      fix myself.
+    </p>
   </div>
 
-  <div class="products-grid" data-products-grid>
-    {
-      products.map(product => (
-        <div class="grid-card">
-          <ProductCard product={product} variant="compact" />
-        </div>
-      ))
-    }
+  <div class="products-list">
+    {products.map((product, index) => <ProductCard product={product} index={index} />)}
   </div>
 </section>
 
 <style>
   .products-section {
-    padding: 80px 0;
-    margin-bottom: 60px;
+    /* Positioning context for the lattice, which is absolutely placed. */
     position: relative;
+    padding: 24px 0 40px;
+    /* Offset the fixed nav when linked to via /#products. */
+    scroll-margin-top: 120px;
   }
 
-  .products-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  /* Both above the lattice. */
+  .section-header,
+  .products-list {
+    position: relative;
+    z-index: 1;
   }
 
-  .products-header {
-    margin-bottom: 48px;
-    text-align: left;
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 640px;
+    margin-bottom: 44px;
   }
 
-  .main-title {
-    color: #fff;
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.05em;
-    margin-bottom: 12px;
-  }
-
-  .subtitle {
-    color: #fff;
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  /* Matches the Digital Backyard heading. */
+  .section-header .section-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-style: italic;
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.08em;
-    margin: 0;
   }
 
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
+  .section-lede {
+    color: var(--text-dim);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 4px 0 0 0;
   }
 
-  .grid-card {
+  /* No gap: each row carries its own vertical padding and hairline rule, so
+     the rules stay evenly spaced between rows rather than floating. */
+  .products-list {
     display: flex;
-  }
-
-  @media (max-width: 1024px) {
-    .products-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
+    flex-direction: column;
   }
 
   @media (max-width: 768px) {
     .products-section {
-      padding: 60px 0;
-      margin-bottom: 40px;
+      scroll-margin-top: 84px;
     }
 
-    .products-header {
+    .section-header {
       margin-bottom: 32px;
+    }
+
+    .section-lede {
+      font-size: 1rem;
     }
   }
 </style>
-
-<script>
-  import {animate} from 'motion'
-
-  class ProductsSection {
-    private section: HTMLElement | null = null
-    private observer: IntersectionObserver | null = null
-
-    constructor() {
-      this.init()
-    }
-
-    private init() {
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.setup())
-      } else {
-        this.setup()
-      }
-    }
-
-    private setup() {
-      this.section = document.querySelector('[data-products-section]')
-      if (!this.section) return
-
-      this.setupIntersectionObserver()
-    }
-
-    private setupIntersectionObserver() {
-      if (!this.section) return
-
-      this.observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              this.animateElements()
-              this.observer?.unobserve(entry.target)
-            }
-          })
-        },
-        {
-          threshold: 0.1,
-          rootMargin: '0px 0px -100px 0px',
-        },
-      )
-
-      this.observer.observe(this.section)
-    }
-
-    private animateElements() {
-      const title = this.section?.querySelector('[data-products-title]') as HTMLElement
-      const grid = this.section?.querySelector('[data-products-grid]') as HTMLElement
-
-      const elements = [title, grid].filter(Boolean)
-
-      elements.forEach((el, index) => {
-        if (el) {
-          el.style.opacity = '0'
-          el.style.transform = 'translateY(30px)'
-
-          animate(
-            el,
-            {
-              opacity: 1,
-              transform: 'translateY(0px)',
-            },
-            {
-              duration: 0.8,
-              delay: index * 0.2,
-              ease: [0.22, 1, 0.36, 1],
-            },
-          )
-        }
-      })
-    }
-
-    destroy() {
-      this.observer?.disconnect()
-    }
-  }
-
-  let productsSectionInstance: ProductsSection | null = null
-
-  function initProductsSection() {
-    productsSectionInstance?.destroy()
-    productsSectionInstance = new ProductsSection()
-  }
-
-  initProductsSection()
-  document.addEventListener('astro:page-load', initProductsSection)
-</script>

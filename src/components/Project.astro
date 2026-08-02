@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets'
 import type {ImageMetadata} from 'astro'
+import {getTechIcon} from '../data/tech'
 
 export interface Props {
   title: string
@@ -29,7 +30,17 @@ const {title, description, link, image, tags, sourceCode} = Astro.props
     <h3>{title}</h3>
     <p>{description}</p>
     <div class="project-tags">
-      {tags.map(tag => <span class="tag">{tag}</span>)}
+      {
+        tags.map(tag => {
+          const icon = getTechIcon(tag)
+          return (
+            <span class="tag" data-tag={tag}>
+              {icon && <span class="tag-logo" aria-hidden="true" set:html={icon} />}
+              {tag}
+            </span>
+          )
+        })
+      }
     </div>
     <div class="project-links">
       <a href={link} target="_blank" rel="noopener noreferrer">View Project →</a>
@@ -111,11 +122,41 @@ const {title, description, link, image, tags, sourceCode} = Astro.props
   }
 
   .tag {
-    padding: 4px 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
     color: #fff;
     font-size: 0.8rem;
+    line-height: 1;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .tag:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Real vectors on transparent backgrounds — no plate needed behind them. */
+  .tag-logo {
+    display: inline-flex;
+  }
+
+  .tag-logo :global(svg) {
+    width: 14px;
+    height: 14px;
+    opacity: 0.75;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tag {
+      transition: none;
+    }
   }
 
   .project-links {

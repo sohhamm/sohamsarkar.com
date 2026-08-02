@@ -3,10 +3,16 @@ import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
 import ProductsSection from '../components/home/ProductsSection.astro'
-import RecommendationsSection from '../components/home/RecommendationsSection.astro'
+import {Picture} from 'astro:assets'
 import {Icon} from 'astro-icon/components'
+import {products, productUrl} from '../data/products'
+import heroPlate from '../assets/hero-blackhole.png'
+import HeroField from '../components/effects/HeroField.astro'
+// Luminance grid for the plate above — regenerate with
+// `bun scripts/luma-grid.mjs src/assets/hero-blackhole.png` if the art changes.
+import heroGrid from '../assets/hero-blackhole.json?url'
 
-const structuredData = {
+const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Soham Sarkar',
@@ -37,6 +43,27 @@ const structuredData = {
   ],
 }
 
+// Products are the focus of this page, so they get their own JSON-LD entry.
+const productList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Products by Soham Sarkar',
+  itemListElement: products.map((product, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: product.title,
+      description: product.description,
+      applicationCategory: product.category,
+      url: productUrl(product.link),
+      author: {'@type': 'Person', name: 'Soham Sarkar'},
+    },
+  })),
+}
+
+const structuredData = [person, productList]
+
 const content = {
   title: 'Soham Sarkar - Builder | Tech | Product | Software Engineer',
   description:
@@ -48,29 +75,88 @@ const content = {
 
 <Layout content={content}>
   <section class="hero-section">
+    {
+      /* Breaks out of the 1200px container to sit full-bleed, and reaches up
+        behind the fixed nav — it's the page's light source now that the
+        spotlight beams are gone. */
+    }
+    <div class="hero-plate" aria-hidden="true">
+      <Picture
+        src={heroPlate}
+        formats={['avif', 'webp']}
+        {/* Without this the <img> fallback stays PNG — multi-megabyte variants
+            shipped for a browser that supports neither AVIF nor WebP. */}
+        fallbackFormat="webp"
+        {/* Capped at 2560. The 3456w variant was 128 KB and is what a retina
+            laptop picked for a 3024px slot — 80 KB more than the 2560w for a
+            1.18x upscale of a soft, near-black glow that has no detail to
+            lose. This is the LCP element, so those bytes are the LCP. */}
+        widths={[960, 1280, 1920, 2560]}
+        {/* Pins the <img src> fallback to the top of that ladder. Left off, it
+            is the full 3763px source — a 119 KB variant no browser with
+            srcset support will ever ask for, generated and deployed anyway. */}
+        width={2560}
+        sizes="100vw"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      {
+        /* After the image in the DOM, so it composites over the plate — and
+          still under .hero-plate::after, which keeps the copy column dark. */
+      }
+      <HeroField gridSrc={heroGrid} />
+    </div>
+
     <div class="hero-text">
       <span class="hero-name">Soham Sarkar</span>
       <h1>
-        Software engineer. I <span class="italic-text">build things</span>.
+        <span class="line">Software engineer.</span>
+        <span class="line">I <span class="italic-text">build things</span>.</span>
       </h1>
       <p>I care about well-crafted products and solving problems that matter.</p>
-      <Button href="https://cal.com/soham-sarkar-work"
-        >Let's build something <Icon name="arrow-right" /></Button
-      >
+      <div class="hero-actions">
+        <Button href="mailto:sohamsarkar.work@gmail.com?subject=Hey%20Soham"
+          >Let's build something <Icon name="arrow-right" /></Button
+        >
+        <Button
+          href="https://cal.com/soham-sarkar-work"
+          variant="secondary"
+          target="_blank"
+          rel="noopener noreferrer">Book a call</Button
+        >
+      </div>
     </div>
   </section>
 
   <ProductsSection />
   <ProjectsSection isHomePage />
-  <RecommendationsSection />
 
   <style>
     .hero-section {
+      position: relative;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 65dvh;
+      align-items: flex-start;
+      justify-content: flex-start;
+      /* Fills the viewport exactly: the section plus .main-content's top
+         padding equals one screen, so the plate reads end-to-end and Products
+         starts cleanly below the fold. */
+      min-height: calc(100dvh - 100px);
+      /*
+        Sets the eyebrow on the same line as the crest of the disk's arc, so
+        the copy and the art share a top datum instead of floating apart.
+
+        Derived, not eyeballed. The plate is 100dvh tall and the art is sized
+        by width, so with art height = 0.92 * 100vw / 1.81 (the asset's aspect)
+        and the arc cresting at 0.23 of the art's own height (measured off the
+        asset), the crest lands at 50dvh - 13.72vw, less the 100px the plate
+        extends above this section. Each breakpoint below re-derives it from
+        that breakpoint's art width.
+      */
+      padding-top: max(1.5rem, calc(50dvh - 13.72vw - 100px));
+      padding-bottom: 24px;
       color: #ffffff;
     }
 
@@ -78,12 +164,65 @@ const content = {
       background: limegreen;
     }
 
+    .hero-plate {
+      position: absolute;
+      /* Up past .main-content's 100px top padding so the plate starts at the
+         very top of the viewport, and down to the section's own edge. */
+      top: -100px;
+      bottom: 0;
+      left: 50%;
+      translate: -50% 0;
+      width: 100vw;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      /* The glow never meets a hard edge at the fold. */
+      mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+    }
+
+    /* Keeps the copy column in pure black on wide screens without dimming the
+       disk itself — cheaper and more controllable than a scrim over the type. */
+    .hero-plate::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.82) 34%, rgba(0, 0, 0, 0) 64%);
+    }
+
+    /* Sized by width and anchored right of center rather than object-fit:
+       cover, so the disk's scale is set explicitly instead of falling out of
+       the viewport's aspect ratio. The asset is cropped to its content and its
+       edges are pure #000, same as the page, so where it ends is invisible —
+       overflowing the right edge just reads as full-bleed. */
+    .hero-plate :global(img) {
+      position: absolute;
+      top: 50%;
+      left: 68%;
+      translate: -50% -50%;
+      width: 92%;
+      height: auto;
+      max-width: none;
+    }
+
     .hero-text {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 24px;
       width: 100%;
+      /* The copy is a left column, not a full-width block — this is what keeps
+         the headline out of the disk instead of running through it. */
+      max-width: 40rem;
+    }
+
+    /* Insurance for the one place type and glow can still meet. */
+    h1,
+    .hero-text p {
+      text-shadow:
+        0 0 10px rgba(0, 0, 0, 0.85),
+        0 2px 32px rgba(0, 0, 0, 0.9);
     }
 
     .hero-name {
@@ -96,10 +235,19 @@ const content = {
 
     h1 {
       color: #fff;
-      font-size: 4.5rem;
+      /* The vw term is tuned so "Software engineer." (18ch) always fits the
+         copy column at every breakpoint — otherwise a sentence wraps inside
+         its own line and the hierarchy collapses. */
+      font-size: clamp(2rem, 4.6vw, 3.75rem);
       font-weight: 400;
-      line-height: 100%;
-      letter-spacing: -0.36rem;
+      line-height: 1.05;
+      /* em, not rem, so the tracking tracks the fluid size. */
+      letter-spacing: -0.05em;
+    }
+
+    /* One sentence per line — the break is the meaning, not the column width. */
+    h1 .line {
+      display: block;
     }
 
     .italic-text {
@@ -111,19 +259,127 @@ const content = {
       font-size: 1.25rem;
       font-weight: 500;
       color: #71717a;
+      /* Victor Mono is monospace, so 1ch is exactly one character: 42 fits
+         "...products and" (39) and forces "solving problems" onto line two
+         (47) at any font size, keeping the subline clear of the disk. */
+      max-width: 42ch;
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 3.5rem;
-        letter-spacing: -0.28rem;
-      }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
     }
 
     @media (max-width: 480px) {
-      h1 {
-        font-size: 2.5rem;
-        letter-spacing: -0.2rem;
+      /* Full-width stacked CTAs read better than two cramped pills. */
+      .hero-actions {
+        width: 100%;
+        gap: 10px;
+      }
+
+      .hero-actions :global(.button) {
+        flex: 1 1 100%;
+      }
+    }
+
+    /* Between the container's max width and the portrait switch the disk has
+       to keep retreating right, or it walks back into the copy. */
+    @media (max-width: 1200px) {
+      .hero-text {
+        max-width: 34rem;
+      }
+
+      .hero-plate :global(img) {
+        left: 72%;
+        width: 100%;
+      }
+
+      /* Art is 100% wide here, so the crest sits at 50dvh - 14.91vw. */
+      .hero-section {
+        padding-top: max(1.5rem, calc(50dvh - 14.91vw - 100px));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-text {
+        max-width: 30rem;
+      }
+
+      .hero-plate :global(img) {
+        left: 78%;
+        width: 118%;
+      }
+
+      /* Art is 118% wide here, so the crest sits at 50dvh - 17.61vw. */
+      .hero-section {
+        padding-top: max(1.5rem, calc(50dvh - 17.61vw - 100px));
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* .main-content's top padding drops to 64px here. */
+      .hero-section {
+        min-height: calc(100dvh - 64px);
+      }
+
+      .hero-plate {
+        top: -64px;
+      }
+
+      .hero-text {
+        max-width: 100%;
+      }
+    }
+
+    /*
+      Portrait stacking. There is no left column to hide the disk behind, so
+      the copy takes the top of the screen and the art is anchored to the
+      bottom of the plate — sized small enough that its bright core always
+      lands below the CTAs instead of behind them. Applies to portrait tablets
+      too, where the side-by-side layout just crops the disk off the right
+      edge. --art-w is the only thing that differs between the two.
+    */
+    @media (max-width: 900px) and (orientation: portrait), (max-width: 768px) {
+      .hero-section {
+        --art-w: 150%;
+        justify-content: flex-start;
+        /* Overrides the crest-alignment padding — nothing to align to here. */
+        padding-top: clamp(1.5rem, 7dvh, 5rem);
+      }
+
+      /* The art no longer runs to the bottom edge, so the fade only has to
+         cover the last sliver rather than a fifth of the plate. */
+      .hero-plate {
+        mask-image: linear-gradient(to bottom, #000 92%, transparent 100%);
+      }
+
+      .hero-plate :global(img) {
+        top: auto;
+        bottom: 8%;
+        left: 50%;
+        translate: -50% 0;
+        width: var(--art-w);
+      }
+
+      /* Opaque through the copy, clear before the core — the fade ends above
+         where the art's bright half begins, so nothing bright is dimmed. */
+      .hero-plate::after {
+        background: linear-gradient(
+          to bottom,
+          #000 0%,
+          #000 45%,
+          rgba(0, 0, 0, 0.6) 54%,
+          rgba(0, 0, 0, 0) 64%
+        );
+      }
+    }
+
+    @media (max-width: 900px) and (orientation: portrait) and (min-width: 769px) {
+      .hero-section {
+        --art-w: 165%;
       }
     }
   </style>

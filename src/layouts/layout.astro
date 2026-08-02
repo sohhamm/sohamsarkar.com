@@ -4,6 +4,7 @@ import Analytics from '@vercel/analytics/astro'
 import MainHead from '../components/MainHead.astro'
 import Nav from '../components/Nav.astro'
 import Footer from '../components/Footer.astro'
+import FooterHorizon from '../components/effects/FooterHorizon.astro'
 
 interface Props {
   content: {
@@ -30,182 +31,66 @@ const {title, description, ...rest} = content
   <body>
     <Analytics />
 
-    <!-- Spotlight Effects -->
-    <div class="spotlight-container">
-      <!-- Left spotlight group -->
-      <div class="spotlight-group spotlight-left">
-        <div class="spotlight-beam spotlight-beam-1"></div>
-        <div class="spotlight-beam spotlight-beam-2"></div>
-        <div class="spotlight-beam spotlight-beam-3"></div>
-      </div>
-
-      <!-- Right spotlight group -->
-      <div class="spotlight-group spotlight-right">
-        <div class="spotlight-beam spotlight-beam-1"></div>
-        <div class="spotlight-beam spotlight-beam-2"></div>
-        <div class="spotlight-beam spotlight-beam-3"></div>
-      </div>
-    </div>
-
     <Nav transition:persist />
     <main class="main-content">
       <div class="container">
         <slot />
         <Footer transition:persist />
       </div>
-      <div class="footer-image"></div>
+      {
+        /* Persisted alongside the footer, so the wordmark keeps its state
+          through a view transition instead of re-mounting on every page. */
+      }
+      <FooterHorizon transition:persist />
     </main>
 
+    <script>
+      // Reveals `.reveal` elements on scroll by adding `.is-revealed`.
+      // Deliberately class-only — see the note in styles/global.css.
+      const REVEAL_FAILSAFE_MS = 2500
+
+      function revealAll(els: Iterable<Element>) {
+        for (const el of els) el.classList.add('is-revealed')
+      }
+
+      function initReveal() {
+        const els = document.querySelectorAll('.reveal:not(.is-revealed)')
+        if (els.length === 0) return
+
+        if (!('IntersectionObserver' in window)) {
+          revealAll(els)
+          return
+        }
+
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue
+              entry.target.classList.add('is-revealed')
+              obs.unobserve(entry.target)
+            }
+          },
+          {threshold: 0, rootMargin: '0px 0px -80px 0px'},
+        )
+
+        els.forEach(el => observer.observe(el))
+
+        // Nothing should ever stay hidden because an observer didn't fire.
+        window.setTimeout(() => {
+          revealAll(document.querySelectorAll('.reveal:not(.is-revealed)'))
+          observer.disconnect()
+        }, REVEAL_FAILSAFE_MS)
+      }
+
+      initReveal()
+      document.addEventListener('astro:page-load', initReveal)
+      // Never hand a half-faded snapshot to a view transition.
+      document.addEventListener('astro:before-swap', () =>
+        revealAll(document.querySelectorAll('.reveal:not(.is-revealed)')),
+      )
+    </script>
+
     <style>
-      .spotlight-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-      }
-
-      .spotlight-group {
-        position: absolute;
-        width: 100vw;
-        height: 100vh;
-        z-index: 40;
-        pointer-events: none;
-      }
-
-      .spotlight-left {
-        top: 0;
-        left: 0;
-        animation: spotlight-move-left 7s ease-in-out infinite alternate;
-      }
-
-      .spotlight-right {
-        top: 0;
-        right: 0;
-        animation: spotlight-move-right 7s ease-in-out infinite alternate;
-      }
-
-      .spotlight-beam {
-        position: absolute;
-        top: 0;
-      }
-
-      /* Left spotlight beams */
-      .spotlight-left .spotlight-beam-1 {
-        left: 0;
-        width: var(--spotlight-beam-primary-w);
-        height: var(--spotlight-beam-h);
-        transform: translateY(var(--spotlight-beam-y-offset))
-          rotate(calc(-1 * var(--spotlight-rotation)));
-        background: radial-gradient(
-          68.54% 68.72% at 55.02% 31.46%,
-          hsla(0, 0%, 100%, 0.08) 0%,
-          hsla(0, 0%, 100%, 0.04) 50%,
-          hsla(0, 0%, 100%, 0) 80%
-        );
-      }
-
-      .spotlight-left .spotlight-beam-2 {
-        left: 0;
-        width: var(--spotlight-beam-secondary-w);
-        height: var(--spotlight-beam-h);
-        transform: rotate(calc(-1 * var(--spotlight-rotation))) translate(5%, -50%);
-        transform-origin: top left;
-        background: radial-gradient(
-          50% 50% at 50% 50%,
-          hsla(0, 0%, 100%, 0.06) 0%,
-          hsla(0, 0%, 100%, 0.02) 80%,
-          transparent 100%
-        );
-      }
-
-      .spotlight-left .spotlight-beam-3 {
-        left: 0;
-        width: var(--spotlight-beam-secondary-w);
-        height: var(--spotlight-beam-h);
-        transform: rotate(calc(-1 * var(--spotlight-rotation))) translate(-180%, -70%);
-        transform-origin: top left;
-        background: radial-gradient(
-          50% 50% at 50% 50%,
-          hsla(0, 0%, 100%, 0.04) 0%,
-          hsla(0, 0%, 100%, 0.015) 80%,
-          transparent 100%
-        );
-      }
-
-      /* Right spotlight beams */
-      .spotlight-right .spotlight-beam-1 {
-        right: 0;
-        width: var(--spotlight-beam-primary-w);
-        height: var(--spotlight-beam-h);
-        transform: translateY(var(--spotlight-beam-y-offset)) rotate(var(--spotlight-rotation));
-        background: radial-gradient(
-          68.54% 68.72% at 55.02% 31.46%,
-          hsla(0, 0%, 100%, 0.08) 0%,
-          hsla(0, 0%, 100%, 0.04) 50%,
-          hsla(0, 0%, 100%, 0) 80%
-        );
-      }
-
-      .spotlight-right .spotlight-beam-2 {
-        right: 0;
-        width: var(--spotlight-beam-secondary-w);
-        height: var(--spotlight-beam-h);
-        transform: rotate(var(--spotlight-rotation)) translate(-5%, -50%);
-        transform-origin: top right;
-        background: radial-gradient(
-          50% 50% at 50% 50%,
-          hsla(0, 0%, 100%, 0.06) 0%,
-          hsla(0, 0%, 100%, 0.02) 80%,
-          transparent 100%
-        );
-      }
-
-      .spotlight-right .spotlight-beam-3 {
-        right: 0;
-        width: var(--spotlight-beam-secondary-w);
-        height: var(--spotlight-beam-h);
-        transform: rotate(var(--spotlight-rotation)) translate(180%, -70%);
-        transform-origin: top right;
-        background: radial-gradient(
-          50% 50% at 50% 50%,
-          hsla(0, 0%, 100%, 0.04) 0%,
-          hsla(0, 0%, 100%, 0.015) 80%,
-          transparent 100%
-        );
-      }
-
-      @keyframes spotlight-move-left {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        50% {
-          transform: translateX(var(--spotlight-sway));
-        }
-      }
-
-      @keyframes spotlight-move-right {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        50% {
-          transform: translateX(calc(-1 * var(--spotlight-sway)));
-        }
-      }
-
-      /* Reduce motion for accessibility */
-      @media (prefers-reduced-motion: reduce) {
-        .spotlight-left,
-        .spotlight-right {
-          animation: none;
-        }
-      }
-
       .main-content {
         width: 100%;
         padding-top: 100px;
@@ -222,34 +107,9 @@ const {title, description, ...rest} = content
         z-index: 2;
       }
 
-      .footer-image {
-        height: 200px;
-        background-image: url('../assets/footer-bottom.png');
-        background-size: contain;
-        background-position: bottom;
-        background-repeat: no-repeat;
-        position: relative;
-        z-index: 2;
-      }
-
       @media (max-width: 768px) {
         .main-content {
           padding-top: 64px;
-        }
-
-        /* Scale down spotlights on mobile */
-        .spotlight-left .spotlight-beam-1,
-        .spotlight-right .spotlight-beam-1 {
-          width: var(--spotlight-mobile-primary-w);
-          height: var(--spotlight-mobile-h);
-        }
-
-        .spotlight-left .spotlight-beam-2,
-        .spotlight-left .spotlight-beam-3,
-        .spotlight-right .spotlight-beam-2,
-        .spotlight-right .spotlight-beam-3 {
-          width: var(--spotlight-mobile-secondary-w);
-          height: var(--spotlight-mobile-h);
         }
       }
     </style>

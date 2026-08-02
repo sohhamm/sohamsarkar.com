@@ -176,7 +176,9 @@
 <style>
   /* CSS Custom Properties */
   :root {
-    --footer-bg-color: #000;
+    /* Transparent, not #000 — the page behind is already black, so it reads
+       identically without painting an opaque block over anything below. */
+    --footer-bg-color: transparent;
     --footer-text-color: #fff;
     --footer-text-secondary: #7f7f7f;
     --footer-hover-bg: rgba(255, 255, 255, 0.1);

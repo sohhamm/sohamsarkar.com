@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/layout.astro'
+import RecommendCard from '../components/home/RecommendCard.astro'
+import {recommendations} from '../data/recommendations'
+
+const content = {
+  title: 'Referrals | Soham Sarkar',
+  description:
+    'Finance apps I actually use — Zerodha, smallcase, INDmoney, CoinSwitch, Wint Wealth and CRED — with referral links that hand you a signup bonus.',
+}
+---
+
+<Layout content={content}>
+  <main class="referrals-page">
+    <header class="page-header">
+      <span class="page-label">Referrals</span>
+      <h1 class="page-title">Money apps I actually use</h1>
+      <p class="page-description">
+        My own investing and payments stack. Every link here is a referral link — signing up through
+        one usually gets you a bonus, and gets me one too.
+      </p>
+    </header>
+
+    <div class="referrals-grid">
+      {recommendations.map((rec, index) => <RecommendCard recommendation={rec} index={index} />)}
+    </div>
+
+    <footer class="page-footer">
+      <p class="disclaimer">
+        These are referral and affiliate links. I only list things I use myself.
+      </p>
+      <p class="logo-credit">
+        Logos powered by <a href="https://logo.dev" target="_blank" rel="noopener noreferrer"
+          >Logo.dev</a
+        >
+      </p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .referrals-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    color: #fff;
+  }
+
+  .page-header {
+    padding: 40px 0 56px;
+    max-width: 660px;
+  }
+
+  .page-label {
+    display: inline-block;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+    margin: 0 0 20px 0;
+  }
+
+  .page-description {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .referrals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .page-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .disclaimer {
+    color: #52525b;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin: 0 0 8px 0;
+  }
+
+  .logo-credit {
+    color: #3f3f46;
+    font-size: 0.75rem;
+    margin: 0;
+  }
+
+  .logo-credit a {
+    color: #52525b;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .logo-credit a:hover {
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1024px) {
+    .referrals-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 24px 0 40px;
+    }
+
+    .referrals-grid {
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .referrals-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-credit a {
+      transition: none;
+    }
+  }
+</style>

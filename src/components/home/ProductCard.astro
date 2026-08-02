@@ -1,684 +1,480 @@
 ---
 import {Image} from 'astro:assets'
-import type {Product} from './ProductsSection.astro'
+import {productDomain, productUrl, type Product} from '../../data/products'
+import {getTechIcon} from '../../data/tech'
 
 export interface Props {
   product: Product
-  variant?: 'default' | 'compact'
+  index?: number
 }
 
-const {product, variant = 'default'} = Astro.props
+const {product, index = 0} = Astro.props
+
+const href = productUrl(product.link)
+const domain = productDomain(product.link)
+const statusKey = product.status.toLowerCase().replace(/\s+/g, '-')
+const marker = String(index + 1).padStart(2, '0')
+const stack = product.stack
+  .map(tech => ({tech, icon: getTechIcon(tech)}))
+  .filter((item): item is {tech: string; icon: string} => item.icon !== null)
+
+// The art keeps its own proportions now that there is no panel to fill, so
+// nothing is ever cropped and the canvas overlay maps 1:1 to the image.
+const aspect = product.image.width / product.image.height
+
+// Never ask for a variant wider than the source: Ritua's export is 1024px, and
+// a 1200px variant of it is an upscale — more bytes, no more detail. 1200 is
+// the ceiling worth generating (620px column at 2x).
+const widest = Math.min(1200, product.image.width)
+const widths = [560, 840, 1200].filter(width => width < widest).concat(widest)
 ---
 
-<div class={`product-card variant-${variant}`} data-product-card={product.id}>
-  <div class="product-content">
-    <div class="product-text">
-      <div class="product-header">
-        <a
-          href={product.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="product-title-link"
-          data-title-link
-        >
-          <h3 class="product-title" data-title>{product.title}</h3>
-        </a>
-        <div class="product-meta" data-meta>
-          <span
-            class={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}
-            data-status
-          >
-            {product.status}
-          </span>
-          <span class="category-badge" data-category>{product.category}</span>
-        </div>
-      </div>
-
-      <p class="product-description" data-description>{product.description}</p>
-    </div>
-
-    <div class="product-visual">
-      <div class="product-image-container" data-image-container>
-        <Image
-          src={product.image}
-          alt={`${product.title} interface`}
-          class="product-image"
-          loading="lazy"
-          decoding="async"
-          widths={[400, 600, 900]}
-          sizes="(max-width: 768px) 100vw, 600px"
-          data-image
-        />
-        <div class="image-overlay" data-overlay></div>
-      </div>
-    </div>
+<article class="product reveal" data-pointer-card style={`--reveal-delay: ${index * 90}ms`}>
+  <div class="product-visual" style={`--art-aspect: ${aspect}`}>
+    <Image
+      src={product.image}
+      alt={`${product.title} — ${product.tagline}`}
+      class="product-art"
+      {/* Every row is below the fold, the first one included — it starts about
+          a full viewport down. Loading it eagerly only put it in the same
+          bandwidth queue as the hero plate, which is the LCP. */}
+      loading="lazy"
+      decoding="async"
+      widths={widths}
+      {/* Without this the <img src> fallback is the untouched source —
+          SuperDivide's is 3684px and 219 KB, generated and deployed for a
+          browser that will never ask for it. */}
+      width={widest}
+      sizes="(max-width: 900px) 100vw, 620px"
+    />
   </div>
 
-  <div class="card-border" data-border></div>
-</div>
+  <div class="product-body">
+    <p class="product-meta">
+      <span class="product-marker">{marker}</span>
+      <span class="product-rule" aria-hidden="true"></span>
+      <span class="product-category">{product.category}</span>
+    </p>
+
+    <h3 class="product-title">{product.title}</h3>
+    <p class="product-tagline">{product.tagline}</p>
+    <p class="product-description">{product.description}</p>
+
+    {/* Was a row of chips — the same words read as a line, with four fewer boxes. */}
+    <p class="product-highlights">
+      {
+        product.highlights.map((item, position) => (
+          <>
+            {position > 0 && <span aria-hidden="true"> · </span>}
+            {item}
+          </>
+        ))
+      }
+    </p>
+
+    <div class="product-footer">
+      <ul class="product-stack" aria-label="Built with">
+        {
+          stack.map(({tech, icon}) => (
+            <li class="stack-chip" title={tech} role="img" aria-label={tech} set:html={icon} />
+          ))
+        }
+      </ul>
+
+      <span class={`product-status status-${statusKey}`}>
+        <span class="status-dot"></span>
+        {product.status}
+      </span>
+    </div>
+
+    {/* The only link in the row. Nothing else here claims to be pressable. */}
+    <a class="product-link" href={href} target="_blank" rel="noopener noreferrer">
+      <span class="product-link-label">{domain}</span>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="7" y1="17" x2="17" y2="7"></line>
+        <polyline points="7 7 17 7 17 17"></polyline>
+      </svg>
+      <span class="sr-only">Open {product.title} in a new tab</span>
+    </a>
+  </div>
+</article>
+
+<script>
+  // Feeds each row the pointer position so its surface light can track the
+  // cursor — the same gesture as the buttons and the hero, so the whole page
+  // reacts to one light source. Delegated at the document level: one listener
+  // however many rows there are, and it survives a <ClientRouter /> swap.
+  //
+  // Nothing here touches the DOM inside the event. This listener used to read
+  // a rect and then write two custom properties synchronously on every
+  // pointermove, which dirtied layout for the rest of the frame — and the
+  // WebGL effects each read a rect of their own on the same event, so every
+  // mouse movement forced a fresh layout. Coalescing into one rAF means the
+  // read and the write happen together, once per frame, after everyone else
+  // has had their turn.
+  //
+  // Only on a device with a real cursor: on touch there is no hover state for
+  // this to serve, and pointermove fires for every drag of a scroll.
+  if (window.matchMedia('(pointer: fine)').matches) {
+    let hovered: HTMLElement | null = null
+    let clientX = 0
+    let clientY = 0
+    let frame = 0
+
+    const paint = () => {
+      frame = 0
+      if (!hovered) return
+      const rect = hovered.getBoundingClientRect()
+      hovered.style.setProperty('--pointer-x', `${clientX - rect.left}px`)
+      hovered.style.setProperty('--pointer-y', `${clientY - rect.top}px`)
+    }
+
+    document.addEventListener(
+      'pointermove',
+      (event: PointerEvent) => {
+        const target = event.target as Element | null
+        const card = target?.closest?.('[data-pointer-card]') as HTMLElement | null
+        if (!card) {
+          hovered = null
+          return
+        }
+        hovered = card
+        clientX = event.clientX
+        clientY = event.clientY
+        if (!frame) frame = requestAnimationFrame(paint)
+      },
+      {passive: true},
+    )
+  }
+</script>
 
 <style>
-  .product-card {
+  /*
+    No border, no radius, no filled panel. Each product is a row on the page
+    separated by a hairline, which is also the honest presentation now that
+    the row as a whole is not a link — a raised card would promise a click
+    that only the domain below actually delivers.
+  */
+  .product {
     position: relative;
-    width: 100%;
-    max-width: 1100px;
-    height: 500px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.6);
-    overflow: visible; /* Changed from hidden to prevent cutoff */
-    cursor: pointer;
-    margin: 0 auto;
-    backdrop-filter: blur(20px);
-    will-change: transform;
-    transition: none; /* Let Motion handle all transitions */
-  }
-
-  .card-border {
-    position: absolute;
-    inset: -1px;
-    border-radius: 21px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1),
-      rgba(255, 255, 255, 0.05),
-      rgba(255, 255, 255, 0.1)
-    );
-    opacity: 0;
-    z-index: -1;
-    will-change: opacity;
-  }
-
-  .product-content {
     display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 44px 0;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* Ambient attention, not a click affordance: the light says "you are here",
+     the way the hero's pointer light does. */
+  .product::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 0;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      460px circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      rgba(255, 255, 255, 0.045),
+      transparent 70%
+    );
+    transition: opacity 0.6s var(--ease-out-soft);
+  }
+
+  .product:hover::before,
+  .product:focus-within::before {
+    opacity: 1;
+  }
+
+  .product-visual {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: var(--art-aspect, 16 / 9);
+    /*
+      The art melts into the page instead of ending on a hard rectangle. Two
+      axis gradients intersected rather than one radial: a radial wide enough
+      not to eat the middle of a screenshot leaves the left and right edges
+      fully opaque, which is the sharp vertical cut it was meant to remove.
+
+      Edge-only — 8% a side softens the boundary without costing UI content.
+      On the wrapper, not in the shader, so the plain <img> is feathered
+      identically when WebGL never runs.
+    */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+      linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    mask-image:
+      linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+      linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  /* The art at rest, and the whole picture whenever the lens is not engaged. */
+  .product-art {
+    width: 100%;
     height: 100%;
-    padding: 48px;
-    gap: 32px;
-    align-items: center;
+    object-fit: contain;
   }
 
-  .product-text {
-    flex: 0 0 45%;
-    z-index: 2;
-  }
-
-  .product-header {
-    margin-bottom: 24px;
-  }
-
-  .product-title-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .product-title {
-    color: #fff;
-    font-size: 2.5rem;
-    font-weight: 400;
-    line-height: 100%;
-    letter-spacing: -0.2rem;
-    margin-bottom: 16px;
-    will-change: transform, color;
-    transition: color 0.3s ease;
-  }
-
-  .product-title:hover {
-    color: #e5e5e5;
+  .product-body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .product-meta {
     display: flex;
-    gap: 12px;
     align-items: center;
-    will-change: transform;
+    gap: 14px;
+    margin: 0 0 4px 0;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
-  .status-badge,
-  .category-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    will-change: transform;
-    transition: none; /* Let Motion handle transitions */
+  .product-marker {
+    color: var(--text-muted);
   }
 
-  .status-badge {
-    background: rgba(255, 255, 255, 0.08);
-    color: #e5e5e5;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+  .product-rule {
+    width: 28px;
+    height: 1px;
+    background: var(--border-medium);
   }
 
-  .category-badge {
-    background: rgba(255, 255, 255, 0.05);
-    color: #a1a1aa;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .product-title {
+    color: var(--text-primary);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin: 0;
+  }
+
+  .product-tagline {
+    color: var(--text-secondary);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-style: italic;
+    line-height: 1.25;
+    letter-spacing: -0.04em;
+    margin: 0;
   }
 
   .product-description {
-    color: #7f7f7f;
-    font-size: 1.4rem;
-    font-weight: 400;
-    line-height: 130%;
-    letter-spacing: -0.1rem;
-    will-change: color;
-    transition: none; /* Let Motion handle transitions */
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 52ch;
+    margin: 4px 0 0 0;
   }
 
-  .product-visual {
-    flex: 1;
-    position: relative;
-    height: 100%;
+  .product-highlights {
+    color: var(--text-faint);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    max-width: 52ch;
+    margin: 0;
+  }
+
+  .product-footer {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  /* Logo-only — the mark is the label here, so the name lives in aria-label. */
+  .product-stack {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .stack-chip {
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    /* Add padding to prevent cutoff during hover animation */
-    padding: 8px 0;
   }
 
-  .product-image-container {
+  /* The svgl files carry their own width/height attributes; CSS beats those
+     presentational hints, so one rule sizes every mark. */
+  .stack-chip :global(svg) {
+    width: 22px;
+    height: 22px;
+    /* Held back so the stack reads as a footnote, not a second logo wall.
+       Comes up to full strength with the rest of the card on hover. */
+    opacity: 0.55;
+    transition: opacity 0.3s ease;
+  }
+
+  .product:hover .stack-chip :global(svg),
+  .product:focus-within .stack-chip :global(svg) {
+    opacity: 1;
+  }
+
+  .product-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-color, var(--text-muted));
+    box-shadow: 0 0 8px var(--status-color, transparent);
+  }
+
+  .status-live {
+    --status-color: #4ade80;
+  }
+
+  .status-beta {
+    --status-color: #60a5fa;
+  }
+
+  .status-coming-soon {
+    --status-color: #fbbf24;
+  }
+
+  /*
+    The row's one interactive element, so it has to look like one on its own
+    rather than borrowing the card's hover. Underline is drawn as a scaling
+    rule so it wipes in from the left instead of blinking on.
+  */
+  .product-link {
     position: relative;
-    width: 100%;
-    height: 80%;
-    border-radius: 16px;
-    overflow: hidden;
-    will-change: transform;
-    transition: none; /* Let Motion handle transitions */
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 4px 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    transition: color 0.3s var(--ease-out-soft);
   }
 
-  .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .product-link-label {
+    position: relative;
   }
 
-  .image-overlay {
+  .product-link-label::after {
+    content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-    opacity: 0;
-    will-change: opacity;
-    transition: none; /* Let Motion handle transitions */
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out-soft);
   }
 
-  @media (max-width: 1200px) {
-    .product-card {
-      max-width: 950px;
-      height: 450px;
-    }
-
-    .product-content {
-      padding: 40px;
-      gap: 28px;
-    }
-
-    .product-title {
-      font-size: 2.25rem;
-    }
+  .product-link:hover,
+  .product-link:focus-visible {
+    color: var(--text-primary);
   }
 
-  @media (max-width: 1024px) {
-    .product-card {
-      height: auto;
-      min-height: 400px;
-      max-width: 800px;
+  .product-link:hover .product-link-label::after,
+  .product-link:focus-visible .product-link-label::after {
+    transform: scaleX(1);
+  }
+
+  .product-link svg {
+    transition: transform 0.3s var(--ease-out-soft);
+  }
+
+  .product-link:hover svg,
+  .product-link:focus-visible svg {
+    transform: translate(3px, -3px);
+  }
+
+  .product-link:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 6px;
+    border-radius: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Wide: art and copy side by side, sides alternating down the list. */
+  @media (min-width: 901px) {
+    .product {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 64px;
+      padding: 72px 0;
     }
 
-    .product-content {
-      flex-direction: column;
-      padding: 32px;
-      gap: 32px;
-    }
-
-    .product-text {
-      flex: none;
-    }
-
-    .product-title {
-      font-size: 2rem;
-    }
-
-    .product-description {
-      font-size: 1.125rem;
+    .product:nth-child(even) .product-visual {
+      order: 2;
     }
   }
 
   @media (max-width: 768px) {
-    .product-card {
-      height: auto;
-      min-height: 350px;
-      max-width: 100%;
-      margin: 0 16px;
-    }
-
-    .product-content {
-      padding: 24px;
-      gap: 24px;
-    }
-
-    .product-title {
-      font-size: 1.75rem;
-      letter-spacing: -0.1rem;
+    .product {
+      gap: 22px;
+      padding: 36px 0;
     }
 
     .product-description {
       font-size: 1rem;
     }
-
-    .product-visual {
-      order: -1;
-    }
-
-    .product-image-container {
-      height: 200px;
-    }
-
-    .product-meta {
-      flex-wrap: wrap;
-      gap: 8px;
-    }
   }
 
-  @media (max-width: 480px) {
-    .product-card {
-      min-height: 320px;
-      margin: 0 12px;
+  @media (prefers-reduced-motion: reduce) {
+    .product::before {
+      display: none;
     }
 
-    .product-content {
-      padding: 20px;
-      gap: 20px;
+    .product-art,
+    .product-link,
+    .product-link svg,
+    .product-link-label::after {
+      transition: none;
     }
 
-    .product-title {
-      font-size: 1.5rem;
-      letter-spacing: -0.05rem;
-    }
-
-    .product-description {
-      font-size: 0.9rem;
-      line-height: 140%;
-    }
-
-    .product-image-container {
-      height: 180px;
-    }
-
-    .status-badge,
-    .category-badge {
-      font-size: 0.75rem;
-      padding: 4px 8px;
-    }
-  }
-
-  @media (max-width: 320px) {
-    .product-card {
-      margin: 0 8px;
-      min-height: 300px;
-    }
-
-    .product-content {
-      padding: 16px;
-      gap: 16px;
-    }
-
-    .product-title {
-      font-size: 1.25rem;
-    }
-
-    .product-description {
-      font-size: 0.85rem;
-    }
-
-    .product-image-container {
-      height: 150px;
-    }
-  }
-
-  /* Compact Variant (for Grid Layout) */
-  .variant-compact {
-    max-width: 100%;
-    height: auto;
-    min-height: auto;
-  }
-
-  .variant-compact .product-content {
-    flex-direction: column;
-    padding: 0;
-    gap: 0;
-  }
-
-  .variant-compact .product-visual {
-    order: -1;
-    height: 140px;
-    padding: 0;
-    border-radius: 20px 20px 0 0;
-    overflow: hidden;
-  }
-
-  .variant-compact .product-image-container {
-    height: 100%;
-    border-radius: 0;
-  }
-
-  .variant-compact .product-text {
-    flex: none;
-    padding: 24px;
-    text-align: left;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .variant-compact .product-header {
-    text-align: left;
-    margin-bottom: 16px;
-    width: 100%;
-  }
-
-  .variant-compact .product-title-link {
-    display: block;
-    width: 100%;
-  }
-
-  .variant-compact .product-title {
-    font-size: 1.5rem;
-    letter-spacing: -0.1rem;
-    text-align: left;
-    margin-bottom: 10px;
-    padding: 0;
-  }
-
-  .variant-compact .product-description {
-    font-size: 0.95rem;
-    line-height: 150%;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-  }
-
-  .variant-compact .product-meta {
-    margin-top: 0;
-    margin-bottom: 0;
-    justify-content: flex-start;
-  }
-
-  @media (max-width: 768px) {
-    .variant-compact .product-visual {
-      height: 120px;
-    }
-
-    .variant-compact .product-text {
-      padding: 20px;
-    }
-
-    .variant-compact .product-title {
-      font-size: 1.35rem;
+    .product-link:hover svg,
+    .product-link:focus-visible svg {
+      transform: none;
     }
   }
 </style>
-
-<script>
-  import {animate} from 'motion'
-
-  class ProductCard {
-    private cards: NodeListOf<HTMLElement>
-    private observers: IntersectionObserver[] = []
-    private animatedCards: Set<HTMLElement> = new Set()
-
-    constructor() {
-      this.cards = document.querySelectorAll('[data-product-card]')
-      this.init()
-    }
-
-    private init() {
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.setup())
-      } else {
-        // Small delay to ensure all components are ready
-        setTimeout(() => this.setup(), 100)
-      }
-    }
-
-    private setup() {
-      this.cards = document.querySelectorAll('[data-product-card]')
-
-      if (this.cards.length === 0) {
-        console.warn('No product cards found')
-        return
-      }
-
-      this.cards.forEach(card => {
-        this.initializeCard(card)
-        this.setupCardAnimations(card)
-      })
-    }
-
-    private initializeCard(card: HTMLElement) {
-      // Setup intersection observer for entrance animation
-      const observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !this.animatedCards.has(entry.target as HTMLElement)) {
-              this.animateCardEntrance(entry.target as HTMLElement)
-              this.animatedCards.add(entry.target as HTMLElement)
-              observer.unobserve(entry.target)
-            }
-          })
-        },
-        {
-          threshold: 0.2,
-          rootMargin: '0px 0px -50px 0px',
-        },
-      )
-
-      observer.observe(card)
-      this.observers.push(observer)
-    }
-
-    private animateCardEntrance(card: HTMLElement) {
-      const title = card.querySelector('[data-title]') as HTMLElement
-      const meta = card.querySelector('[data-meta]') as HTMLElement
-      const description = card.querySelector('[data-description]') as HTMLElement
-      const imageContainer = card.querySelector('[data-image-container]') as HTMLElement
-
-      const elements = [title, meta, description, imageContainer].filter(Boolean)
-
-      // Animate each element individually with staggered delay
-      elements.forEach((el, index) => {
-        if (el) {
-          // Set initial state
-          el.style.opacity = '0'
-          el.style.transform = 'translateY(20px)'
-
-          // Animate to final state
-          animate(
-            el,
-            {
-              opacity: 1,
-              transform: 'translateY(0px)',
-            },
-            {
-              duration: 0.6,
-              delay: index * 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            },
-          )
-        }
-      })
-    }
-
-    private setupCardAnimations(card: HTMLElement) {
-      const title = card.querySelector('[data-title]')
-      const titleLink = card.querySelector('[data-title-link]')
-      const meta = card.querySelector('[data-meta]')
-      const description = card.querySelector('[data-description]')
-      const imageContainer = card.querySelector('[data-image-container]')
-      const image = card.querySelector('[data-image]')
-      const overlay = card.querySelector('[data-overlay]')
-      const border = card.querySelector('[data-border]')
-
-      // Hover animations
-      const handleMouseEnter = () => {
-        // Card elevation and border glow
-        animate(
-          card,
-          {
-            transform: 'translateY(-6px)',
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-          },
-          {duration: 0.4, ease: [0.22, 1, 0.36, 1]},
-        )
-
-        // Border glow effect
-        if (border) {
-          animate(border, {opacity: 1}, {duration: 0.4})
-        }
-
-        // Description color change
-        if (description) {
-          animate(description, {color: '#a1a1aa'}, {duration: 0.3})
-        }
-
-        // Image container scale
-        if (imageContainer) {
-          animate(imageContainer, {scale: 1.02}, {duration: 0.4, ease: [0.22, 1, 0.36, 1]})
-        }
-
-        // Image zoom
-        if (image) {
-          animate(image, {scale: 1.05}, {duration: 0.6, ease: [0.22, 1, 0.36, 1]})
-        }
-
-        // Overlay fade in
-        if (overlay) {
-          animate(overlay, {opacity: 1}, {duration: 0.3})
-        }
-
-        // Meta badges animation with staggered timing
-        const badges = card.querySelectorAll('[data-status], [data-category]')
-        badges.forEach((badge, index) => {
-          setTimeout(() => {
-            animate(
-              badge as HTMLElement,
-              {
-                scale: 1.02,
-                transform: 'translateY(-1px) scale(1.02)',
-              },
-              {
-                duration: 0.3,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            )
-          }, index * 50)
-        })
-      }
-
-      const handleMouseLeave = () => {
-        // Reset card position and border
-        animate(
-          card,
-          {
-            transform: 'translateY(0px)',
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-          },
-          {duration: 0.4, ease: [0.22, 1, 0.36, 1]},
-        )
-
-        // Reset border glow
-        if (border) {
-          animate(border, {opacity: 0}, {duration: 0.4})
-        }
-
-        // Reset description color
-        if (description) {
-          animate(description, {color: '#7f7f7f'}, {duration: 0.3})
-        }
-
-        // Reset image container
-        if (imageContainer) {
-          animate(imageContainer, {scale: 1}, {duration: 0.4, ease: [0.22, 1, 0.36, 1]})
-        }
-
-        // Reset image
-        if (image) {
-          animate(image, {scale: 1}, {duration: 0.6, ease: [0.22, 1, 0.36, 1]})
-        }
-
-        // Reset overlay
-        if (overlay) {
-          animate(overlay, {opacity: 0}, {duration: 0.3})
-        }
-
-        // Reset badges with staggered timing
-        const badges = card.querySelectorAll('[data-status], [data-category]')
-        badges.forEach((badge, index) => {
-          setTimeout(() => {
-            animate(
-              badge as HTMLElement,
-              {
-                scale: 1,
-                transform: 'translateY(0px) scale(1)',
-              },
-              {
-                duration: 0.3,
-                ease: [0.22, 1, 0.36, 1],
-              },
-            )
-          }, index * 50)
-        })
-      }
-
-      const handleMouseDown = () => {
-        animate(card, {scale: 0.98}, {duration: 0.1})
-      }
-
-      const handleMouseUp = () => {
-        animate(card, {scale: 1}, {duration: 0.2})
-      }
-
-      // Add event listeners
-      card.addEventListener('mouseenter', handleMouseEnter)
-      card.addEventListener('mouseleave', handleMouseLeave)
-      card.addEventListener('mousedown', handleMouseDown)
-      card.addEventListener('mouseup', handleMouseUp)
-
-      // Handle click navigation
-      card.addEventListener('click', e => {
-        // Don't navigate if clicking on the title link directly
-        if (e.target === titleLink || titleLink?.contains(e.target as Node)) {
-          return
-        }
-
-        // Navigate to product link
-        if (titleLink) {
-          const href = titleLink.getAttribute('href')
-          if (href) {
-            window.open(href, '_blank', 'noopener,noreferrer')
-          }
-        }
-      })
-
-      // Prevent double-click text selection
-      card.addEventListener('selectstart', e => {
-        e.preventDefault()
-      })
-    }
-
-    public destroy() {
-      this.observers.forEach(observer => observer.disconnect())
-      this.observers = []
-      this.animatedCards.clear()
-    }
-  }
-
-  let instance: ProductCard | null = null
-
-  function initProductCards() {
-    instance?.destroy()
-    instance = new ProductCard()
-  }
-
-  initProductCards()
-  document.addEventListener('astro:page-load', initProductCards)
-</script>

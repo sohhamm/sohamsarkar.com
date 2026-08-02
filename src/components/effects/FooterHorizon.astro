@@ -1,0 +1,109 @@
+---
+// The wordmark that closes every page.
+//
+// The <img> is the whole thing: without JS, without WebGL, or with reduced
+// motion asked for, this renders exactly what the static plate always did. The
+// canvas is enhancement, laid over the image and never replacing it in markup.
+import {Picture} from 'astro:assets'
+import wordmark from '../../assets/footer-bottom.png'
+---
+
+<div class="footer-horizon" data-footer-horizon>
+  {
+    /* Was the raw PNG straight out of the asset pipeline — 58.5 KB on every
+       page for a wordmark that is white ink on transparency. AVIF carries the
+       same alpha at a fifth of the bytes. <Picture> still renders one <img>,
+       which is what the script measures and uploads as a texture. */
+  }
+  <Picture
+    src={wordmark}
+    formats={['avif', 'webp']}
+    fallbackFormat="webp"
+    widths={[1440, 2048, 2839]}
+    width={2839}
+    sizes="100vw"
+    alt=""
+    aria-hidden="true"
+    decoding="async"
+    loading="lazy"
+  />
+  <canvas aria-hidden="true"></canvas>
+</div>
+
+<script>
+  // The chunk is only fetched once the foot of the page is approaching — it is
+  // never on the critical path for anything above it.
+  function initFooterHorizon() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const host = document.querySelector<HTMLElement>('[data-footer-horizon]:not([data-mounted])')
+    if (!host) return
+
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          observer.disconnect()
+          import('./footer-horizon').then(({mountFooterHorizon}) =>
+            mountFooterHorizon(entry.target as HTMLElement),
+          )
+        }
+      },
+      {rootMargin: '300px'},
+    )
+
+    observer.observe(host)
+  }
+
+  initFooterHorizon()
+  document.addEventListener('astro:page-load', initFooterHorizon)
+</script>
+
+<style>
+  .footer-horizon {
+    position: relative;
+    height: 200px;
+    z-index: 2;
+  }
+
+  /* `contain` + bottom is what the background-image this replaced resolved to,
+     so the band keeps its exact previous geometry at every width. */
+  .footer-horizon img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    object-position: bottom;
+  }
+
+  /* Placed and sized by the script, measured off the image's fitted box. */
+  .footer-horizon canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* No transition on either side: the canvas's first frame is the plate pixel
+     for pixel, so this swap is invisible and the effect blooms in from there.
+     Crossfading two copies of one artwork would dip its brightness instead. */
+  .footer-horizon.is-ready img {
+    opacity: 0;
+  }
+
+  .footer-horizon.is-ready canvas {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-horizon canvas {
+      display: none;
+    }
+  }
+</style>

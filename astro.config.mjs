@@ -33,8 +33,15 @@ export default defineConfig({
   site: 'https://sohamsarkar.com',
   output: 'static',
   adapter: vercel(),
+  // /recommendations was live and may be linked externally.
+  redirects: {'/recommendations': '/referrals'},
   build: {
-    inlineStylesheets: 'auto',
+    // All of this site's CSS is ~5 KB gzipped, and 'auto' still left the two
+    // page stylesheets as separate <link>s — two render-blocking round trips
+    // that cost ~1s of first paint on a throttled mobile connection. Inlined,
+    // the HTML document is the only thing standing between the network and
+    // first paint.
+    inlineStylesheets: 'always',
   },
   integrations: [
     sitemap({

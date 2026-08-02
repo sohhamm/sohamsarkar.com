@@ -1,9 +1,10 @@
 ---
+// The landing page is the product page, so `products` would only ever scroll
+// the page you're already on. `/referrals` is intentionally unlinked.
 export const LINKS = [
   {name: 'home', to: '/'},
-  {name: 'projects', to: '/projects'},
+  {name: 'work', to: '/work'},
   {name: 'about', to: '/about'},
-  {name: 'picks', to: '/recommendations'},
   // {name: 'payments', to: '/payments'},
   // {name: 'music', to: '/music'},
 ]
@@ -77,7 +78,11 @@ const currentPath = Astro.url.pathname
         const isActive =
           currentPath === link.to || (link.to !== '/' && currentPath.startsWith(link.to))
         return (
-          <li class={`nav-item ${isActive ? 'active text-caption-italic-bold' : 'text-caption'}`}>
+          <li
+            class={`nav-item ${isActive ? 'active text-caption-italic-bold' : 'text-caption'}`}
+            data-nav-item={link.name}
+            data-nav-to={link.to}
+          >
             <a
               href={link.to}
               class={`nav-link${isActive ? ' active' : ''}`}
@@ -142,27 +147,63 @@ const currentPath = Astro.url.pathname
 </nav>
 
 <script>
+  // The nav is transition:persist, so the server-rendered active classes go
+  // stale after a client-side navigation. Recompute them here on every load.
+
+  function setActive(name: string | null) {
+    document.querySelectorAll<HTMLElement>('[data-nav-item]').forEach(item => {
+      const isActive = item.dataset.navItem === name
+      item.classList.toggle('active', isActive)
+      item.classList.toggle('text-caption-italic-bold', isActive)
+      item.classList.toggle('text-caption', !isActive)
+
+      const link = item.querySelector('.nav-link')
+      link?.classList.toggle('active', isActive)
+      if (isActive) link?.setAttribute('aria-current', 'page')
+      else link?.removeAttribute('aria-current')
+    })
+  }
+
+  /** The nav item matching the current pathname, if any. */
+  function itemForPath(): string | null {
+    const path = location.pathname
+    let match: string | null = null
+
+    document.querySelectorAll<HTMLElement>('[data-nav-item]').forEach(item => {
+      const to = item.dataset.navTo ?? ''
+      if (path === to || (to !== '/' && path.startsWith(to))) {
+        match = item.dataset.navItem ?? null
+      }
+    })
+
+    return match
+  }
+
   function initNav() {
     const hamburger = document.getElementById('hamburger')
     const navLinks = document.getElementById('nav-links')
 
-    if (hamburger && navLinks) {
+    // Guard: the persisted nav would otherwise stack a new listener per page.
+    if (hamburger && navLinks && !hamburger.dataset.bound) {
+      hamburger.dataset.bound = 'true'
+
       hamburger.addEventListener('click', function () {
         hamburger.classList.toggle('active')
         navLinks.classList.toggle('active')
       })
 
-      const navLinkElements = navLinks.querySelectorAll('.nav-link')
-      navLinkElements.forEach(link => {
+      navLinks.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function () {
           hamburger.classList.remove('active')
           navLinks.classList.remove('active')
         })
       })
     }
+
+    setActive(itemForPath())
   }
 
-  document.addEventListener('DOMContentLoaded', initNav)
+  initNav()
   document.addEventListener('astro:page-load', initNav)
 </script>
 
@@ -174,7 +215,20 @@ const currentPath = Astro.url.pathname
     width: 100%;
     padding: 24px 0;
     z-index: 1000;
-    backdrop-filter: blur(8px);
+  }
+
+  /*
+    A full-width backdrop-blur here turned into a milky white band whenever a
+    light card scrolled under it. A dark scrim keeps the logo and icons legible
+    over any card colour; the nav pill supplies its own blur.
+  */
+  .navbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+    z-index: -1;
   }
 
   .logo {

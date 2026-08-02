@@ -91,12 +91,15 @@ class FooterAnimationController {
   private coordinateElements: NodeListOf<CoordinateElement>
   private tickers: NumberTicker[] = []
   private observer: IntersectionObserver | null = null
+  private observedTarget: Element | null = null
   private config: AnimationConfig
 
   constructor(config: Partial<AnimationConfig> = {}) {
     this.config = {
-      threshold: 0.3,
-      rootMargin: '0px 0px -50px 0px',
+      // the footer is taller than most viewports, so a fractional threshold
+      // can never be satisfied — trigger as soon as any part is visible
+      threshold: 0,
+      rootMargin: '0px',
       duration: 2500,
       staggerDelay: 300,
       ...config,
@@ -134,6 +137,16 @@ class FooterAnimationController {
   }
 
   private setupIntersectionObserver(): void {
+    // watch the coordinates block itself, not the whole (very tall) footer
+    const target = document.querySelector('.coordinates') ?? document.querySelector('footer')
+
+    if (!target || typeof IntersectionObserver === 'undefined') {
+      this.startAnimation()
+      return
+    }
+
+    this.observedTarget = target
+
     const options: IntersectionObserverInit = {
       threshold: this.config.threshold,
       rootMargin: this.config.rootMargin,
@@ -148,12 +161,13 @@ class FooterAnimationController {
       })
     }, options)
 
-    const footer = document.querySelector('footer')
-    if (footer) {
-      this.observer.observe(footer)
-    } else {
-      console.warn('Footer element not found')
-    }
+    this.observer.observe(target)
+  }
+
+  /** true while the elements this controller holds are still in the document */
+  isAttached(): boolean {
+    const first = this.coordinateElements[0]
+    return !!first && document.contains(first)
   }
 
   private setupCleanup(): void {
@@ -173,6 +187,7 @@ class FooterAnimationController {
   destroy(): void {
     this.tickers.forEach(ticker => ticker.destroy())
     this.tickers = []
+    this.observedTarget = null
 
     if (this.observer) {
       this.observer.disconnect()
@@ -184,7 +199,13 @@ class FooterAnimationController {
 let controller: FooterAnimationController | null = null
 
 function initializeFooterAnimations(): void {
-  if (controller) return // footer is transition:persist — only init once
+  // footer is transition:persist, so keep the controller as long as it still
+  // points at live nodes — rebuild only if the footer DOM was replaced
+  if (controller?.isAttached()) return
+
+  controller?.destroy()
+  controller = null
+
   try {
     controller = new FooterAnimationController()
   } catch (error) {

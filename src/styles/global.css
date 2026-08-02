@@ -113,3 +113,31 @@ body {
   background-color: var(--bg-color);
   color: white;
 }
+
+/*
+  Scroll reveal.
+
+  CSS owns visibility; JS only ever adds `.is-revealed`. Never write
+  `style.opacity` from JS for entrance animations — with <ClientRouter /> a
+  navigation can cancel the in-flight animation before it commits, stranding
+  the element at opacity 0 permanently. Toggling a class is idempotent, so a
+  re-run or an interrupted transition can never hide content.
+
+  Gated on `scripting: enabled` so the hidden state never applies when the
+  reveal script can't run.
+*/
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
