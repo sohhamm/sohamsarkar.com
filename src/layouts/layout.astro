@@ -5,6 +5,7 @@ import MainHead from '../components/MainHead.astro'
 import Nav from '../components/Nav.astro'
 import Footer from '../components/Footer.astro'
 import FooterHorizon from '../components/effects/FooterHorizon.astro'
+import EmailFallback from '../components/EmailFallback.astro'
 
 interface Props {
   content: {
@@ -43,6 +44,12 @@ const {title, description, ...rest} = content
       }
       <FooterHorizon transition:persist />
     </main>
+
+    {
+      /* Catches mailto: clicks that never reach a mail app — see the component.
+        Persisted so a view transition can't swap it out mid-dialog. */
+    }
+    <EmailFallback transition:persist />
 
     <script>
       // Reveals `.reveal` elements on scroll by adding `.is-revealed`.
