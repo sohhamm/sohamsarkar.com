@@ -1,0 +1,753 @@
+---
+import {createHash} from 'node:crypto'
+import Layout from '../layouts/layout.astro'
+import {
+  investors,
+  scenarios,
+  categories,
+  dryPowderTiers,
+  emergencyFund,
+  emergencyFundNote,
+  type CategoryKey,
+} from '../data/investments'
+
+// Server-rendered so the password never ships to the client.
+export const prerender = false
+
+const PASSWORD = import.meta.env.FINANCE_PASSWORD ?? process.env.FINANCE_PASSWORD
+
+// Cookie stores a hash of the password, so rotating the env var
+// invalidates every previously issued cookie.
+const token = PASSWORD ? createHash('sha256').update(PASSWORD).digest('hex') : null
+
+const COOKIE = 'finance_auth'
+let error = false
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData()
+  const attempt = form.get('password')
+  if (token && typeof attempt === 'string' && attempt === PASSWORD) {
+    Astro.cookies.set(COOKIE, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/invest',
+      maxAge: 60 * 60 * 24 * 180,
+    })
+    return Astro.redirect('/invest', 303)
+  }
+  error = true
+}
+
+const authed = token !== null && Astro.cookies.get(COOKIE)?.value === token
+
+// Belt and braces on top of the meta tag — also covers the lock screen.
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+Astro.response.headers.set('Cache-Control', 'private, no-store')
+
+const content = {
+  title: 'Investment Plan',
+  description: 'Private page',
+  noindex: true,
+}
+
+const inr = (n: number) => `₹${n.toLocaleString('en-IN')}`
+// ₹1,95,000 → ₹1.95L, for the compact scenario pills.
+const lakh = (n: number) => (n >= 100000 ? `₹${parseFloat((n / 100000).toFixed(2))}L` : inr(n))
+
+// All percentages are computed here, never hardcoded in the data file.
+const scenarioData = scenarios.map(s => {
+  const people = investors.map(p => {
+    const items = p.plans[s.id].items
+    const total = items.reduce((sum, i) => sum + i.amount, 0)
+    return {name: p.name, emoji: p.emoji, items, total}
+  })
+  const grandTotal = people.reduce((sum, p) => sum + p.total, 0)
+
+  const byCategory = new Map<CategoryKey, number>()
+  for (const p of people) {
+    for (const i of p.items) {
+      byCategory.set(i.category, (byCategory.get(i.category) ?? 0) + i.amount)
+    }
+  }
+  const allocation = [...byCategory.entries()]
+    .map(([key, amount]) => ({
+      key,
+      amount,
+      pct: (amount / grandTotal) * 100,
+      ...categories[key],
+    }))
+    .sort((a, b) => b.amount - a.amount)
+
+  return {...s, people, grandTotal, allocation}
+})
+
+const DEFAULT_SCENARIO = 'realistic'
+---
+
+<Layout content={content}>
+  {
+    !authed ? (
+      <section class="lock-screen">
+        <form class="lock-card" method="post">
+          <div class="lock-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+              <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+            </svg>
+          </div>
+          <h1 class="lock-title">Private page</h1>
+          <p class="lock-subtitle">Enter the password to continue</p>
+          <input
+            class="lock-input"
+            type="password"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            autofocus
+            required
+          />
+          {error && <p class="lock-error">Wrong password, try again.</p>}
+          <button class="lock-button" type="submit">
+            Unlock
+          </button>
+        </form>
+      </section>
+    ) : (
+      <section class="plan">
+        <header class="plan-header">
+          <p class="section-label">Every month</p>
+          <h1 class="plan-title">Investment Plan</h1>
+        </header>
+
+        <div class="scenario-tabs" role="tablist" aria-label="Month scenario">
+          {scenarioData.map(s => (
+            <button
+              class="scenario-tab"
+              role="tab"
+              data-scenario-tab={s.id}
+              data-active={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
+              aria-selected={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
+            >
+              <span class="scenario-tab-emoji" aria-hidden="true">
+                {s.emoji}
+              </span>
+              <span class="scenario-tab-label">{s.label}</span>
+              <span class="scenario-tab-total">{lakh(s.grandTotal)}</span>
+            </button>
+          ))}
+        </div>
+
+        {scenarioData.map(s => (
+          <div
+            class="scenario"
+            data-scenario={s.id}
+            data-active={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
+          >
+            <p class="scenario-total">
+              <span class="scenario-total-amount">{inr(s.grandTotal)}</span>
+              <span class="scenario-total-suffix">/ month combined</span>
+            </p>
+
+            <div class="allocation-card">
+              <div class="allocation-bar" role="img" aria-label="Allocation by asset class">
+                {s.allocation.map(a => (
+                  <div
+                    class="allocation-segment"
+                    style={`width:${a.pct}%;background:${a.color}`}
+                    title={`${a.label} ${Math.round(a.pct)}%`}
+                  />
+                ))}
+              </div>
+              <div class="allocation-legend">
+                {s.allocation.map(a => (
+                  <div class="legend-item">
+                    <span class="legend-dot" style={`background:${a.color}`} />
+                    <span class="legend-name">{a.label}</span>
+                    <span class="legend-pct">{Math.round(a.pct)}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="people">
+              {s.people.map(person => (
+                <div class="person-card">
+                  <div class="person-header">
+                    <h2 class="person-name">
+                      <span aria-hidden="true">{person.emoji}</span> {person.name}
+                    </h2>
+                    <span class="person-total">{inr(person.total)}/mo</span>
+                  </div>
+                  <ul class="investment-list">
+                    {person.items.map(item => (
+                      <li class="investment">
+                        <span
+                          class="investment-accent"
+                          style={`background:${categories[item.category].color}`}
+                          aria-hidden="true"
+                        />
+                        <div class="investment-main">
+                          <span class="investment-name">
+                            <span aria-hidden="true">{categories[item.category].emoji}</span>{' '}
+                            {item.label ?? categories[item.category].label}
+                          </span>
+                          {item.note && <span class="investment-note">{item.note}</span>}
+                        </div>
+                        <div class="investment-figures">
+                          <span class="investment-amount">{inr(item.amount)}</span>
+                          <span class="investment-pct">
+                            {((item.amount / person.total) * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div class="strategy-card">
+          <p class="section-label">📉 Dry Powder Strategy</p>
+          <div class="strategy-tiers">
+            {dryPowderTiers.map(tier => (
+              <div class="strategy-tier">
+                <div class="strategy-tier-header">
+                  <span class="strategy-tier-name">{tier.name}</span>
+                  <span class="strategy-tier-vehicle">{tier.vehicle}</span>
+                </div>
+                <p class="strategy-tier-use">{tier.use}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="ef-card">
+          <div class="ef-main">
+            <span class="ef-label">Emergency Fund</span>
+            <span class="ef-note">{emergencyFundNote}</span>
+          </div>
+          <span class="ef-value">{lakh(emergencyFund)}</span>
+        </div>
+      </section>
+    )
+  }
+</Layout>
+
+<style>
+  /* ---------- Lock screen ---------- */
+  .lock-screen {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  .lock-card {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px 32px;
+    background: var(--surface-overlay-soft);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    border-radius: 24px;
+    text-align: center;
+  }
+
+  .lock-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: var(--surface-overlay-soft);
+    border: 1px solid var(--border-soft);
+    color: var(--indigo-300);
+    margin-bottom: 4px;
+  }
+
+  .lock-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .lock-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: var(--text-primary);
+  }
+
+  .lock-subtitle {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .lock-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: var(--surface-overlay-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s var(--ease-out-soft);
+  }
+
+  .lock-input:focus {
+    border-color: var(--border-medium);
+  }
+
+  .lock-error {
+    font-size: 0.875rem;
+    color: #f87171;
+  }
+
+  .lock-button {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02rem;
+    color: var(--black);
+    background: var(--white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition:
+      transform 0.2s var(--ease-out-soft),
+      opacity 0.2s var(--ease-out-soft);
+  }
+
+  .lock-button:hover {
+    opacity: 0.9;
+  }
+
+  .lock-button:active {
+    transform: scale(0.98);
+  }
+
+  /* ---------- Plan ---------- */
+  .plan {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 0 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .plan-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .plan-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.045rem;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---------- Scenario tabs ---------- */
+  .scenario-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .scenario-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s var(--ease-out-soft);
+  }
+
+  .scenario-tab:hover {
+    background: var(--surface-overlay-soft);
+  }
+
+  .scenario-tab[data-active='true'] {
+    background: var(--surface-overlay-hover);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
+  }
+
+  .scenario-tab-emoji {
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  .scenario-tab-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.02rem;
+    color: var(--text-primary);
+  }
+
+  .scenario-tab-total {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Scenario panels ---------- */
+  .scenario {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.3s var(--ease-out-soft);
+  }
+
+  .scenario[data-active='true'] {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .scenario-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .scenario-total-amount {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .scenario-total-suffix {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Allocation ---------- */
+  .allocation-card {
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .allocation-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    gap: 3px;
+  }
+
+  .allocation-segment {
+    height: 100%;
+    border-radius: 2px;
+    min-width: 4px;
+  }
+
+  .allocation-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-name {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  .legend-pct {
+    font-size: 0.8125rem;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Person cards ---------- */
+  .people {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .person-card {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    border-radius: 20px;
+  }
+
+  .person-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .person-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.03rem;
+    color: var(--text-primary);
+  }
+
+  .person-total {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--indigo-300);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .investment-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .investment {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 0;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .investment-accent {
+    width: 3px;
+    align-self: stretch;
+    border-radius: 999px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .investment-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .investment-name {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02rem;
+    color: var(--text-primary);
+  }
+
+  .investment-note {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .investment-figures {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .investment-amount {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .investment-pct {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Dry powder strategy ---------- */
+  .strategy-card {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-soft);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .strategy-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .strategy-tier {
+    padding: 16px;
+    background: var(--surface-overlay-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .strategy-tier-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .strategy-tier-name {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+    color: var(--text-primary);
+  }
+
+  .strategy-tier-vehicle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fbbf24;
+  }
+
+  .strategy-tier-use {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Emergency fund ---------- */
+  .ef-card {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 18px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-soft);
+    border-radius: 20px;
+  }
+
+  .ef-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .ef-label {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+  }
+
+  .ef-note {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .ef-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02rem;
+    color: #4ade80;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 768px) {
+    .plan {
+      padding: 12px 0 60px;
+      gap: 16px;
+    }
+
+    .allocation-card,
+    .person-card,
+    .strategy-card {
+      padding: 18px;
+    }
+
+    .ef-card {
+      padding: 16px 18px;
+    }
+
+    .lock-card {
+      padding: 32px 24px;
+    }
+  }
+</style>
+
+<script>
+  function initScenarios() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('[data-scenario-tab]')
+    const panels = document.querySelectorAll<HTMLDivElement>('[data-scenario]')
+    if (tabs.length === 0) return
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.scenarioTab
+
+        tabs.forEach(t => {
+          const active = t === tab
+          t.setAttribute('data-active', String(active))
+          t.setAttribute('aria-selected', String(active))
+        })
+        panels.forEach(p => p.setAttribute('data-active', String(p.dataset.scenario === target)))
+      })
+    })
+  }
+
+  initScenarios()
+  document.addEventListener('astro:page-load', initScenarios)
+</script>

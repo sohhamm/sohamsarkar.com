@@ -2,10 +2,6 @@
 import {Icon} from 'astro-icon/components'
 import {fetchYouTubePlaylist, fallbackPlaylistData} from '../utils/youtube'
 
-export interface Props {
-  isHomePage?: boolean
-}
-
 // Your YouTube Music playlist ID
 const PLAYLIST_ID = 'PLvU9iXRGj0MQiHp6XSWJ3Q9veSGGrEZyS'
 
@@ -25,250 +21,328 @@ try {
 }
 ---
 
-<section class="music-section">
-  <div class="music-header">
-    <h2>Music</h2>
-    <p>The soundtrack to my creative process</p>
+<section class="music-page">
+  <header class="page-header">
+    <span class="page-label">Music</span>
+    <h1 class="page-title">The soundtrack to my creative process</h1>
+    <p class="page-description">{musicData.description}</p>
+  </header>
+
+  <div class="playlist-bar">
+    <div class="playlist-meta">
+      <h2 class="playlist-title">{musicData.title}</h2>
+      <p class="playlist-count">{musicData.tracks.length} tracks · YouTube Music</p>
+    </div>
+    <div class="playlist-actions">
+      <button id="shuffle-button" class="action action-primary" type="button">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 3h5v5"></path>
+          <path d="M4 20L21 3"></path>
+          <path d="M21 16v5h-5"></path>
+          <path d="M15 15l6 6"></path>
+          <path d="M4 4l5 5"></path>
+        </svg>
+        Shuffle
+      </button>
+      <a
+        href={musicData.playlistUrl}
+        class="action action-secondary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon name="youtubemusic" />
+        Open playlist
+      </a>
+    </div>
   </div>
 
-  <div class="playlist-container">
-    <div class="playlist-header">
-      <div class="playlist-info">
-        <h3>{musicData.title}</h3>
-        <p>{musicData.description}</p>
-        <div class="track-count">{musicData.tracks.length} tracks</div>
-      </div>
-      <div class="playlist-actions">
-        <button id="shuffle-button" class="shuffle-button">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
+  <ol class="tracks-list">
+    {
+      musicData.tracks.map((track, index) => (
+        <li class="track-row">
+          <button
+            class="track-item"
+            type="button"
+            data-video-id={track.videoId}
+            aria-label={`Play ${track.title} by ${track.artist}`}
           >
-            <path d="M16 3h5v5"></path>
-            <path d="M4 20L21 3"></path>
-            <path d="M21 16v5h-5"></path>
-            <path d="M15 15l6 6"></path>
-            <path d="M4 4l5 5"></path>
-          </svg>
-          Shuffle Play
-        </button>
-        <a
-          href={musicData.playlistUrl}
-          class="listen-button"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Icon name="youtubemusic" />
-          Listen on YouTube Music
-        </a>
-      </div>
-    </div>
-
-    <div class="tracks-list">
-      {
-        musicData.tracks.map((track, index) => (
-          <div class="track-item" data-video-id={track.videoId}>
-            <div class="track-number">{(index + 1).toString().padStart(2, '0')}</div>
-            <div class="track-thumbnail">
+            <span class="track-index" aria-hidden="true">
+              <span class="track-number">{(index + 1).toString().padStart(2, '0')}</span>
+              <svg class="track-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
+            <span class="track-thumbnail">
               <img
                 src={track.thumbnail}
-                alt={`${track.title} thumbnail`}
+                alt=""
                 width="48"
                 height="48"
                 loading="lazy"
                 decoding="async"
               />
-              <button class="play-button" data-video-id={track.videoId}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-            </div>
-            <div class="track-info">
-              <div class="track-title">{track.title}</div>
-              <div class="track-artist">{track.artist}</div>
-            </div>
-            <div class="track-duration">{track.duration}</div>
-          </div>
-        ))
-      }
-    </div>
-  </div>
+            </span>
+            <span class="track-info">
+              <span class="track-title">{track.title}</span>
+              <span class="track-artist">{track.artist}</span>
+            </span>
+            <span class="track-duration">{track.duration}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ol>
 
   <!-- Modal Backdrop -->
   <div id="modal-backdrop" class="modal-backdrop hidden">
     <!-- Modal Content -->
-    <div id="music-player" class="music-player-modal">
+    <div
+      id="music-player"
+      class="music-player-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Music player"
+    >
       <div class="player-header">
         <div class="now-playing">
-          <div class="now-playing-text">Now Playing</div>
+          <div class="now-playing-text">Now playing</div>
           <div class="current-track-info">
             <div class="current-track-title"></div>
             <div class="current-track-artist"></div>
           </div>
         </div>
-        <button id="close-player" class="close-player">
+        <button id="close-player" class="close-player" type="button" aria-label="Close player">
           <svg
-            width="20"
-            height="20"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
           >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
-      <div id="youtube-player"></div>
+      <div class="player-frame"><div id="youtube-player"></div></div>
     </div>
   </div>
 </section>
 
 <style>
-  .music-section {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 4rem 0;
-    color: #ffffff;
+  .music-page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+    color: var(--text-primary);
   }
 
-  .music-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  /* ---------- Header ---------- */
+  .page-header {
+    padding: 40px 0;
   }
 
-  .music-header h2 {
-    font-size: 2.5rem;
-    font-weight: 400;
-    letter-spacing: -0.2rem;
-    color: #fff;
-    margin: 0;
-  }
-
-  .music-header p {
-    font-size: 1.25rem;
+  .page-label {
+    display: inline-block;
+    color: var(--text-faint);
+    font-size: 0.75rem;
     font-weight: 500;
-    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+    margin: 0 0 20px 0;
+    max-width: 16ch;
+  }
+
+  .page-description {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    line-height: 1.6;
     margin: 0;
+    max-width: 52ch;
   }
 
-  .playlist-container {
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    box-shadow: 0px 0px 24px 0px rgba(255, 255, 255, 0.1);
-  }
-
-  .playlist-header {
+  /* ---------- Playlist bar ---------- */
+  .playlist-bar {
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-    gap: 2rem;
+    gap: 24px;
+    padding-bottom: 20px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .playlist-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px 0;
+  }
+
+  .playlist-count {
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+    margin: 0;
+    font-variant-numeric: tabular-nums;
   }
 
   .playlist-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 10px;
+    flex-shrink: 0;
   }
 
-  .playlist-info h3 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #fff;
-    margin: 0 0 0.5rem 0;
-  }
-
-  .playlist-info p {
-    font-size: 1rem;
-    color: #71717a;
-    margin: 0 0 0.5rem 0;
-  }
-
-  .track-count {
-    font-size: 0.875rem;
-    color: #a1a1aa;
-  }
-
-  .shuffle-button,
-  .listen-button {
+  .action {
     display: inline-flex;
-    padding: 12px 20px;
     align-items: center;
     gap: 8px;
-    border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
-    color: #fff;
-    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    letter-spacing: -0.02em;
+    line-height: 1;
     white-space: nowrap;
+    text-decoration: none;
     cursor: pointer;
+    transition:
+      background 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft),
+      color 0.2s var(--ease-out-soft),
+      opacity 0.2s var(--ease-out-soft);
   }
 
-  .shuffle-button {
-    background: linear-gradient(180deg, rgba(96, 165, 250, 0.2) 0%, rgba(59, 130, 246, 0.3) 100%);
-    border: 1px solid rgba(96, 165, 250, 0.3);
+  .action:focus-visible {
+    outline: 2px solid var(--indigo-300);
+    outline-offset: 2px;
   }
 
-  .shuffle-button:hover,
-  .listen-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 0px 16px 0px rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+  .action-primary {
+    background: var(--white);
+    border: 1px solid var(--white);
+    color: var(--black);
   }
 
-  .shuffle-button:hover {
-    background: rgba(96, 165, 250, 0.2);
-    box-shadow: 0px 0px 16px 0px rgba(96, 165, 250, 0.3);
+  .action-primary:hover {
+    opacity: 0.9;
   }
 
+  .action-secondary {
+    background: var(--surface-overlay-soft);
+    border: 1px solid var(--border-soft);
+    color: var(--text-secondary);
+  }
+
+  .action-secondary:hover {
+    background: var(--surface-overlay-hover);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+  }
+
+  .action svg,
+  .action :global(svg) {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Tracks ---------- */
   .tracks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .track-row + .track-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   .track-item {
     display: grid;
-    grid-template-columns: 2rem 3rem 1fr 4rem;
+    grid-template-columns: 2rem 48px 1fr auto;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    border-radius: 8px;
-    transition: background 0.2s ease;
+    gap: 16px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s var(--ease-out-soft);
   }
 
   .track-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-overlay-soft);
   }
 
-  .track-number {
-    font-size: 0.875rem;
-    color: #a1a1aa;
-    text-align: center;
+  .track-item:focus-visible {
+    outline: 2px solid var(--indigo-300);
+    outline-offset: -2px;
+  }
+
+  .track-index {
+    display: grid;
+    place-items: center;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Number and play glyph share one cell so the row never reflows on hover. */
+  .track-number,
+  .track-play {
+    grid-area: 1 / 1;
+    transition: opacity 0.15s var(--ease-out-soft);
+  }
+
+  .track-play {
+    opacity: 0;
+    color: var(--text-primary);
+  }
+
+  .track-item:hover .track-number,
+  .track-item:focus-visible .track-number {
+    opacity: 0;
+  }
+
+  .track-item:hover .track-play,
+  .track-item:focus-visible .track-play {
+    opacity: 1;
   }
 
   .track-thumbnail {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 4px;
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
     overflow: hidden;
-    position: relative;
-    cursor: pointer;
+    border: 1px solid var(--border-soft);
   }
 
   .track-thumbnail img {
@@ -277,70 +351,57 @@ try {
     object-fit: cover;
   }
 
-  .play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .track-thumbnail:hover .play-button {
-    opacity: 1;
-  }
-
-  .play-button:hover {
-    background: rgba(0, 0, 0, 0.9);
-  }
-
   .track-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 3px;
     min-width: 0;
   }
 
-  .track-title {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #fff;
-    truncate: true;
+  .track-title,
+  .track-artist {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .track-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-secondary);
   }
 
   .track-artist {
-    font-size: 0.75rem;
-    color: #71717a;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
   }
 
   .track-duration {
-    font-size: 0.75rem;
-    color: #a1a1aa;
-    text-align: right;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
   }
 
+  /* Whichever track the player is on. */
+  .track-row[data-playing='true'] .track-title,
+  .track-row[data-playing='true'] .track-index {
+    color: var(--indigo-300);
+  }
+
+  .track-row[data-playing='true'] .track-play {
+    opacity: 1;
+    color: var(--indigo-300);
+  }
+
+  .track-row[data-playing='true'] .track-number {
+    opacity: 0;
+  }
+
+  /* ---------- Player modal ---------- */
   .modal-backdrop {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
     z-index: 1000;
@@ -349,7 +410,7 @@ try {
     justify-content: center;
     padding: 2rem;
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s var(--ease-out-soft);
   }
 
   .modal-backdrop.hidden {
@@ -359,175 +420,148 @@ try {
 
   .music-player-modal {
     width: 100%;
-    max-width: 800px;
+    max-width: 760px;
     max-height: 90vh;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 20px;
+    border: 1px solid var(--border-soft);
+    background: rgba(10, 10, 10, 0.9);
     backdrop-filter: blur(10px);
     overflow: hidden;
     transform: scale(1);
-    transition: transform 0.3s ease;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s var(--ease-out-soft);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
   }
 
   .modal-backdrop.hidden .music-player-modal {
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
 
   .player-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .now-playing {
+    min-width: 0;
   }
 
   .now-playing-text {
-    font-size: 0.75rem;
-    color: #a1a1aa;
+    font-size: 0.6875rem;
+    color: var(--text-faint);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
   }
 
   .current-track-title {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: #fff;
-    margin-bottom: 0.125rem;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .current-track-artist {
-    font-size: 0.875rem;
-    color: #71717a;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
   }
 
   .close-player {
-    background: none;
-    border: none;
-    color: #a1a1aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    background: var(--surface-overlay-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    color: var(--text-dim);
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    transition:
+      background 0.2s var(--ease-out-soft),
+      color 0.2s var(--ease-out-soft);
   }
 
   .close-player:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-overlay-hover);
+    color: var(--text-primary);
   }
 
-  #youtube-player {
+  .close-player:focus-visible {
+    outline: 2px solid var(--indigo-300);
+    outline-offset: 2px;
+  }
+
+  .player-frame {
+    aspect-ratio: 16 / 9;
+    max-height: calc(90vh - 80px);
+    background: var(--black);
+  }
+
+  .player-frame :global(#youtube-player) {
     width: 100%;
-    height: 400px;
+    height: 100%;
   }
 
+  /* ---------- Responsive ---------- */
   @media (max-width: 768px) {
-    .music-header h2 {
-      font-size: 2rem;
-      letter-spacing: -0.16rem;
+    .page-header {
+      padding: 24px 0 32px;
     }
 
-    .playlist-container {
-      padding: 1.5rem;
-    }
-
-    .playlist-header {
+    .playlist-bar {
       flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+      align-items: stretch;
+      gap: 16px;
     }
 
     .playlist-actions {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-      gap: 0.75rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
 
-    .shuffle-button,
-    .listen-button {
-      width: 100%;
+    .action {
       justify-content: center;
     }
 
     .track-item {
-      grid-template-columns: 2rem 2.5rem 1fr 3rem;
-      gap: 0.75rem;
-      padding: 0.5rem;
+      grid-template-columns: 1.75rem 40px 1fr auto;
+      gap: 12px;
+      padding: 10px 8px;
     }
 
     .track-thumbnail {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-
-    .play-button {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 40px;
+      height: 40px;
     }
 
     .modal-backdrop {
       padding: 1rem;
-    }
-
-    .music-player-modal {
-      max-width: 100%;
-    }
-
-    .player-header {
-      padding: 1rem;
-    }
-
-    #youtube-player {
-      height: 300px;
     }
   }
 
   @media (max-width: 480px) {
-    .music-header h2 {
-      font-size: 1.75rem;
-      letter-spacing: -0.14rem;
+    .track-duration {
+      display: none;
     }
+  }
 
-    .playlist-container {
-      padding: 1rem;
-    }
-
-    .track-item {
-      grid-template-columns: 1.5rem 2rem 1fr 3rem;
-      gap: 0.5rem;
-    }
-
-    .track-thumbnail {
-      width: 2rem;
-      height: 2rem;
-    }
-
-    .track-number {
-      font-size: 0.75rem;
-    }
-
-    .track-title {
-      font-size: 0.8rem;
-    }
-
-    .track-artist {
-      font-size: 0.7rem;
-    }
-
-    .play-button {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    .modal-backdrop {
-      padding: 0.5rem;
-    }
-
-    #youtube-player {
-      height: 250px;
+  @media (prefers-reduced-motion: reduce) {
+    .action,
+    .track-item,
+    .track-number,
+    .track-play,
+    .close-player,
+    .modal-backdrop,
+    .music-player-modal {
+      transition: none;
     }
   }
 </style>
@@ -543,6 +577,8 @@ try {
 
   let player: any = null
   let isPlayerReady = false
+  // Set when a track is clicked before the iframe API has finished loading.
+  let pendingVideoId: string | null = null
 
   // Load YouTube IFrame Player API
   if (!window.YT) {
@@ -552,10 +588,10 @@ try {
     firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
   }
 
-  // Initialize player when API is ready
-  window.onYouTubeIframeAPIReady = function () {
+  function createPlayer() {
+    isPlayerReady = false
     player = new window.YT.Player('youtube-player', {
-      height: '315',
+      height: '100%',
       width: '100%',
       playerVars: {
         playsinline: 1,
@@ -567,128 +603,101 @@ try {
       events: {
         onReady: () => {
           isPlayerReady = true
+          if (pendingVideoId) {
+            player.loadVideoById(pendingVideoId)
+            pendingVideoId = null
+          }
         },
       },
     })
   }
 
-  // Get all tracks from DOM
-  function getAllTracks() {
-    const tracks: any[] = []
-    document.querySelectorAll('.track-item').forEach(item => {
-      const videoId = item.getAttribute('data-video-id')
-      const title = item.querySelector('.track-title')?.textContent || ''
-      const artist = item.querySelector('.track-artist')?.textContent || ''
-      if (videoId) {
-        tracks.push({videoId, title, artist})
-      }
-    })
-    return tracks
+  window.onYouTubeIframeAPIReady = createPlayer
+
+  // A view transition swaps in a fresh #youtube-player div, orphaning the old
+  // iframe. Rebuild the player whenever the mount point is a bare div again.
+  function ensurePlayer() {
+    const mount = document.getElementById('youtube-player')
+    if (!mount || mount.tagName === 'IFRAME') return
+    if (!window.YT?.Player) return // onYouTubeIframeAPIReady will handle it
+    createPlayer()
   }
 
-  // Play random track
-  function playRandomTrack() {
-    const tracks = getAllTracks()
-    if (tracks.length === 0) return
-
-    const randomIndex = Math.floor(Math.random() * tracks.length)
-    const randomTrack = tracks[randomIndex]
-
-    playVideo(randomTrack.videoId, randomTrack.title, randomTrack.artist)
+  function closePlayer() {
+    document.getElementById('modal-backdrop')?.classList.add('hidden')
+    document
+      .querySelectorAll('.track-row[data-playing="true"]')
+      .forEach(row => row.removeAttribute('data-playing'))
+    pendingVideoId = null
+    if (player && typeof player.pauseVideo === 'function') player.pauseVideo()
   }
 
-  // Play video function
   function playVideo(videoId: string, title: string, artist: string) {
-    if (!isPlayerReady) {
-      console.warn('YouTube player not ready yet')
-      return
-    }
+    document.getElementById('modal-backdrop')?.classList.remove('hidden')
 
-    // Show modal
-    const modalBackdrop = document.getElementById('modal-backdrop')
-    if (modalBackdrop) {
-      modalBackdrop.classList.remove('hidden')
-    }
-
-    // Update current track info
     const trackTitle = document.querySelector('.current-track-title')
     const trackArtist = document.querySelector('.current-track-artist')
     if (trackTitle) trackTitle.textContent = title
     if (trackArtist) trackArtist.textContent = artist
 
-    // Load and play video
-    player.loadVideoById(videoId)
+    document
+      .querySelectorAll('.track-row[data-playing="true"]')
+      .forEach(row => row.removeAttribute('data-playing'))
+    document
+      .querySelector(`.track-item[data-video-id="${videoId}"]`)
+      ?.closest('.track-row')
+      ?.setAttribute('data-playing', 'true')
+
+    // Queue the track if the API is still loading — onReady picks it up.
+    if (isPlayerReady) {
+      player.loadVideoById(videoId)
+    } else {
+      pendingVideoId = videoId
+      ensurePlayer()
+    }
+  }
+
+  function playTrack(item: HTMLElement) {
+    const videoId = item.dataset.videoId
+    if (!videoId) return
+    const title = item.querySelector('.track-title')?.textContent || ''
+    const artist = item.querySelector('.track-artist')?.textContent || ''
+    playVideo(videoId, title, artist)
   }
 
   let escapeListenerBound = false
 
   function initMusicSection() {
+    ensurePlayer()
+
     document.getElementById('shuffle-button')?.addEventListener('click', () => {
-      playRandomTrack()
+      const items = document.querySelectorAll<HTMLElement>('.track-item')
+      if (items.length === 0) return
+      playTrack(items[Math.floor(Math.random() * items.length)])
     })
 
-    document.querySelectorAll('.play-button').forEach(button => {
-      button.addEventListener('click', e => {
-        e.stopPropagation()
-        const videoId = button.getAttribute('data-video-id')
-        const trackItem = button.closest('.track-item')
-        const title = trackItem?.querySelector('.track-title')?.textContent || ''
-        const artist = trackItem?.querySelector('.track-artist')?.textContent || ''
-
-        if (videoId) {
-          playVideo(videoId, title, artist)
-        }
-      })
+    document.querySelectorAll<HTMLElement>('.track-item').forEach(item => {
+      item.addEventListener('click', () => playTrack(item))
     })
 
-    document.getElementById('close-player')?.addEventListener('click', () => {
-      const modalBackdrop = document.getElementById('modal-backdrop')
-      if (modalBackdrop) {
-        modalBackdrop.classList.add('hidden')
-      }
-      if (player && typeof player.pauseVideo === 'function') {
-        player.pauseVideo()
-      }
-    })
+    document.getElementById('close-player')?.addEventListener('click', closePlayer)
 
     document.getElementById('modal-backdrop')?.addEventListener('click', e => {
-      if (e.target === e.currentTarget) {
-        const modalBackdrop = document.getElementById('modal-backdrop')
-        if (modalBackdrop) {
-          modalBackdrop.classList.add('hidden')
-        }
-        if (player && typeof player.pauseVideo === 'function') {
-          player.pauseVideo()
-        }
-      }
+      if (e.target === e.currentTarget) closePlayer()
     })
 
     // Bind once: document survives transitions, only attach the keydown listener a single time
     if (!escapeListenerBound) {
       document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          const modalBackdrop = document.getElementById('modal-backdrop')
-          if (modalBackdrop && !modalBackdrop.classList.contains('hidden')) {
-            modalBackdrop.classList.add('hidden')
-            if (player && typeof player.pauseVideo === 'function') {
-              player.pauseVideo()
-            }
-          }
+        const backdrop = document.getElementById('modal-backdrop')
+        if (e.key === 'Escape' && backdrop && !backdrop.classList.contains('hidden')) {
+          closePlayer()
         }
       })
       escapeListenerBound = true
     }
-
-    document.querySelectorAll('.track-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const playButton = item.querySelector('.play-button') as HTMLElement
-        if (playButton) {
-          playButton.click()
-        }
-      })
-    })
   }
 
-  document.addEventListener('DOMContentLoaded', initMusicSection)
+  initMusicSection()
   document.addEventListener('astro:page-load', initMusicSection)
 </script>

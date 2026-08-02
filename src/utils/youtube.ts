@@ -29,6 +29,7 @@ interface YouTubePlaylistItemSnippet {
   title: string
   thumbnails?: Record<string, YouTubeThumbnail>
   resourceId?: {videoId: string}
+  videoOwnerChannelTitle?: string
 }
 
 interface YouTubePlaylist {
@@ -64,10 +65,41 @@ function formatDuration(duration: string): string {
   return `${totalMinutes}:${seconds.toString().padStart(2, '0')}`
 }
 
-// Extract artist from video title (enhanced patterns)
-function extractArtist(title: string): {title: string; artist: string} {
-  // Clean up common YouTube prefixes/suffixes
-  let cleanTitle = title
+// Strip the boilerplate YouTube channels append to an artist's name.
+// "Lil Uzi Vert - Topic" -> "Lil Uzi Vert", "ArtistVEVO" -> "Artist".
+function cleanChannelName(channel: string): string {
+  return channel
+    .replace(/\s*[-–—]\s*Topic$/i, '')
+    .replace(/VEVO$/i, '')
+    .replace(/\s*[-–—]?\s*Official(?:\s+(?:Channel|Music|Artist|Video))?$/i, '')
+    .trim()
+}
+
+function isTopicChannel(channel: string): boolean {
+  return /\s*[-–—]\s*Topic$/i.test(channel)
+}
+
+// Resolve a track's title and artist, preferring the channel name where it is
+// authoritative. Auto-generated "Topic" uploads name the artist on the channel
+// and put only the song in the title, so title-splitting can never find them.
+function resolveTrack(rawTitle: string, channelTitle = ''): {title: string; artist: string} {
+  const channelArtist = cleanChannelName(channelTitle)
+
+  if (channelArtist && isTopicChannel(channelTitle)) {
+    return {title: cleanupTitle(rawTitle), artist: channelArtist}
+  }
+
+  const {title, artist} = extractArtist(rawTitle)
+  if (artist !== UNKNOWN_ARTIST) return {title, artist}
+
+  return {title, artist: channelArtist || UNKNOWN_ARTIST}
+}
+
+const UNKNOWN_ARTIST = 'Unknown Artist'
+
+// Clean up common YouTube prefixes/suffixes
+function cleanupTitle(title: string): string {
+  return title
     .replace(/\[Official.*?\]/gi, '')
     .replace(/\(Official.*?\)/gi, '')
     .replace(/\[Lyric.*?\]/gi, '')
@@ -79,6 +111,11 @@ function extractArtist(title: string): {title: string; artist: string} {
     .replace(/\[4K\]/gi, '')
     .replace(/\(4K\)/gi, '')
     .trim()
+}
+
+// Extract artist from video title (enhanced patterns)
+function extractArtist(title: string): {title: string; artist: string} {
+  const cleanTitle = cleanupTitle(title)
 
   // Enhanced patterns for artist extraction
   const patterns = [
@@ -149,7 +186,7 @@ function extractArtist(title: string): {title: string; artist: string} {
   // If still no match, use the full title and "Unknown Artist"
   return {
     title: cleanTitle,
-    artist: 'Unknown Artist',
+    artist: UNKNOWN_ARTIST,
   }
 }
 
@@ -238,14 +275,16 @@ export async function fetchYouTubePlaylist(
       const videoDetail = videoDetailsMap.get(videoId)
       const duration = videoDetail?.contentDetails?.duration || 'PT0S'
 
-      const {title, artist} = extractArtist(item.snippet.title)
+      const {title, artist} = resolveTrack(item.snippet.title, item.snippet.videoOwnerChannelTitle)
       const formattedDuration = formatDuration(duration)
 
       return {
         title,
         artist,
         duration: formattedDuration,
-        thumbnail: item.snippet.thumbnails?.default?.url || '',
+        // `medium` is 320px — the row renders at 48px, so it stays crisp on retina.
+        thumbnail:
+          item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || '',
         videoId,
       }
     })

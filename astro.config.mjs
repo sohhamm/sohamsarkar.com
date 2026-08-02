@@ -19,6 +19,7 @@ const urlToPageFile = url => {
 }
 
 const NOINDEXED = [
+  '/invest',
   '/payments',
   '/pochita-technologies',
   '/twitter',
