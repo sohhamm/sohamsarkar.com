@@ -66,13 +66,20 @@ const currentPath = Astro.url.pathname
     >
   </a>
 
-  <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+  <button
+    class="hamburger"
+    id="hamburger"
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    aria-controls="nav-links"
+  >
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
   </button>
 
   <ul class="nav-links" id="nav-links">
+    <li class="drawer-eyebrow" aria-hidden="true">menu</li>
     {
       LINKS.map(link => {
         const isActive =
@@ -96,8 +103,10 @@ const currentPath = Astro.url.pathname
     }
 
     <!-- Social icons for mobile drawer -->
-    <li class="mobile-social-icons">
-      <a href="/x" class="social-icon" aria-label="X (Twitter)">
+    <li class="drawer-footer">
+      <span class="drawer-eyebrow" aria-hidden="true">elsewhere</span>
+      <div class="drawer-social">
+        <a href="/x" class="social-icon" aria-label="X (Twitter)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path
             d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
@@ -117,7 +126,8 @@ const currentPath = Astro.url.pathname
             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
           ></path>
         </svg>
-      </a>
+        </a>
+      </div>
     </li>
   </ul>
 
@@ -179,6 +189,18 @@ const currentPath = Astro.url.pathname
     return match
   }
 
+  function setMenuOpen(open: boolean) {
+    const hamburger = document.getElementById('hamburger')
+    const navLinks = document.getElementById('nav-links')
+    if (!hamburger || !navLinks) return
+
+    hamburger.classList.toggle('active', open)
+    navLinks.classList.toggle('active', open)
+    hamburger.setAttribute('aria-expanded', String(open))
+    // The drawer is full-screen; the page behind it shouldn't scroll.
+    document.body.classList.toggle('nav-open', open)
+  }
+
   function initNav() {
     const hamburger = document.getElementById('hamburger')
     const navLinks = document.getElementById('nav-links')
@@ -188,18 +210,23 @@ const currentPath = Astro.url.pathname
       hamburger.dataset.bound = 'true'
 
       hamburger.addEventListener('click', function () {
-        hamburger.classList.toggle('active')
-        navLinks.classList.toggle('active')
+        setMenuOpen(!navLinks.classList.contains('active'))
       })
 
       navLinks.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function () {
-          hamburger.classList.remove('active')
-          navLinks.classList.remove('active')
+          setMenuOpen(false)
         })
+      })
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') setMenuOpen(false)
       })
     }
 
+    // A back/forward navigation can restore a page with the drawer open, and
+    // the swapped-in <body> never carries the scroll lock — reset both.
+    setMenuOpen(false)
     setActive(itemForPath())
   }
 
@@ -278,28 +305,51 @@ const currentPath = Astro.url.pathname
   .hamburger {
     display: none;
     flex-direction: column;
-    background: none;
-    border: none;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    backdrop-filter: blur(8px);
     cursor: pointer;
-    padding: 8px;
+    padding: 0;
     position: absolute;
     right: 24px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1001;
+    transition:
+      background 0.3s var(--ease-out-soft),
+      border-color 0.3s var(--ease-out-soft);
+  }
+
+  .hamburger:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 3px;
+  }
+
+  .hamburger.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--border-medium);
   }
 
   .hamburger-line {
-    width: 24px;
+    width: 16px;
     height: 2px;
     background: white;
-    margin: 3px 0;
-    transition: 0.3s;
     border-radius: 2px;
+    transition:
+      transform 0.3s var(--ease-out-soft),
+      opacity 0.2s ease;
   }
 
+  /* Lines sit 7px apart centre-to-centre (2px line + 5px gap). */
   .hamburger.active .hamburger-line:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
+    transform: translateY(7px) rotate(45deg);
   }
 
   .hamburger.active .hamburger-line:nth-child(2) {
@@ -307,38 +357,60 @@ const currentPath = Astro.url.pathname
   }
 
   .hamburger.active .hamburger-line:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
+    transform: translateY(-7px) rotate(-45deg);
   }
 
   .social-icons {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     position: absolute;
     right: 24px;
     top: 50%;
     transform: translateY(-50%);
   }
 
+  /*
+    Squarish glass tile — same material as the nav pill and secondary button:
+    soft 1px border, faint fill, inset top highlight. The border only lights
+    up on hover so the resting state stays quiet.
+  */
   .social-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    color: white;
+    width: 38px;
+    height: 38px;
+    color: rgba(255, 255, 255, 0.72);
     text-decoration: none;
-    border-radius: 50%;
+    border-radius: 12px;
+    border: 1px solid transparent;
     transition:
-      color 0.3s ease,
-      background-color 0.3s ease,
-      transform 0.2s ease;
+      color 0.3s var(--ease-out-soft),
+      background 0.3s var(--ease-out-soft),
+      border-color 0.3s var(--ease-out-soft),
+      box-shadow 0.3s var(--ease-out-soft),
+      transform 0.3s var(--ease-out-soft);
   }
 
-  .social-icon:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1);
+  .social-icon:hover,
+  .social-icon:focus-visible {
+    color: var(--white);
+    border-color: var(--border-medium);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+      0 0 20px 0 rgba(255, 255, 255, 0.12);
     transform: translateY(-2px);
+  }
+
+  .social-icon:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 3px;
+  }
+
+  .social-icon:active {
+    transform: translateY(0) scale(0.96);
   }
 
   .social-icon svg {
@@ -346,8 +418,15 @@ const currentPath = Astro.url.pathname
     height: 18px;
   }
 
-  .mobile-social-icons {
+  /* Drawer-only furniture, hidden on desktop. */
+  .drawer-eyebrow,
+  .drawer-footer {
     display: none;
+  }
+
+  /* The full-screen drawer locks the page behind it. */
+  :global(body.nav-open) {
+    overflow: hidden;
   }
 
   @media (max-width: 768px) {
@@ -369,51 +448,138 @@ const currentPath = Astro.url.pathname
       display: none;
     }
 
+    /*
+      Full-screen drawer. It fades rather than slides — the site's motion
+      language is soft rises and fades, not panel slides — and each row
+      staggers up once the surface is in.
+    */
     .nav-links {
       position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(12px);
+      inset: 0;
+      height: 100dvh;
       flex-direction: column;
+      align-items: stretch;
       justify-content: center;
-      align-items: center;
-      gap: 32px;
-      padding: 20px;
-      transition: right 0.3s ease;
-      z-index: 1000;
+      gap: 0;
+      padding: 96px 32px 40px;
       border: none;
       border-radius: 0;
+      background:
+        radial-gradient(120% 50% at 50% 112%, rgba(255, 255, 255, 0.08), transparent 60%),
+        rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.45s var(--ease-out-soft),
+        visibility 0s linear 0.45s;
     }
 
     .nav-links.active {
-      right: 0;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.45s var(--ease-out-soft);
     }
 
-    .nav-item {
-      padding: 12px 24px;
-      font-size: 18px;
+    .drawer-eyebrow {
+      display: block;
+      /* Splits the drawer's free space with the footer's auto margin, so the
+         link block floats centred between the top bar and the social row. */
+      margin-top: auto;
+      color: var(--text-faint);
+      font-size: 0.75rem;
+      font-weight: 500;
+      font-style: normal;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    /* The desktop pill treatment doesn't scale to full-width rows — the
+       active state is carried by the type itself instead. */
+    .nav-item,
+    .nav-item.active {
+      padding: 0;
       width: 100%;
-      text-align: center;
+      justify-content: flex-start;
+      border: none;
+      background: none;
+      box-shadow: none;
     }
 
     .nav-link {
       display: block;
       width: 100%;
-      text-align: center;
+      padding: 14px 0;
+      text-align: left;
+      font-size: 2.25rem;
+      line-height: 1.1;
+      letter-spacing: -0.06em;
+      color: var(--text-secondary);
+      transition: color 0.3s var(--ease-out-soft);
     }
 
-    .mobile-social-icons {
+    /* The hero writes "I build things." — the current page gets the same
+       cursive italic and its full stop. */
+    .nav-link.active {
+      color: var(--white);
+      text-shadow: 0 0 28px rgba(255, 255, 255, 0.35);
+    }
+
+    .nav-link.active::after {
+      content: '.';
+    }
+
+    .drawer-footer {
       display: flex;
-      gap: 24px;
-      margin-top: 32px;
+      flex-direction: column;
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-soft);
     }
 
-    .mobile-social-icons .social-icon {
-      width: 44px;
-      height: 44px;
+    .drawer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .drawer-social .social-icon {
+      width: 52px;
+      height: 52px;
+      color: var(--text-secondary);
+      border-color: var(--border-soft);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    }
+
+    /* Staggered rise once the surface is in. */
+    .nav-links > li {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.5s var(--ease-out-soft),
+        transform 0.5s var(--ease-out-soft);
+    }
+
+    .nav-links.active > li {
+      opacity: 1;
+      transform: none;
+    }
+
+    .nav-links.active > li:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+    .nav-links.active > li:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+    .nav-links.active > li:nth-child(3) {
+      transition-delay: 0.15s;
+    }
+    .nav-links.active > li:nth-child(4) {
+      transition-delay: 0.2s;
+    }
+    .nav-links.active > li:nth-child(5) {
+      transition-delay: 0.3s;
     }
   }
 
@@ -431,26 +597,29 @@ const currentPath = Astro.url.pathname
     }
 
     .nav-links {
-      width: 100%;
-      right: -100%;
+      padding: 96px 24px 32px;
     }
 
-    .nav-links.active {
-      right: 0;
+    .nav-link {
+      font-size: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-links,
+    .nav-links > li,
+    .hamburger-line,
+    .social-icon {
+      transition: none;
     }
 
-    .nav-item {
-      padding: 10px 20px;
-      font-size: 16px;
+    .nav-links > li {
+      opacity: 1;
+      transform: none;
     }
 
-    .mobile-social-icons {
-      gap: 20px;
-    }
-
-    .mobile-social-icons .social-icon {
-      width: 40px;
-      height: 40px;
+    .social-icon:hover {
+      transform: none;
     }
   }
 </style>

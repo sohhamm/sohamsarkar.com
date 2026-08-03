@@ -36,7 +36,7 @@
     </section>
 
     <section class="footer-right" aria-labelledby="social-heading">
-      <h3 id="social-heading" class="visually-hidden">Social Media Links</h3>
+      <h3 id="social-heading" class="social-eyebrow">elsewhere</h3>
       <nav class="social-links" aria-label="Social media profiles">
         <a
           href="https://sohamsarkar.work"
@@ -162,11 +162,6 @@
       </nav>
     </section>
   </div>
-
-  <nav class="footer-nav" aria-label="Footer navigation">
-    <a href="/" aria-current="false">WORK</a>
-    <a href="/about">ABOUT</a>
-  </nav>
 </footer>
 
 <script>
@@ -326,81 +321,91 @@
   }
 
   /* Social Links */
+  .social-eyebrow {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 1rem 0;
+  }
+
   .social-links {
     display: flex;
     flex-direction: column;
-    gap: var(--footer-spacing-sm);
+    gap: 0.625rem;
   }
 
   .social-link {
-    color: var(--footer-text-color);
+    color: var(--text-muted);
     text-decoration: none;
     font-size: var(--footer-spacing-md);
-    transition: var(--footer-transition);
     display: flex;
     align-items: center;
-    gap: var(--footer-spacing-sm);
-    padding: 0.25rem 0;
-    border-radius: 0.25rem;
-  }
-
-  .social-link:hover {
-    opacity: 0.7;
-    transform: translateX(4px);
+    gap: 0.75rem;
+    border-radius: 0.75rem;
+    transition: color 0.3s var(--ease-out-soft);
   }
 
   .social-link:focus-visible {
     outline: var(--footer-focus-width) solid var(--footer-focus-color);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
+  /*
+    The icon sits in the same squarish glass tile as the nav's social icons:
+    soft 1px border, faint fill, inset top highlight, and it lights up under
+    the pointer while the handle comes up to full white.
+  */
   .social-icon {
     flex-shrink: 0;
-    transition: var(--footer-transition);
+    box-sizing: content-box;
+    padding: 8px;
+    color: var(--footer-text-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    transition:
+      background 0.3s var(--ease-out-soft),
+      border-color 0.3s var(--ease-out-soft),
+      box-shadow 0.3s var(--ease-out-soft);
   }
 
-  .social-link:hover .social-icon {
-    transform: scale(1.1);
+  .social-link:hover,
+  .social-link:focus-visible {
+    color: var(--footer-text-color);
+  }
+
+  .social-link:hover .social-icon,
+  .social-link:focus-visible .social-icon {
+    border-color: var(--border-medium);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+      0 0 20px 0 rgba(255, 255, 255, 0.12);
   }
 
   .social-text {
     white-space: nowrap;
   }
 
-  /* Footer Navigation */
-  .footer-nav {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--footer-spacing-lg);
-    margin-bottom: var(--footer-spacing-lg);
-    padding-top: var(--footer-spacing-lg);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* These all open elsewhere — say so, but only under the pointer. */
+  .social-text::after {
+    content: '↗';
+    display: inline-block;
+    margin-left: 0.375rem;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition:
+      opacity 0.3s var(--ease-out-soft),
+      transform 0.3s var(--ease-out-soft);
   }
 
-  .footer-nav a {
-    color: var(--footer-text-color);
-    text-decoration: none;
-    font-size: var(--footer-spacing-md);
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    transition: var(--footer-transition);
-    padding: var(--footer-spacing-sm);
-    border-radius: 0.25rem;
-  }
-
-  .footer-nav a:hover {
-    opacity: 0.7;
-    transform: translateY(-1px);
-  }
-
-  .footer-nav a:focus-visible {
-    outline: var(--footer-focus-width) solid var(--footer-focus-color);
-    outline-offset: 2px;
-  }
-
-  .footer-nav a[aria-current='page'] {
-    font-weight: 700;
+  .social-link:hover .social-text::after,
+  .social-link:focus-visible .social-text::after {
     opacity: 1;
+    transform: none;
   }
 
   /* Responsive Design */
@@ -413,16 +418,18 @@
 
   @media (max-width: 768px) {
     footer {
-      padding: var(--footer-spacing-lg) var(--footer-spacing-md) 0;
+      background-color: rgba(255, 255, 255, 0.035);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 3rem 1.5rem 1rem;
     }
 
     .footer-content {
       flex-direction: column;
-      gap: var(--footer-spacing-lg);
+      gap: 3rem;
     }
 
     .footer-tagline {
-      font-size: 2.5rem;
+      font-size: clamp(2.5rem, 11vw, 3.5rem);
       letter-spacing: -0.05em;
     }
 
@@ -430,37 +437,41 @@
       flex-direction: column;
       align-items: flex-start;
       gap: var(--footer-spacing-md);
-      margin-top: var(--footer-spacing-lg);
+      margin-top: 2.5rem;
     }
 
-    .footer-nav {
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: var(--footer-spacing-md);
+    .footer-right {
+      width: 100%;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .social-links {
+      gap: 0.9rem;
+    }
+
+    .social-link {
+      min-height: 2.75rem;
+      font-size: 1.125rem;
+      gap: 0.75rem;
+    }
+
+    .social-icon {
+      width: 22px;
+      height: 22px;
     }
   }
 
   @media (max-width: 480px) {
-    .footer-nav {
-      flex-direction: column;
-      align-items: center;
-      gap: var(--footer-spacing-sm);
-    }
-
     .location-info {
       gap: var(--footer-spacing-sm);
-    }
-
-    .social-links {
-      gap: 0.75rem;
     }
   }
 
   /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
     .work-with-me:hover,
-    .social-link:hover,
-    .footer-nav a:hover {
+    .social-link:hover {
       transform: none;
     }
 
