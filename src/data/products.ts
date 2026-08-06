@@ -35,7 +35,7 @@ export const products: Product[] = [
     description:
       'A blazingly fast way to create, manage & settle shared expenses without any hassle.',
     image: superdivideImage,
-    link: 'https://www.superdivide.com',
+    link: 'https://superdivide.com',
     status: 'Beta',
     category: 'Personal Finance',
     highlights: ['Split any expense', 'Group balances', 'One-tap settle up'],
@@ -50,7 +50,7 @@ export const products: Product[] = [
     description:
       'A habit tracker that turns intention into a practice you can keep — streaks, habit scores, and planned rest, without the guilt spiral.',
     image: rituaImage,
-    link: 'https://www.getritua.com',
+    link: 'https://getritua.com',
     status: 'Live',
     category: 'Productivity',
     highlights: ['Streaks & rhythm', 'Habit score', 'Rest days planned', 'Free'],
