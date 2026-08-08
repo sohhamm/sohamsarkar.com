@@ -66,8 +66,11 @@ const structuredData = [person, productList]
 
 const content = {
   title: 'Soham Sarkar - Builder | Tech | Product | Software Engineer',
+  // Kept under 160 characters: Google truncates the meta description around
+  // there, and the previous 178-character version lost its closing clause in the
+  // SERP.
   description:
-    'Software engineer who cares about well-crafted products and solving problems that matter. Full-stack developer specializing in React, TypeScript, Go, and modern web technologies.',
+    'Software engineer who cares about well-crafted products and solving problems that matter. Full-stack developer working in React, TypeScript, Go, and Node.',
   ogImage: '/opengraph.png',
   structuredData,
 }
