@@ -9,6 +9,11 @@ export interface Props {
 
 const {isHomePage = false} = Astro.props
 
+// On the home page this section sits under that page's own h1, so its heading is
+// an h2. On /projects/ it is the only heading on the page, and shipping that page
+// with no h1 at all left its main subject unstated to crawlers.
+const Heading = isHomePage ? 'h2' : 'h1'
+
 const allProjects = await getCollection('projects')
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order)
 const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
@@ -16,7 +21,7 @@ const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
 
 <section class="projects-section">
   <div class="projects-header">
-    <h2>{isHomePage ? 'Digital Backyard' : 'Projects'}</h2>
+    <Heading>{isHomePage ? 'Digital Backyard' : 'Projects'}</Heading>
     {
       isHomePage && (
         <Button href="/projects" variant="secondary" size="sm">
@@ -56,6 +61,7 @@ const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
     gap: 16px;
   }
 
+  .projects-header h1,
   .projects-header h2 {
     color: var(--text-primary);
     font-size: clamp(2rem, 5vw, 3.5rem);
