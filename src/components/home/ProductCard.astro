@@ -29,9 +29,21 @@ const aspect = product.image.width / product.image.height
 // out, the next one up is 840 and it overshoots by a third.
 const widest = Math.min(1200, product.image.width)
 const widths = [560, 700, 840, 1200].filter(width => width < widest).concat(widest)
+
+// Which side the art sits on, wide only. Driven by the index rather than a
+// :nth-child(even) rule: Astro emits this component's <script> once, as a real
+// element inside .products-list, so the rows are not the only children there.
+// DOM parity stopped matching product parity and every row after the first
+// landed on the wrong side.
+const flip = index % 2 === 1
 ---
 
-<article class="product reveal" data-pointer-card style={`--reveal-delay: ${index * 90}ms`}>
+<article
+  class="product reveal"
+  data-pointer-card
+  data-flip={flip ? '' : undefined}
+  style={`--reveal-delay: ${index * 90}ms`}
+>
   <div class="product-visual" style={`--art-aspect: ${aspect}`}>
     <Image
       src={product.image}
@@ -456,7 +468,7 @@ const widths = [560, 700, 840, 1200].filter(width => width < widest).concat(wide
       padding: 72px 0;
     }
 
-    .product:nth-child(even) .product-visual {
+    .product[data-flip] .product-visual {
       order: 2;
     }
   }

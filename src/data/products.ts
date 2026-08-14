@@ -66,12 +66,12 @@ export const products: Product[] = [
       'A source-owned TypeScript SaaS foundation — Bun + Hono API, React 19 SPA, end-to-end typed contracts, auth, billing and guided cloud deploys.',
     image: superslateImage,
     link: 'https://superslate.dev',
-    status: 'Coming Soon',
+    status: 'Live',
     category: 'Developer Tools',
     highlights: ['Bun + Hono', 'React 19 SPA', 'Typed end-to-end', 'You own the source'],
     stack: ['Bun', 'Hono', 'React', 'PostgreSQL', 'Zod'],
     fit: 'contain',
-    panel: '#0a0806',
+    panel: '#0c1117',
   },
 ]
 
