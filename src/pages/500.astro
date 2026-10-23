@@ -28,16 +28,15 @@ const content = {
         <h1>Server Error</h1>
         <p>
           Oops! Our digital garden hit a technical snag.
-          <br />The seeds are still growing, but something went wrong on our end.
+          <br />
+          The seeds are still growing, but something went wrong on our end.
         </p>
-        {
-          error instanceof Error && (
-            <details class="error-details">
-              <summary>Technical Details</summary>
-              <code>{error.message}</code>
-            </details>
-          )
-        }
+        {error instanceof Error && (
+          <details class="error-details">
+            <summary>Technical Details</summary>
+            <code>{error.message}</code>
+          </details>
+        )}
       </div>
 
       <div class="error-actions">

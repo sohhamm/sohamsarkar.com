@@ -12,14 +12,15 @@
 <dialog class="email-fallback" id="email-fallback" aria-labelledby="email-fallback-title">
   <div class="ef-body">
     <button class="ef-close" type="button" data-ef-close aria-label="Close">
-      <svg viewBox="0 0 24 24" aria-hidden="true"
-        ><path
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
           d="M6 6l12 12M18 6L6 18"
           fill="none"
           stroke="currentColor"
           stroke-width="1.5"
-          stroke-linecap="round"></path></svg
-      >
+          stroke-linecap="round"
+        ></path>
+      </svg>
     </button>
 
     <h2 id="email-fallback-title">No mail app here</h2>
@@ -31,33 +32,39 @@
     <div class="ef-actions">
       <a class="ef-action" data-ef-gmail href="#" target="_blank" rel="noopener noreferrer">
         <span>Compose in Gmail</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"
-          ><path
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
             d="M7 17L17 7M9 7h8v8"
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
             stroke-linecap="round"
-            stroke-linejoin="round"></path></svg
-        >
+            stroke-linejoin="round"
+          ></path>
+        </svg>
       </a>
       <a class="ef-action" data-ef-outlook href="#" target="_blank" rel="noopener noreferrer">
         <span>Compose in Outlook</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"
-          ><path
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
             d="M7 17L17 7M9 7h8v8"
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
             stroke-linecap="round"
-            stroke-linejoin="round"></path></svg
-        >
+            stroke-linejoin="round"
+          ></path>
+        </svg>
       </a>
     </div>
 
     <div class="ef-copy">
-      <span class="ef-address" data-ef-address>&nbsp;</span>
-      <button class="ef-copy-button" type="button" data-ef-copy>Copy</button>
+      <span class="ef-address" data-ef-address>
+        &nbsp;
+      </span>
+      <button class="ef-copy-button" type="button" data-ef-copy>
+        Copy
+      </button>
     </div>
   </div>
 </dialog>
@@ -168,7 +175,13 @@
     const link = target?.closest?.('a[href^="mailto:"]') as HTMLAnchorElement | null
     if (!link) return
     // Let modified clicks (new tab, download, …) behave normally.
-    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    if (
+      event.defaultPrevented ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
       return
     }
     watchForHandoff(link.href)

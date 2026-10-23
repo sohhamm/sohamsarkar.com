@@ -53,26 +53,24 @@ const paymentMethods = [
     </header>
 
     <div class="method-switch" role="tablist" aria-label="Payment method">
-      {
-        paymentMethods.map((method, i) => (
-          <button
-            class="method-tab"
-            role="tab"
-            type="button"
-            id={`tab-${method.id}`}
-            aria-controls={`panel-${method.id}`}
-            aria-selected={i === 0 ? 'true' : 'false'}
-            tabindex={i === 0 ? 0 : -1}
-            data-tab={method.id}
-          >
-            <Icon name={method.icon} class="method-icon" />
-            <span class="method-text">
-              <span class="method-title">{method.title}</span>
-              <span class="method-description">{method.description}</span>
-            </span>
-          </button>
-        ))
-      }
+      {paymentMethods.map((method, i) => (
+        <button
+          class="method-tab"
+          role="tab"
+          type="button"
+          id={`tab-${method.id}`}
+          aria-controls={`panel-${method.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-tab={method.id}
+        >
+          <Icon name={method.icon} class="method-icon" />
+          <span class="method-text">
+            <span class="method-title">{method.title}</span>
+            <span class="method-description">{method.description}</span>
+          </span>
+        </button>
+      ))}
     </div>
 
     <section
@@ -83,14 +81,12 @@ const paymentMethods = [
       data-section="upi"
     >
       <div class="qr-grid">
-        {
-          qrCodes.map(qr => (
-            <figure class="qr-card">
-              <img src={qr.src} alt={qr.alt} class="qr-image" loading="lazy" decoding="async" />
-              <figcaption class="qr-app">{qr.app}</figcaption>
-            </figure>
-          ))
-        }
+        {qrCodes.map(qr => (
+          <figure class="qr-card">
+            <img src={qr.src} alt={qr.alt} class="qr-image" loading="lazy" decoding="async" />
+            <figcaption class="qr-app">{qr.app}</figcaption>
+          </figure>
+        ))}
       </div>
 
       <div class="field">
@@ -116,27 +112,25 @@ const paymentMethods = [
       hidden
     >
       <div class="fields">
-        {
-          bankDetails.map(detail => (
-            <div class="field">
-              <span class="field-label">{detail.label}</span>
-              <div class="copy-field">
-                <span class="copy-text">{detail.value}</span>
-                {detail.copy && (
-                  <button
-                    class="copy-btn"
-                    type="button"
-                    data-copy-btn={detail.value}
-                    aria-label={`Copy ${detail.label.toLowerCase()}`}
-                  >
-                    <Icon name="copy" class="copy-icon" />
-                    <Icon name="check" class="check-icon" />
-                  </button>
-                )}
-              </div>
+        {bankDetails.map(detail => (
+          <div class="field">
+            <span class="field-label">{detail.label}</span>
+            <div class="copy-field">
+              <span class="copy-text">{detail.value}</span>
+              {detail.copy && (
+                <button
+                  class="copy-btn"
+                  type="button"
+                  data-copy-btn={detail.value}
+                  aria-label={`Copy ${detail.label.toLowerCase()}`}
+                >
+                  <Icon name="copy" class="copy-icon" />
+                  <Icon name="check" class="check-icon" />
+                </button>
+              )}
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
 
       <p class="panel-note">Double-check the account number and IFSC before you send anything.</p>

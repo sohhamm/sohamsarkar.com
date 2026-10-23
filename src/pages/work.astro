@@ -94,25 +94,27 @@ const content = {
         <Button href={CAL_LINK} target="_blank" rel="noopener noreferrer">
           Book a session <Icon name="arrow-right" />
         </Button>
-        <Button href={EMAIL} variant="secondary">Email me first</Button>
+        <Button href={EMAIL} variant="secondary">
+          Email me first
+        </Button>
       </div>
     </header>
 
     <section class="services" aria-labelledby="services-heading">
-      <h2 id="services-heading" class="sr-only">What I help with</h2>
-      {
-        services.map((service, index) => (
-          <article class="service reveal" style={`--reveal-delay: ${index * 80}ms`}>
-            <h3>{service.title}</h3>
-            <p>{service.description}</p>
-            <ul>
-              {service.points.map(point => (
-                <li>{point}</li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
+      <h2 id="services-heading" class="sr-only">
+        What I help with
+      </h2>
+      {services.map((service, index) => (
+        <article class="service reveal" style={`--reveal-delay: ${index * 80}ms`}>
+          <h3>{service.title}</h3>
+          <p>{service.description}</p>
+          <ul>
+            {service.points.map(point => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
     </section>
 
     <section class="proof reveal" aria-labelledby="proof-heading">
@@ -125,19 +127,17 @@ const content = {
       </div>
 
       <ul class="product-strip">
-        {
-          products.map(product => (
-            <li>
-              <a href={productUrl(product.link)} target="_blank" rel="noopener noreferrer">
-                <span class="product-name">{product.title}</span>
-                <span class="product-meta">
-                  {product.category} · {product.status}
-                </span>
-                <span class="product-domain">{productDomain(product.link)}</span>
-              </a>
-            </li>
-          ))
-        }
+        {products.map(product => (
+          <li>
+            <a href={productUrl(product.link)} target="_blank" rel="noopener noreferrer">
+              <span class="product-name">{product.title}</span>
+              <span class="product-meta">
+                {product.category} · {product.status}
+              </span>
+              <span class="product-domain">{productDomain(product.link)}</span>
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
 
@@ -148,20 +148,18 @@ const content = {
       </div>
 
       <ol class="track-list">
-        {
-          track.map(item => (
-            <li>
-              <div class="track-head">
-                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                  {item.company}
-                </a>
-                <span class="track-period">{item.period}</span>
-              </div>
-              <p class="track-role">{item.role}</p>
-              <p class="track-note">{item.note}</p>
-            </li>
-          ))
-        }
+        {track.map(item => (
+          <li>
+            <div class="track-head">
+              <a href={item.url} target="_blank" rel="noopener noreferrer">
+                {item.company}
+              </a>
+              <span class="track-period">{item.period}</span>
+            </div>
+            <p class="track-role">{item.role}</p>
+            <p class="track-note">{item.note}</p>
+          </li>
+        ))}
       </ol>
     </section>
 
@@ -175,7 +173,9 @@ const content = {
         <Button href={CAL_LINK} target="_blank" rel="noopener noreferrer">
           Book a session <Icon name="arrow-right" />
         </Button>
-        <Button href={EMAIL} variant="secondary">Email me</Button>
+        <Button href={EMAIL} variant="secondary">
+          Email me
+        </Button>
       </div>
     </aside>
   </section>

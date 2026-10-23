@@ -67,29 +67,23 @@ const absoluteOgImage = new URL(ogImage, Astro.site).href
 
 <!-- Favicon and Icons -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-{
-  /* /favicon.ico is still on disk for anything that goes looking for it at the
+{/* /favicon.ico is still on disk for anything that goes looking for it at the
      root, but it is not declared: declaring it made every browser download
-     15 KB of legacy multi-size bitmap alongside the SVG it was going to use. */
-}
+     15 KB of legacy multi-size bitmap alongside the SVG it was going to use. */}
 <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
 <link rel="manifest" href="/favicon/site.webmanifest" />
 
 <!-- Structured Data -->
-{
-  structuredData && (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  )
-}
+{structuredData && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}
 
-{
-  /* Preload above-the-fold fonts (used in hero + nav). All three earn their
+{/* Preload above-the-fold fonts (used in hero + nav). All three earn their
      place — measured: dropping Medium's preload costs ~225ms of first paint
      on throttled mobile, because the nav and the hero labels are laid out
-     with it and it is only discovered once they are. */
-}
+     with it and it is only discovered once they are. */}
 <link
   rel="preload"
   href="/fonts/VictorMono-Regular.woff2"

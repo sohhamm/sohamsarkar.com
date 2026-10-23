@@ -22,28 +22,24 @@ const projects = isHomePage ? sortedProjects.slice(0, 3) : sortedProjects
 <section class="projects-section">
   <div class="projects-header">
     <Heading>{isHomePage ? 'Digital Backyard' : 'Projects'}</Heading>
-    {
-      isHomePage && (
-        <Button href="/projects" variant="secondary" size="sm">
-          View all projects →
-        </Button>
-      )
-    }
+    {isHomePage && (
+      <Button href="/projects" variant="secondary" size="sm">
+        View all projects →
+      </Button>
+    )}
   </div>
 
   <div class="projects-container">
-    {
-      projects.map(project => (
-        <Project
-          title={project.data.title}
-          description={project.data.description}
-          link={project.data.link}
-          image={project.data.image}
-          tags={project.data.tags}
-          sourceCode={project.data.sourceCode}
-        />
-      ))
-    }
+    {projects.map(project => (
+      <Project
+        title={project.data.title}
+        description={project.data.description}
+        link={project.data.link}
+        image={project.data.image}
+        tags={project.data.tags}
+        sourceCode={project.data.sourceCode}
+      />
+    ))}
   </div>
 </section>
 

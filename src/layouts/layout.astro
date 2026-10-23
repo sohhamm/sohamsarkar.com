@@ -38,17 +38,13 @@ const {title, description, ...rest} = content
         <slot />
         <Footer transition:persist />
       </div>
-      {
-        /* Persisted alongside the footer, so the wordmark keeps its state
-          through a view transition instead of re-mounting on every page. */
-      }
+      {/* Persisted alongside the footer, so the wordmark keeps its state
+          through a view transition instead of re-mounting on every page. */}
       <FooterHorizon transition:persist />
     </main>
 
-    {
-      /* Catches mailto: clicks that never reach a mail app — see the component.
-        Persisted so a view transition can't swap it out mid-dialog. */
-    }
+    {/* Catches mailto: clicks that never reach a mail app — see the component.
+        Persisted so a view transition can't swap it out mid-dialog. */}
     <EmailFallback transition:persist />
 
     <script>
@@ -96,7 +92,6 @@ const {title, description, ...rest} = content
         revealAll(document.querySelectorAll('.reveal:not(.is-revealed)')),
       )
     </script>
-
     <style>
       .main-content {
         width: 100%;

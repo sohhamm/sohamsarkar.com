@@ -1,5 +1,5 @@
 {
   "cleanUrls": true,
-  "installCommand": "bun install",
+  "installCommand": "bun install --frozen-lockfile",
   "buildCommand": "bun run build && bun scripts/vercel-headers.mjs"
 }

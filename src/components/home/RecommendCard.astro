@@ -42,7 +42,9 @@ const shareText = recommendation.shareText || getDefaultShareText(recommendation
 
     <div class="card-content">
       <div class="card-header">
-        <h3 class="card-title" data-title>{recommendation.title}</h3>
+        <h3 class="card-title" data-title>
+          {recommendation.title}
+        </h3>
         <svg
           class="external-icon"
           width="14"
@@ -72,38 +74,36 @@ const shareText = recommendation.shareText || getDefaultShareText(recommendation
     <div class="card-glow" aria-hidden="true"></div>
   </a>
 
-  {
-    showShare && (
-      <button
-        class="share-button"
-        data-share-button
-        data-share-text={shareText}
-        data-share-title={recommendation.title}
-        data-share-url={recommendation.link}
-        type="button"
-        aria-label={`Share ${recommendation.title}`}
+  {showShare && (
+    <button
+      class="share-button"
+      data-share-button
+      data-share-text={shareText}
+      data-share-title={recommendation.title}
+      data-share-url={recommendation.link}
+      type="button"
+      aria-label={`Share ${recommendation.title}`}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="share-icon"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="share-icon"
-        >
-          <circle cx="18" cy="5" r="3" />
-          <circle cx="6" cy="12" r="3" />
-          <circle cx="18" cy="19" r="3" />
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-        </svg>
-        <span class="share-tooltip">Copied!</span>
-      </button>
-    )
-  }
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+      </svg>
+      <span class="share-tooltip">Copied!</span>
+    </button>
+  )}
 </div>
 
 <style>
