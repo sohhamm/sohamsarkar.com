@@ -22,7 +22,9 @@ const content = {
     </header>
 
     <div class="referrals-grid">
-      {recommendations.map((rec, index) => <RecommendCard recommendation={rec} index={index} />)}
+      {recommendations.map((rec, index) => (
+        <RecommendCard recommendation={rec} index={index} />
+      ))}
     </div>
 
     <footer class="page-footer">
@@ -30,9 +32,10 @@ const content = {
         These are referral and affiliate links. I only list things I use myself.
       </p>
       <p class="logo-credit">
-        Logos powered by <a href="https://logo.dev" target="_blank" rel="noopener noreferrer"
-          >Logo.dev</a
-        >
+        Logos powered by{' '}
+        <a href="https://logo.dev" target="_blank" rel="noopener noreferrer">
+          Logo.dev
+        </a>
       </p>
     </footer>
   </main>

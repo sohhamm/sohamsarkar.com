@@ -239,89 +239,92 @@ const experiences = resumeData.experiences.map(exp => ({
       <h1 class="name">{resumeData.profile.name}</h1>
       <p class="title">{resumeData.profile.title}</p>
     </div>
-    <a href={resumeData.profile.pdfUrl} target="_blank" class="download-btn"> Download PDF </a>
+    <a href={resumeData.profile.pdfUrl} target="_blank" class="download-btn">
+      {' '}
+      Download PDF{' '}
+    </a>
   </div>
 
   <div class="resume-nav">
-    <button class="nav-btn active" data-section="experience">Experience</button>
-    <button class="nav-btn" data-section="skills">Skills</button>
-    <button class="nav-btn" data-section="education">Education</button>
+    <button class="nav-btn active" data-section="experience">
+      Experience
+    </button>
+    <button class="nav-btn" data-section="skills">
+      Skills
+    </button>
+    <button class="nav-btn" data-section="education">
+      Education
+    </button>
   </div>
 
   <div class="resume-content">
     <!-- Experience Section -->
     <div class="section active" data-section="experience">
       <div class="experience-list">
-        {
-          experiences.map(exp => (
-            <article class="company-block">
-              <div class="company-header">
-                <div class="company-logo">
-                  <Image src={exp.logo} alt={exp.company} width={48} height={48} />
-                </div>
-                <div class="company-meta">
-                  <h2>
-                    <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer">
-                      {exp.company}
-                    </a>
-                  </h2>
-                  <span class="tenure">{exp.tenure}</span>
-                </div>
+        {experiences.map(exp => (
+          <article class="company-block">
+            <div class="company-header">
+              <div class="company-logo">
+                <Image src={exp.logo} alt={exp.company} width={48} height={48} />
               </div>
+              <div class="company-meta">
+                <h2>
+                  <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer">
+                    {exp.company}
+                  </a>
+                </h2>
+                <span class="tenure">{exp.tenure}</span>
+              </div>
+            </div>
 
-              <div class="roles">
-                {exp.roles.map(role => (
-                  <div class="role">
-                    <div class="role-title">
-                      <h3>{role.title}</h3>
-                      <span class="role-period">{role.period}</span>
-                    </div>
-                    {role.responsibilities && (
-                      <ul class="responsibilities">
-                        {role.responsibilities.map(resp => (
-                          <li>{resp}</li>
-                        ))}
-                      </ul>
-                    )}
+            <div class="roles">
+              {exp.roles.map(role => (
+                <div class="role">
+                  <div class="role-title">
+                    <h3>{role.title}</h3>
+                    <span class="role-period">{role.period}</span>
                   </div>
-                ))}
-              </div>
-            </article>
-          ))
-        }
+                  {role.responsibilities && (
+                    <ul class="responsibilities">
+                      {role.responsibilities.map(resp => (
+                        <li>{resp}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
       </div>
     </div>
 
     <!-- Skills Section -->
     <div class="section" data-section="skills">
       <div class="skills-grid">
-        {
-          resumeData.skills.map(group => (
-            <div class="skill-group">
-              <h3>{group.category}</h3>
-              <div class="skill-list">
-                {group.skills.map(skill => (
-                  <span>{skill}</span>
-                ))}
-              </div>
+        {resumeData.skills.map(group => (
+          <div class="skill-group">
+            <h3>{group.category}</h3>
+            <div class="skill-list">
+              {group.skills.map(skill => (
+                <span>{skill}</span>
+              ))}
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
     </div>
 
     <!-- Education Section -->
     <div class="section" data-section="education">
       <div class="education-list">
-        {
-          resumeData.education.map(edu => (
-            <article class="education-item">
-              <h3>{edu.degree}</h3>
-              <p class="institution">{edu.institution}</p>
-              <span class="period">{edu.period}</span>
-            </article>
-          ))
-        }
+        {resumeData.education.map(edu => (
+          <article class="education-item">
+            <h3>{edu.degree}</h3>
+            <p class="institution">{edu.institution}</p>
+            <span class="period">{edu.period}</span>
+          </article>
+        ))}
       </div>
     </div>
   </div>

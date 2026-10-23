@@ -48,20 +48,17 @@ const flip = index % 2 === 1
     <Image
       src={product.image}
       alt={`${product.title} — ${product.tagline}`}
-      class="product-art"
-      {/* Every row is below the fold, the first one included — it starts about
+      class="product-art" /* Every row is below the fold, the first one included — it starts about
           a full viewport down. Loading it eagerly only put it in the same
-          bandwidth queue as the hero plate, which is the LCP. */}
+          bandwidth queue as the hero plate, which is the LCP. */
       loading="lazy"
       decoding="async"
-      widths={widths}
-      {/* Without this the <img src> fallback is the untouched source —
+      widths={widths} /* Without this the <img src> fallback is the untouched source —
           SuperDivide's is 3684px and 219 KB, generated and deployed for a
-          browser that will never ask for it. */}
-      width={widest}
-      {/* Not 100vw: the row sits inside .container's 20px gutters, so 100vw
+          browser that will never ask for it. */
+      width={widest} /* Not 100vw: the row sits inside .container's 20px gutters, so 100vw
           overstates the slot by ~11% — enough on a 412px phone to push the
-          browser off the 700w rung and onto the 840w one. */}
+          browser off the 700w rung and onto the 840w one. */
       sizes="(max-width: 900px) calc(100vw - 40px), 620px"
     />
   </div>
@@ -79,14 +76,12 @@ const flip = index % 2 === 1
 
     {/* Was a row of chips — the same words read as a line, with four fewer boxes. */}
     <p class="product-highlights">
-      {
-        product.highlights.map((item, position) => (
-          <>
-            {position > 0 && <span aria-hidden="true"> · </span>}
-            {item}
-          </>
-        ))
-      }
+      {product.highlights.map((item, position) => (
+        <>
+          {position > 0 && <span aria-hidden="true"> · </span>}
+          {item}
+        </>
+      ))}
     </p>
 
     <div class="product-footer">

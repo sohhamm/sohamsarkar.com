@@ -78,26 +78,26 @@ const content = {
 
 <Layout content={content}>
   <section class="hero-section">
-    {
-      /* Breaks out of the 1200px container to sit full-bleed, and reaches up
+    {/* Breaks out of the 1200px container to sit full-bleed, and reaches up
         behind the fixed nav — it's the page's light source now that the
-        spotlight beams are gone. */
-    }
+        spotlight beams are gone. */}
     <div class="hero-plate" aria-hidden="true">
       <Picture
         src={heroPlate}
-        formats={['avif', 'webp']}
-        {/* Without this the <img> fallback stays PNG — multi-megabyte variants
-            shipped for a browser that supports neither AVIF nor WebP. */}
-        fallbackFormat="webp"
-        {/* Capped at 2560. The 3456w variant was 128 KB and is what a retina
+        formats={[
+          'avif',
+          'webp',
+        ]} /* Without this the <img> fallback stays PNG — multi-megabyte variants
+            shipped for a browser that supports neither AVIF nor WebP. */
+        fallbackFormat="webp" /* Capped at 2560. The 3456w variant was 128 KB and is what a retina
             laptop picked for a 3024px slot — 80 KB more than the 2560w for a
             1.18x upscale of a soft, near-black glow that has no detail to
-            lose. This is the LCP element, so those bytes are the LCP. */}
-        widths={[960, 1280, 1920, 2560]}
-        {/* Pins the <img src> fallback to the top of that ladder. Left off, it
+            lose. This is the LCP element, so those bytes are the LCP. */
+        widths={[
+          960, 1280, 1920, 2560,
+        ]} /* Pins the <img src> fallback to the top of that ladder. Left off, it
             is the full 3763px source — a 119 KB variant no browser with
-            srcset support will ever ask for, generated and deployed anyway. */}
+            srcset support will ever ask for, generated and deployed anyway. */
         width={2560}
         sizes="100vw"
         alt=""
@@ -105,10 +105,8 @@ const content = {
         fetchpriority="high"
         decoding="async"
       />
-      {
-        /* After the image in the DOM, so it composites over the plate — and
-          still under .hero-plate::after, which keeps the copy column dark. */
-      }
+      {/* After the image in the DOM, so it composites over the plate — and
+          still under .hero-plate::after, which keeps the copy column dark. */}
       <HeroField gridSrc={heroGrid} />
     </div>
 
@@ -116,19 +114,23 @@ const content = {
       <span class="hero-name">Soham Sarkar</span>
       <h1>
         <span class="line">Software engineer.</span>
-        <span class="line">I <span class="italic-text">build things</span>.</span>
+        <span class="line">
+          I <span class="italic-text">build things</span>.
+        </span>
       </h1>
       <p>I care about well-crafted products and solving problems that matter.</p>
       <div class="hero-actions">
-        <Button href="mailto:sohamsarkar.work@gmail.com?subject=Hey%20Soham"
-          >Let's build something <Icon name="arrow-right" /></Button
-        >
+        <Button href="mailto:sohamsarkar.work@gmail.com?subject=Hey%20Soham">
+          Let's build something <Icon name="arrow-right" />
+        </Button>
         <Button
           href="https://cal.com/soham-sarkar-work"
           variant="secondary"
           target="_blank"
-          rel="noopener noreferrer">Book a call</Button
+          rel="noopener noreferrer"
         >
+          Book a call
+        </Button>
       </div>
     </div>
   </section>

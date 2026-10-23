@@ -27,3 +27,13 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Dependency maintenance
+
+Use Bun 1.4.4 and Node 24.22.0 (the version in `.node-version`). Run
+`bun install --frozen-lockfile`, `bun run check`, `bun run typecheck`, and
+`bun run build && bun scripts/vercel-headers.mjs` before merging.
+
+TypeScript is intentionally on 6.0.3 because the stable Astro checker rejects
+TypeScript 7.0. The version-scoped overrides keep Vercel build dependencies on
+patched releases within their existing major versions; they require Bun 1.4.4.

@@ -86,154 +86,152 @@ const DEFAULT_SCENARIO = 'realistic'
 ---
 
 <Layout content={content}>
-  {
-    !authed ? (
-      <section class="lock-screen">
-        <form class="lock-card" method="post">
-          <div class="lock-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
-              <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
-            </svg>
-          </div>
-          <h1 class="lock-title">Private page</h1>
-          <p class="lock-subtitle">Enter the password to continue</p>
-          <input
-            class="lock-input"
-            type="password"
-            name="password"
-            placeholder="Password"
-            autocomplete="current-password"
-            autofocus
-            required
-          />
-          {error && <p class="lock-error">Wrong password, try again.</p>}
-          <button class="lock-button" type="submit">
-            Unlock
-          </button>
-        </form>
-      </section>
-    ) : (
-      <section class="plan">
-        <header class="plan-header">
-          <p class="section-label">Every month</p>
-          <h1 class="plan-title">Investment Plan</h1>
-        </header>
-
-        <div class="scenario-tabs" role="tablist" aria-label="Month scenario">
-          {scenarioData.map(s => (
-            <button
-              class="scenario-tab"
-              role="tab"
-              data-scenario-tab={s.id}
-              data-active={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
-              aria-selected={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
-            >
-              <span class="scenario-tab-emoji" aria-hidden="true">
-                {s.emoji}
-              </span>
-              <span class="scenario-tab-label">{s.label}</span>
-              <span class="scenario-tab-total">{lakh(s.grandTotal)}</span>
-            </button>
-          ))}
+  {!authed ? (
+    <section class="lock-screen">
+      <form class="lock-card" method="post">
+        <div class="lock-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+            <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+          </svg>
         </div>
+        <h1 class="lock-title">Private page</h1>
+        <p class="lock-subtitle">Enter the password to continue</p>
+        <input
+          class="lock-input"
+          type="password"
+          name="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          autofocus
+          required
+        />
+        {error && <p class="lock-error">Wrong password, try again.</p>}
+        <button class="lock-button" type="submit">
+          Unlock
+        </button>
+      </form>
+    </section>
+  ) : (
+    <section class="plan">
+      <header class="plan-header">
+        <p class="section-label">Every month</p>
+        <h1 class="plan-title">Investment Plan</h1>
+      </header>
 
+      <div class="scenario-tabs" role="tablist" aria-label="Month scenario">
         {scenarioData.map(s => (
-          <div
-            class="scenario"
-            data-scenario={s.id}
+          <button
+            class="scenario-tab"
+            role="tab"
+            data-scenario-tab={s.id}
             data-active={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
+            aria-selected={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
           >
-            <p class="scenario-total">
-              <span class="scenario-total-amount">{inr(s.grandTotal)}</span>
-              <span class="scenario-total-suffix">/ month combined</span>
-            </p>
+            <span class="scenario-tab-emoji" aria-hidden="true">
+              {s.emoji}
+            </span>
+            <span class="scenario-tab-label">{s.label}</span>
+            <span class="scenario-tab-total">{lakh(s.grandTotal)}</span>
+          </button>
+        ))}
+      </div>
 
-            <div class="allocation-card">
-              <div class="allocation-bar" role="img" aria-label="Allocation by asset class">
-                {s.allocation.map(a => (
-                  <div
-                    class="allocation-segment"
-                    style={`width:${a.pct}%;background:${a.color}`}
-                    title={`${a.label} ${Math.round(a.pct)}%`}
-                  />
-                ))}
-              </div>
-              <div class="allocation-legend">
-                {s.allocation.map(a => (
-                  <div class="legend-item">
-                    <span class="legend-dot" style={`background:${a.color}`} />
-                    <span class="legend-name">{a.label}</span>
-                    <span class="legend-pct">{Math.round(a.pct)}%</span>
-                  </div>
-                ))}
-              </div>
+      {scenarioData.map(s => (
+        <div
+          class="scenario"
+          data-scenario={s.id}
+          data-active={s.id === DEFAULT_SCENARIO ? 'true' : 'false'}
+        >
+          <p class="scenario-total">
+            <span class="scenario-total-amount">{inr(s.grandTotal)}</span>
+            <span class="scenario-total-suffix">/ month combined</span>
+          </p>
+
+          <div class="allocation-card">
+            <div class="allocation-bar" role="img" aria-label="Allocation by asset class">
+              {s.allocation.map(a => (
+                <div
+                  class="allocation-segment"
+                  style={`width:${a.pct}%;background:${a.color}`}
+                  title={`${a.label} ${Math.round(a.pct)}%`}
+                />
+              ))}
             </div>
-
-            <div class="people">
-              {s.people.map(person => (
-                <div class="person-card">
-                  <div class="person-header">
-                    <h2 class="person-name">
-                      <span aria-hidden="true">{person.emoji}</span> {person.name}
-                    </h2>
-                    <span class="person-total">{inr(person.total)}/mo</span>
-                  </div>
-                  <ul class="investment-list">
-                    {person.items.map(item => (
-                      <li class="investment">
-                        <span
-                          class="investment-accent"
-                          style={`background:${categories[item.category].color}`}
-                          aria-hidden="true"
-                        />
-                        <div class="investment-main">
-                          <span class="investment-name">
-                            <span aria-hidden="true">{categories[item.category].emoji}</span>{' '}
-                            {item.label ?? categories[item.category].label}
-                          </span>
-                          {item.note && <span class="investment-note">{item.note}</span>}
-                        </div>
-                        <div class="investment-figures">
-                          <span class="investment-amount">{inr(item.amount)}</span>
-                          <span class="investment-pct">
-                            {((item.amount / person.total) * 100).toFixed(1)}%
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+            <div class="allocation-legend">
+              {s.allocation.map(a => (
+                <div class="legend-item">
+                  <span class="legend-dot" style={`background:${a.color}`} />
+                  <span class="legend-name">{a.label}</span>
+                  <span class="legend-pct">{Math.round(a.pct)}%</span>
                 </div>
               ))}
             </div>
           </div>
-        ))}
 
-        <div class="strategy-card">
-          <p class="section-label">📉 Dry Powder Strategy</p>
-          <div class="strategy-tiers">
-            {dryPowderTiers.map(tier => (
-              <div class="strategy-tier">
-                <div class="strategy-tier-header">
-                  <span class="strategy-tier-name">{tier.name}</span>
-                  <span class="strategy-tier-vehicle">{tier.vehicle}</span>
+          <div class="people">
+            {s.people.map(person => (
+              <div class="person-card">
+                <div class="person-header">
+                  <h2 class="person-name">
+                    <span aria-hidden="true">{person.emoji}</span> {person.name}
+                  </h2>
+                  <span class="person-total">{inr(person.total)}/mo</span>
                 </div>
-                <p class="strategy-tier-use">{tier.use}</p>
+                <ul class="investment-list">
+                  {person.items.map(item => (
+                    <li class="investment">
+                      <span
+                        class="investment-accent"
+                        style={`background:${categories[item.category].color}`}
+                        aria-hidden="true"
+                      />
+                      <div class="investment-main">
+                        <span class="investment-name">
+                          <span aria-hidden="true">{categories[item.category].emoji}</span>{' '}
+                          {item.label ?? categories[item.category].label}
+                        </span>
+                        {item.note && <span class="investment-note">{item.note}</span>}
+                      </div>
+                      <div class="investment-figures">
+                        <span class="investment-amount">{inr(item.amount)}</span>
+                        <span class="investment-pct">
+                          {((item.amount / person.total) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
+      ))}
 
-        <div class="ef-card">
-          <div class="ef-main">
-            <span class="ef-label">Emergency Fund</span>
-            <span class="ef-note">{emergencyFundNote}</span>
-          </div>
-          <span class="ef-value">{lakh(emergencyFund)}</span>
+      <div class="strategy-card">
+        <p class="section-label">📉 Dry Powder Strategy</p>
+        <div class="strategy-tiers">
+          {dryPowderTiers.map(tier => (
+            <div class="strategy-tier">
+              <div class="strategy-tier-header">
+                <span class="strategy-tier-name">{tier.name}</span>
+                <span class="strategy-tier-vehicle">{tier.vehicle}</span>
+              </div>
+              <p class="strategy-tier-use">{tier.use}</p>
+            </div>
+          ))}
         </div>
-      </section>
-    )
-  }
+      </div>
+
+      <div class="ef-card">
+        <div class="ef-main">
+          <span class="ef-label">Emergency Fund</span>
+          <span class="ef-note">{emergencyFundNote}</span>
+        </div>
+        <span class="ef-value">{lakh(emergencyFund)}</span>
+      </div>
+    </section>
+  )}
 </Layout>
 
 <style>

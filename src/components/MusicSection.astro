@@ -67,40 +67,38 @@ try {
   </div>
 
   <ol class="tracks-list">
-    {
-      musicData.tracks.map((track, index) => (
-        <li class="track-row">
-          <button
-            class="track-item"
-            type="button"
-            data-video-id={track.videoId}
-            aria-label={`Play ${track.title} by ${track.artist}`}
-          >
-            <span class="track-index" aria-hidden="true">
-              <span class="track-number">{(index + 1).toString().padStart(2, '0')}</span>
-              <svg class="track-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </span>
-            <span class="track-thumbnail">
-              <img
-                src={track.thumbnail}
-                alt=""
-                width="48"
-                height="48"
-                loading="lazy"
-                decoding="async"
-              />
-            </span>
-            <span class="track-info">
-              <span class="track-title">{track.title}</span>
-              <span class="track-artist">{track.artist}</span>
-            </span>
-            <span class="track-duration">{track.duration}</span>
-          </button>
-        </li>
-      ))
-    }
+    {musicData.tracks.map((track, index) => (
+      <li class="track-row">
+        <button
+          class="track-item"
+          type="button"
+          data-video-id={track.videoId}
+          aria-label={`Play ${track.title} by ${track.artist}`}
+        >
+          <span class="track-index" aria-hidden="true">
+            <span class="track-number">{(index + 1).toString().padStart(2, '0')}</span>
+            <svg class="track-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <span class="track-thumbnail">
+            <img
+              src={track.thumbnail}
+              alt=""
+              width="48"
+              height="48"
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
+          <span class="track-info">
+            <span class="track-title">{track.title}</span>
+            <span class="track-artist">{track.artist}</span>
+          </span>
+          <span class="track-duration">{track.duration}</span>
+        </button>
+      </li>
+    ))}
   </ol>
 
   <!-- Modal Backdrop -->
@@ -137,7 +135,9 @@ try {
           </svg>
         </button>
       </div>
-      <div class="player-frame"><div id="youtube-player"></div></div>
+      <div class="player-frame">
+        <div id="youtube-player"></div>
+      </div>
     </div>
   </div>
 </section>

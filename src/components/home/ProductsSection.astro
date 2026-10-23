@@ -18,7 +18,9 @@ import {products} from '../../data/products'
   </div>
 
   <div class="products-list">
-    {products.map((product, index) => <ProductCard product={product} index={index} />)}
+    {products.map((product, index) => (
+      <ProductCard product={product} index={index} />
+    ))}
   </div>
 </section>
 

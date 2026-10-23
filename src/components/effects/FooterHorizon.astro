@@ -9,12 +9,10 @@ import wordmark from '../../assets/footer-bottom.png'
 ---
 
 <div class="footer-horizon" data-footer-horizon>
-  {
-    /* Was the raw PNG straight out of the asset pipeline — 58.5 KB on every
+  {/* Was the raw PNG straight out of the asset pipeline — 58.5 KB on every
        page for a wordmark that is white ink on transparency. AVIF carries the
        same alpha at a fifth of the bytes. <Picture> still renders one <img>,
-       which is what the script measures and uploads as a texture. */
-  }
+       which is what the script measures and uploads as a texture. */}
   <Picture
     src={wordmark}
     formats={['avif', 'webp']}
