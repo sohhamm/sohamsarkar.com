@@ -3,11 +3,16 @@ import Layout from '../layouts/layout.astro'
 import InteractiveResume from '../components/InteractiveResume.astro'
 ---
 
+{/* Unlisted: reachable if you know the URL, but never surfaced in search. Also
+    filtered out of the sitemap via NOINDEXED in astro.config.mjs. Google had
+    this indexed at /resume as of 9 August 2026 — it chose the slashless form
+    over the rel=canonical — so the noindex has real work to do here. */}
 <Layout
   content={{
     title: 'Resume | Soham Sarkar',
     description:
       'Resume of Soham Sarkar — full-stack software engineer based in Bangalore. Experience across React, TypeScript, Go, Node.js, and product engineering.',
+    noindex: true,
   }}
 >
   <InteractiveResume />

@@ -2,11 +2,14 @@
 import Layout from '../layouts/layout.astro'
 import MusicSection from '../components/MusicSection.astro'
 
+// Unlisted: reachable if you know the URL, but never surfaced in search. Also
+// filtered out of the sitemap via NOINDEXED in astro.config.mjs.
 const content = {
   title: 'Music - Soham Sarkar',
   description:
     'My sonic identity - a curated playlist that defines my musical taste and creative process.',
   ogImage: '/opengraph.png',
+  noindex: true,
 }
 ---
 

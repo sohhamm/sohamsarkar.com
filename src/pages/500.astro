@@ -9,9 +9,12 @@ interface Props {
 
 const {error} = Astro.props
 
+// Same reasoning as 404.astro: /500 is a reachable path that answers 200 with
+// error copy, which reads to a crawler as a Soft 404.
 const content = {
   title: '500 - Server Error | Soham Sarkar',
   description: `Internal server error. Our digital garden is experiencing some technical difficulties.`,
+  noindex: true,
 }
 ---
 

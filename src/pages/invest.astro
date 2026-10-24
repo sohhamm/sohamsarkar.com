@@ -34,7 +34,9 @@ if (Astro.request.method === 'POST') {
       path: '/invest',
       maxAge: 60 * 60 * 24 * 180,
     })
-    return Astro.redirect('/invest', 303)
+    // Slashed form: trailingSlash is 'always', so '/invest' would 308 again and
+    // turn a successful login into a two-hop redirect chain.
+    return Astro.redirect('/invest/', 303)
   }
   error = true
 }

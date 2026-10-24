@@ -3,9 +3,15 @@ import Layout from '../layouts/layout.astro'
 import Button from '../components/Button.astro'
 import {Icon} from 'astro-icon/components'
 
+// Vercel serves this file with a real 404 for unmatched routes, but the path
+// /404 itself resolves through the filesystem handler and answers 200 — an
+// error page returning success is the textbook Soft 404. noindex keeps the
+// literal URL out of the index; the status code still does the work everywhere
+// else.
 const content = {
   title: '404 - Page Not Found | Soham Sarkar',
   description: `The page you're looking for doesn't exist. Return to explore my work and projects.`,
+  noindex: true,
 }
 ---
 
@@ -31,7 +37,7 @@ const content = {
           <Icon name="home" />
           Back to Home
         </Button>
-        <Button href="/projects" variant="secondary">
+        <Button href="/projects/" variant="secondary">
           View Projects
           <Icon name="arrow-right" />
         </Button>

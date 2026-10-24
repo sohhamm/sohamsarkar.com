@@ -3,10 +3,15 @@ import Layout from '../layouts/layout.astro'
 import RecommendCard from '../components/home/RecommendCard.astro'
 import {recommendations} from '../data/recommendations'
 
+// Unlisted: reachable if you know the URL, but never surfaced in search. Also
+// filtered out of the sitemap via NOINDEXED in astro.config.mjs. Google had this
+// one indexed at both /referrals and /referrals/ as of 9 August 2026, so the
+// noindex has real work to do here — see the Removals tool for faster takedown.
 const content = {
   title: 'Referrals | Soham Sarkar',
   description:
     'Finance apps I actually use — Zerodha, smallcase, INDmoney, CoinSwitch, Wint Wealth and CRED — with referral links that hand you a signup bonus.',
+  noindex: true,
 }
 ---
 
