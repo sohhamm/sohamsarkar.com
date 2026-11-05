@@ -5,10 +5,12 @@ import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import {defineConfig} from 'astro/config'
 
+const EDGE_SLASHES_RE = /^\/|\/$/g
+
 const PAGES_DIR = fileURLToPath(new URL('./src/pages', import.meta.url))
 
 const urlToPageFile = url => {
-  const path = new URL(url).pathname.replace(/^\/|\/$/g, '') || 'index'
+  const path = new URL(url).pathname.replace(EDGE_SLASHES_RE, '') || 'index'
   for (const ext of ['.astro', '/index.astro']) {
     try {
       const file = `${PAGES_DIR}/${path}${ext}`

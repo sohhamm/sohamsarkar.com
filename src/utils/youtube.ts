@@ -1,3 +1,30 @@
+const ISO_DURATION_RE = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
+const CHANNEL_TOPIC_SUFFIX_RE = /\s*[-–—]\s*Topic$/i
+const VEVO_SUFFIX_RE = /VEVO$/i
+const OFFICIAL_SUFFIX_RE = /\s*[-–—]?\s*Official(?:\s+(?:Channel|Music|Artist|Video))?$/i
+const OFFICIAL_BRACKET_RE = /\[Official.*?\]/gi
+const OFFICIAL_PAREN_RE = /\(Official.*?\)/gi
+const LYRIC_BRACKET_RE = /\[Lyric.*?\]/gi
+const LYRIC_PAREN_RE = /\(Lyric.*?\)/gi
+const AUDIO_BRACKET_RE = /\[Audio.*?\]/gi
+const AUDIO_PAREN_RE = /\(Audio.*?\)/gi
+const HD_BRACKET_RE = /\[HD\]/gi
+const HD_PAREN_RE = /\(HD\)/gi
+const FOUR_K_BRACKET_RE = /\[4K\]/gi
+const FOUR_K_PAREN_RE = /\(4K\)/gi
+const ARTIST_DASH_TITLE_RE = /^(.+?)\s*[-–—]\s*(.+)$/
+const ARTIST_COLON_TITLE_RE = /^(.+?)\s*:\s*(.+)$/
+const ARTIST_PIPE_TITLE_RE = /^(.+?)\s*[|｜]\s*(.+)$/
+const TITLE_BY_ARTIST_RE = /^(.+?)\s+by\s+(.+)$/i
+const QUOTED_TITLE_ARTIST_RE = /^["'](.+?)["']\s+(.+)$/
+const ARTIST_QUOTED_TITLE_RE = /^(.+?)\s+["'](.+?)["']$/
+const ARTIST_FEAT_DASH_TITLE_RE = /^(.+?(?:\s+(?:feat\.?|ft\.?|featuring)\s+.+?))\s*[-–—]\s*(.+)$/i
+const ARTIST_PAREN_TITLE_RE = /^(.+?)\s*\((.+?)\)$/
+const ARTIST_DASH_TITLE_PAREN_RE = /^(.+?)\s*[-–—]\s*(.+?)\s*\([^)]*\)$/
+const ARTIST_SUFFIX_RE = /\s*(?:VEVO|Records|Music|Official|Channel)$/gi
+const ARTIST_TOPIC_SUFFIX_RE = /\s*(?:Topic)$/gi
+const CHANNEL_NAME_SUFFIX_RE = /^(.+?)\s*(?:VEVO|Records|Music|Official|Channel|Topic)$/gi
+
 export interface YouTubeTrack {
   title: string
   artist: string
@@ -54,7 +81,7 @@ interface YouTubeListResponse<T> {
 
 // Format duration from ISO 8601 (PT4M13S) to MM:SS
 function formatDuration(duration: string): string {
-  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/)
+  const match = duration.match(ISO_DURATION_RE)
   if (!match) return '0:00'
 
   const hours = parseInt(match[1] || '0')
@@ -69,14 +96,14 @@ function formatDuration(duration: string): string {
 // "Lil Uzi Vert - Topic" -> "Lil Uzi Vert", "ArtistVEVO" -> "Artist".
 function cleanChannelName(channel: string): string {
   return channel
-    .replace(/\s*[-–—]\s*Topic$/i, '')
-    .replace(/VEVO$/i, '')
-    .replace(/\s*[-–—]?\s*Official(?:\s+(?:Channel|Music|Artist|Video))?$/i, '')
+    .replace(CHANNEL_TOPIC_SUFFIX_RE, '')
+    .replace(VEVO_SUFFIX_RE, '')
+    .replace(OFFICIAL_SUFFIX_RE, '')
     .trim()
 }
 
 function isTopicChannel(channel: string): boolean {
-  return /\s*[-–—]\s*Topic$/i.test(channel)
+  return CHANNEL_TOPIC_SUFFIX_RE.test(channel)
 }
 
 // Resolve a track's title and artist, preferring the channel name where it is
@@ -100,16 +127,16 @@ const UNKNOWN_ARTIST = 'Unknown Artist'
 // Clean up common YouTube prefixes/suffixes
 function cleanupTitle(title: string): string {
   return title
-    .replace(/\[Official.*?\]/gi, '')
-    .replace(/\(Official.*?\)/gi, '')
-    .replace(/\[Lyric.*?\]/gi, '')
-    .replace(/\(Lyric.*?\)/gi, '')
-    .replace(/\[Audio.*?\]/gi, '')
-    .replace(/\(Audio.*?\)/gi, '')
-    .replace(/\[HD\]/gi, '')
-    .replace(/\(HD\)/gi, '')
-    .replace(/\[4K\]/gi, '')
-    .replace(/\(4K\)/gi, '')
+    .replace(OFFICIAL_BRACKET_RE, '')
+    .replace(OFFICIAL_PAREN_RE, '')
+    .replace(LYRIC_BRACKET_RE, '')
+    .replace(LYRIC_PAREN_RE, '')
+    .replace(AUDIO_BRACKET_RE, '')
+    .replace(AUDIO_PAREN_RE, '')
+    .replace(HD_BRACKET_RE, '')
+    .replace(HD_PAREN_RE, '')
+    .replace(FOUR_K_BRACKET_RE, '')
+    .replace(FOUR_K_PAREN_RE, '')
     .trim()
 }
 
@@ -120,26 +147,26 @@ function extractArtist(title: string): {title: string; artist: string} {
   // Enhanced patterns for artist extraction
   const patterns = [
     // Standard patterns: "Artist - Title", "Artist: Title"
-    /^(.+?)\s*[-–—]\s*(.+)$/,
-    /^(.+?)\s*:\s*(.+)$/,
-    /^(.+?)\s*[|｜]\s*(.+)$/,
+    ARTIST_DASH_TITLE_RE,
+    ARTIST_COLON_TITLE_RE,
+    ARTIST_PIPE_TITLE_RE,
 
     // "Title by Artist", "Title - Artist"
-    /^(.+?)\s+by\s+(.+)$/i,
-    /^(.+?)\s*[-–—]\s*(.+)$/,
+    TITLE_BY_ARTIST_RE,
+    ARTIST_DASH_TITLE_RE,
 
     // Artist in quotes: '"Title" Artist'
-    /^["'](.+?)["']\s+(.+)$/,
-    /^(.+?)\s+["'](.+?)["']$/,
+    QUOTED_TITLE_ARTIST_RE,
+    ARTIST_QUOTED_TITLE_RE,
 
     // Feat/ft patterns: "Artist feat. Artist2 - Title"
-    /^(.+?(?:\s+(?:feat\.?|ft\.?|featuring)\s+.+?))\s*[-–—]\s*(.+)$/i,
+    ARTIST_FEAT_DASH_TITLE_RE,
 
     // Parentheses patterns: "Artist (Title)" or "Title (Artist)"
-    /^(.+?)\s*\((.+?)\)$/,
+    ARTIST_PAREN_TITLE_RE,
 
     // "Artist - Title (something)"
-    /^(.+?)\s*[-–—]\s*(.+?)\s*\([^)]*\)$/,
+    ARTIST_DASH_TITLE_PAREN_RE,
   ]
 
   for (const pattern of patterns) {
@@ -155,10 +182,7 @@ function extractArtist(title: string): {title: string; artist: string} {
       }
 
       // Clean up common channel suffixes from artist names
-      artist = artist
-        .replace(/\s*(?:VEVO|Records|Music|Official|Channel)$/gi, '')
-        .replace(/\s*(?:Topic)$/gi, '')
-        .trim()
+      artist = artist.replace(ARTIST_SUFFIX_RE, '').replace(ARTIST_TOPIC_SUFFIX_RE, '').trim()
 
       // Validate that we extracted something meaningful
       if (artist.length > 0 && artist.length < 100) {
@@ -171,7 +195,7 @@ function extractArtist(title: string): {title: string; artist: string} {
   }
 
   // If no pattern matches, try to extract from common YouTube channel naming
-  const channelPatterns = [/^(.+?)\s*(?:VEVO|Records|Music|Official|Channel|Topic)$/gi]
+  const channelPatterns = [CHANNEL_NAME_SUFFIX_RE]
 
   for (const pattern of channelPatterns) {
     const match = cleanTitle.match(pattern)

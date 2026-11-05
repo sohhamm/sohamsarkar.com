@@ -1,3 +1,6 @@
+const XML_DECLARATION_RE = /<\?xml[\s\S]*?\?>/g
+const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g
+
 /**
  * Tech marks, bundled locally from svgl.app.
  *
@@ -49,10 +52,7 @@ const TECH_ICONS: Record<string, string> = {
 
 /** Strips the XML prolog and comments so the markup can be inlined into HTML. */
 function clean(svg: string): string {
-  return svg
-    .replace(/<\?xml[\s\S]*?\?>/g, '')
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .trim()
+  return svg.replace(XML_DECLARATION_RE, '').replace(HTML_COMMENT_RE, '').trim()
 }
 
 /**

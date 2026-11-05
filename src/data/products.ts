@@ -3,6 +3,8 @@ import superdivideImage from '../assets/products/superdivide.webp'
 import rituaImage from '../assets/products/ritua.webp'
 import superslateImage from '../assets/products/superslate.webp'
 
+const WWW_PREFIX_RE = /^www\./
+
 export type ProductStatus = 'Live' | 'Beta' | 'Coming Soon'
 
 export interface Product {
@@ -84,5 +86,5 @@ export function productUrl(link: string) {
 
 /** `https://www.superdivide.com` -> `superdivide.com` */
 export function productDomain(link: string) {
-  return new URL(link).hostname.replace(/^www\./, '')
+  return new URL(link).hostname.replace(WWW_PREFIX_RE, '')
 }
