@@ -1,7 +1,6 @@
 ---
 import {Image} from 'astro:assets'
 import {productDomain, productUrl, type Product} from '../../data/products'
-import {getTechIcon} from '../../data/tech'
 
 export interface Props {
   product: Product
@@ -14,9 +13,6 @@ const href = productUrl(product.link)
 const domain = productDomain(product.link)
 const statusKey = product.status.toLowerCase().replace(/\s+/g, '-')
 const marker = String(index + 1).padStart(2, '0')
-const stack = product.stack
-  .map(tech => ({tech, icon: getTechIcon(tech)}))
-  .filter((item): item is {tech: string; icon: string} => item.icon !== null)
 
 // The art keeps its own proportions now that there is no panel to fill, so
 // nothing is ever cropped and the canvas overlay maps 1:1 to the image.
@@ -84,26 +80,33 @@ const flip = index % 2 === 1
       ))}
     </p>
 
-    <div class="product-footer">
-      <ul class="product-stack" aria-label="Built with">
-        {
-          /* role="img" belongs on the mark, not on the <li>. Put it on the
-             list item and the item stops being a listitem, which both makes
-             the role invalid for the element and leaves the <ul> holding
-             children a list is not allowed to have. */
-          stack.map(({tech, icon}) => (
-            <li class="stack-chip">
-              <span role="img" title={tech} aria-label={tech} set:html={icon} />
-            </li>
-          ))
-        }
-      </ul>
-
-      <span class={`product-status status-${statusKey}`}>
-        <span class="status-dot"></span>
-        {product.status}
-      </span>
-    </div>
+    {/* A spec sheet in the page's own label type, not a badge. The rows read as
+        facts about the product, and nothing here pretends to be pressable. */}
+    <dl class="product-spec">
+      <div class="spec-row">
+        <dt>Status</dt>
+        <dd class={`spec-status status-${statusKey}`}>{product.status}</dd>
+      </div>
+      <div class="spec-row">
+        <dt>Stack</dt>
+        <dd>
+          {/* Each name holds together and carries its own trailing slash, so a
+              wrap can never split "TanStack Start" or start a line on a "/". */}
+          {product.stack.map((tech, position) => (
+            <>
+              <span class="spec-item">
+                {tech}
+                {position < product.stack.length - 1 && (
+                  <span class="spec-sep" aria-hidden="true">
+                    {' /'}
+                  </span>
+                )}
+              </span>{' '}
+            </>
+          ))}
+        </dd>
+      </div>
+    </dl>
 
     {/* The only link in the row. Nothing else here claims to be pressable. */}
     <a class="product-link" href={href} target="_blank" rel="noopener noreferrer">
@@ -308,77 +311,44 @@ const flip = index % 2 === 1
     margin: 0;
   }
 
-  .product-footer {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 12px;
-  }
-
-  /* Logo-only — the mark is the label here, so the name lives in aria-label. */
-  .product-stack {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 14px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .stack-chip,
-  .stack-chip span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* The svgl files carry their own width/height attributes; CSS beats those
-     presentational hints, so one rule sizes every mark. */
-  .stack-chip :global(svg) {
-    width: 22px;
-    height: 22px;
-    /* Held back so the stack reads as a footnote, not a second logo wall.
-       Comes up to full strength with the rest of the card on hover. */
-    opacity: 0.55;
-    transition: opacity 0.3s ease;
-  }
-
-  .product:hover .stack-chip :global(svg),
-  .product:focus-within .stack-chip :global(svg) {
-    opacity: 1;
-  }
-
-  .product-status {
-    display: inline-flex;
-    align-items: center;
+  .product-spec {
+    display: grid;
     gap: 8px;
-    color: var(--text-muted);
+    max-width: 52ch;
+    margin: 14px 0 0 0;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .spec-row {
+    display: grid;
+    grid-template-columns: 9ch 1fr;
+    column-gap: 16px;
+    align-items: baseline;
+  }
+
+  .spec-row dt {
+    color: var(--text-faint);
     font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    line-height: 1;
   }
 
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--status-color, var(--text-muted));
-    box-shadow: 0 0 8px var(--status-color, transparent);
+  .spec-row dd {
+    margin: 0;
+    color: var(--text-muted);
   }
 
-  .status-live {
-    --status-color: #4ade80;
+  .spec-item {
+    white-space: nowrap;
   }
 
-  .status-beta {
-    --status-color: #60a5fa;
+  .spec-sep {
+    color: var(--text-faint);
   }
 
-  .status-coming-soon {
-    --status-color: #fbbf24;
+  .spec-status.status-live {
+    color: var(--text-secondary);
   }
 
   /*
