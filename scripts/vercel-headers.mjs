@@ -54,6 +54,17 @@ if (!config.routes.some(r => r.has?.some(h => h.type === 'host' && h.value === W
   changes.push(`308 ${WWW_HOST} -> apex`)
 }
 
+const slashRoute = config.routes.findIndex(r => r.headers?.Location === '/$1/')
+const shadowedRedirects = config.routes.filter(
+  (r, i) => i > slashRoute && r.status && r.headers?.Location && !r.headers.Location.includes('$'),
+)
+
+if (slashRoute !== -1 && shadowedRedirects.length) {
+  config.routes = config.routes.filter(r => !shadowedRedirects.includes(r))
+  config.routes.splice(slashRoute, 0, ...shadowedRedirects)
+  changes.push(`${shadowedRedirects.map(r => r.src).join(', ')} ahead of the trailing-slash 308`)
+}
+
 if (changes.length) {
   writeFileSync(CONFIG, JSON.stringify(config, null, 2) + '\n')
   console.log(`vercel-headers: added ${changes.join(', ')}`)
