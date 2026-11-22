@@ -17,6 +17,8 @@
 //    mirror. Only .vercel/output/config.json can express this — vercel.json's
 //    `redirects` are inert on a Build Output API v3 deploy, and _redirects/
 //    Astro `redirects` cannot match on host at all.
+// 3. A Link header on page responses advertising /llms.txt and the sitemap
+//    (see DISCOVERY_LINK below).
 import {readFileSync, writeFileSync} from 'node:fs'
 
 const CONFIG = new URL('../.vercel/output/config.json', import.meta.url)
@@ -32,6 +34,23 @@ if (!config.routes.some(r => r.src === '^/fonts/(.*)$')) {
   const fontsRoute = {src: '^/fonts/(.*)$', headers: IMMUTABLE, continue: true}
   config.routes.splice(astroRoute === -1 ? config.routes.length - 1 : astroRoute + 1, 0, fontsRoute)
   changes.push('immutable cache-control for /fonts/*')
+}
+
+const DISCOVERY_LINK = [
+  '</llms.txt>; rel="describedby"; type="text/plain"',
+  '</sitemap-index.xml>; rel="sitemap"; type="application/xml"',
+].join(', ')
+
+if (!config.routes.some(r => r.headers?.Link === DISCOVERY_LINK)) {
+  // Page URLs only (the root and slash-terminated paths), so assets stay clean.
+  // `continue: true` lets the request fall through to the filesystem handler.
+  const astroRoute = config.routes.findIndex(r => r.src === '^/_astro(?:/(.*))$')
+  config.routes.splice(astroRoute === -1 ? config.routes.length - 1 : astroRoute + 1, 0, {
+    src: '^/(?:[^.]*/)?$',
+    headers: {Link: DISCOVERY_LINK},
+    continue: true,
+  })
+  changes.push('Link header pointing at /llms.txt and the sitemap')
 }
 
 const WWW_HOST = 'www.sohamsarkar.com'
