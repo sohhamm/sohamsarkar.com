@@ -1,0 +1,33 @@
+# Soham Sarkar
+
+> Soham Sarkar (sohamsarkar.com) is a software engineer in Bangalore, India, working across tech, product and design. He is a founding engineer turned technical lead who builds and runs his own products, and offers architecture reviews, technical advisory and career guidance.
+
+Canonical site: https://sohamsarkar.com
+
+## About
+
+Most of his projects start the same way: he runs into a problem, gets annoyed, and builds something to fix it. He ships first and builds things he would use himself.
+
+Current stack: React, React Native, TypeScript, Next.js, Astro on the frontend; Go, Echo, Hono, Bun, Node.js and PostgreSQL on the backend.
+
+Career: founding engineer then technical lead at ZenAdmin (2022 to present), frontend developer at GreedyGame (2021 to 2022), full stack developer at Tellephant (2021).
+
+## Products
+
+- SuperDivide (https://superdivide.com): shared expenses, settled. Create, manage and settle shared expenses.
+- Ritua (https://getritua.com): a habit tracker built around streaks, habit scores and planned rest.
+- superslate (https://superslate.dev): a source-owned TypeScript SaaS foundation in three editions: React + Hono, TanStack Start and Expo.
+- saasclub (https://saasclub.app): a paid product leaderboard where what you pay is your rank.
+- TesterSwap (https://testerswap.com): a free exchange where developers install, use and honestly review each other's live apps.
+- CTC in Hand (https://ctcinhand.in): an in-hand salary calculator for India, with the new and old tax regimes side by side.
+
+## Pages
+
+- [Home](https://sohamsarkar.com/): who he is and the products he has built.
+- [About](https://sohamsarkar.com/about/): background, how he works and his current stack.
+- [Projects](https://sohamsarkar.com/projects/): web apps and games, with source on GitHub.
+- [Work with me](https://sohamsarkar.com/work/): architecture and code review, product and technical advisory, career guidance.
+
+## Sitemap
+
+https://sohamsarkar.com/sitemap-index.xml
