@@ -30,13 +30,13 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 
 ## Dependency maintenance
 
-Use Bun 1.4.4 and Node 24.22.0 (the version in `.node-version`). Run
+Use Bun 1.4.5 and Node 24.22.3 (the version in `.node-version`). Run
 `bun install --frozen-lockfile`, `bun run check`, `bun run typecheck`, and
 `bun run build && bun scripts/vercel-headers.mjs` before merging.
 
 TypeScript is intentionally on 6.0.3 because the stable Astro checker rejects
 TypeScript 7.0. The version-scoped overrides keep Vercel build dependencies on
-patched releases within their existing major versions; they require Bun 1.4.4.
+patched releases within their existing major versions; they require Bun 1.4.5.
 
 ## IndexNow
 
