@@ -19,7 +19,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "bun run lint && bun run format:check",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "seo:indexnow": "bun scripts/seo/indexnow.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
